@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prince Ube Blueprint | Your Complete Music Strategy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --winter-blue: #4A90E2;
+            --snow-white: #F8F9FA;
+            --dark-night: #1a1a2e;
+            --temple-gold: #D4AF37;
+            --soft-gray: #6C757D;
+            --warm-cream: #FFF5E1;
+            --deep-blue: #0f3460;
+            --accent-pink: #E94560;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-night);
+            background: linear-gradient(135deg, var(--snow-white) 0%, var(--warm-cream) 100%);
+            padding-bottom: 80px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Download Button */
+        .download-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--temple-gold);
+            color: var(--dark-night);
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            z-index: 2000;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .download-btn {
+                top: 10px;
+                right: 10px;
+                padding: 10px 18px;
+                font-size: 0.85em;
+            }
+        }
+
+        /* Header / Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--deep-blue) 0%, var(--dark-night) 100%);
+            color: var(--snow-white);
+            padding: 40px 20px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "❄️";
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 120px;
+            opacity: 0.1;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .hero .tagline {
+            font-size: 0.95em;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        /* Navigation */
+        .nav {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-container {
+            display: flex;
+            padding: 0;
+            max-width: 100%;
+        }
+
+        .nav-item {
+            flex: 0 0 auto;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--dark-night);
+            font-weight: 500;
+            font-size: 0.9em;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            border-bottom-color: var(--winter-blue);
+            background: rgba(74, 144, 226, 0.05);
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section Styling */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            min-height: 200px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--winter-blue);
+        }
+
+        .section-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--deep-blue);
+        }
+
+        .section-subtitle {
+            font-size: 1em;
+            color: var(--soft-gray);
+            margin-top: 5px;
+        }
+
+        /* Sub-headings */
+        h3 {
+            color: var(--deep-blue);
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        h4 {
+            color: var(--deep-blue);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        /* Identity Card */
+        .identity-card {
+            background: linear-gradient(135deg, var(--winter-blue) 0%, var(--deep-blue) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .identity-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            color: white;
+            margin-top: 0;
+        }
+
+        .identity-item {
+            display: flex;
+            margin-bottom: 10px;
+            align-items: flex-start;
+        }
+
+        .identity-label {
+            font-weight: 600;
+            min-width: 120px;
+            opacity: 0.9;
+        }
+
+        .identity-value {
+            flex: 1;
+        }
+
+        /* Ingredient Cards */
+        .ingredient-card {
+            background: var(--warm-cream);
+            border-left: 4px solid var(--temple-gold);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .ingredient-card h4 {
+            color: var(--deep-blue);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .ingredient-icon {
+            margin-right: 10px;
+            font-size: 1.4em;
+        }
+
+        .percentage-badge {
+            display: inline-block;
+            background: var(--temple-gold);
+            color: var(--dark-night);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        /* Lists */
+        .custom-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .custom-list li {
+            padding: 10px 0 10px 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .custom-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--winter-blue);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Theme Cards */
+        .theme-card {
+            border: 2px solid var(--winter-blue);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        .theme-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .theme-title {
+            font-size: 1.2em;
+            color: var(--deep-blue);
+            font-weight: 700;
+        }
+
+        .theme-percentage {
+            background: var(--accent-pink);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+        }
+
+        .theme-description {
+            color: var(--soft-gray);
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .theme-examples {
+            background: var(--snow-white);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .theme-examples h5 {
+            color: var(--deep-blue);
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        /* Content Type Cards */
+        .content-card {
+            background: linear-gradient(135deg, var(--snow-white) 0%, white 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .content-title {
+            font-size: 1.3em;
+            color: var(--deep-blue);
+            font-weight: 700;
+        }
+
+        .frequency-badge {
+            background: var(--temple-gold);
+            color: var(--dark-night);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        /* Hashtag Tags */
+        .hashtag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .hashtag {
+            background: var(--winter-blue);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--dark-night);
+            color: var(--snow-white);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.8;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Warning/Info Boxes */
+        .info-box {
+            background: #E3F2FD;
+            border-left: 4px solid var(--winter-blue);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .warning-box {
+            background: #FFF3E0;
+            border-left: 4px solid #FF9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .success-box {
+            background: #E8F5E9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        /* Rule Card */
+        .rule-card {
+            background: var(--accent-pink);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(233, 69, 96, 0.3);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--winter-blue);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--temple-gold);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px var(--winter-blue);
+        }
+
+        .timeline-title {
+            font-weight: 700;
+            color: var(--deep-blue);
+            margin-bottom: 8px;
+        }
+
+        .timeline-content {
+            color: var(--soft-gray);
+        }
+
+        /* Schedule Grid */
+        .schedule-grid {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .schedule-item {
+            background: var(--warm-cream);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--winter-blue);
+        }
+
+        .schedule-day {
+            font-weight: 700;
+            color: var(--deep-blue);
+            margin-bottom: 5px;
+        }
+
+        .schedule-time {
+            font-size: 0.9em;
+            color: var(--soft-gray);
+            margin-bottom: 8px;
+        }
+
+        .schedule-action {
+            font-size: 0.95em;
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist-item {
+            background: var(--snow-white);
+            padding: 12px 15px 12px 45px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checklist-item:hover {
+            background: var(--warm-cream);
+        }
+
+        .checklist-item::before {
+            content: "☐";
+            position: absolute;
+            left: 15px;
+            font-size: 1.3em;
+            color: var(--winter-blue);
+        }
+
+        /* Vision Cards */
+        .vision-card {
+            background: linear-gradient(135deg, var(--winter-blue) 0%, var(--deep-blue) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .vision-year {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+
+        .vision-item {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .vision-item::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Quotes */
+        .quote-box {
+            background: var(--warm-cream);
+            border-left: 5px solid var(--temple-gold);
+            padding: 20px 25px;
+            margin: 20px 0;
+            font-style: italic;
+            font-size: 1.05em;
+            line-height: 1.8;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Footer Navigation */
+        .footer-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .footer-nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            text-decoration: none;
+            color: var(--soft-gray);
+            font-size: 0.85em;
+            transition: all 0.3s;
+        }
+
+        .footer-nav-item:hover, .footer-nav-item.active {
+            color: var(--winter-blue);
+        }
+
+        .footer-icon {
+            font-size: 1.5em;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .section {
+                padding: 20px 15px;
+            }
+
+            .section-title {
+                font-size: 1.4em;
+            }
+
+            .nav-item {
+                font-size: 0.85em;
+                padding: 12px 15px;
+            }
+
+            .identity-label {
+                min-width: 100px;
+                font-size: 0.9em;
+            }
+            
+            .content-title {
+                font-size: 1.1em;
+            }
+            
+            h3 {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Print Styles */
+        @media print {
+            .nav, .footer-nav, .download-btn {
+                display: none;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Download Button -->
+    <a href="#" class="download-btn" id="downloadBtn">
+        <span>⬇️</span>
+        <span>Download Blueprint</span>
+    </a>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>🏀 Prince Ube Blueprint</h1>
+        <div class="subtitle">Your Complete Music Strategy</div>
+        <div class="tagline">Spiritual Winter Indie Hip-Hop | The Jokić Framework</div>
+    </div>
+
+    <!-- Sticky Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#identity" class="nav-item">Identity</a>
+            <a href="#beats" class="nav-item">Beats</a>
+            <a href="#lyrics" class="nav-item">Lyrics</a>
+            <a href="#distribution" class="nav-item">Distribution</a>
+            <a href="#timeline" class="nav-item">Timeline</a>
+            <a href="#rules" class="nav-item">Rules</a>
+            <a href="#vision" class="nav-item">Vision</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <!-- SECTION 1: IDENTITY -->
+        <section id="identity" class="section">
+            <div class="section-header">
+                <span class="section-icon">📍</span>
+                <div>
+                    <h2 class="section-title">Your North Star</h2>
+                    <p class="section-subtitle">Who you are & what you're building</p>
+                </div>
+            </div>
+
+            <div class="identity-card">
+                <h3>Artist Identity</h3>
+                <div class="identity-item">
+                    <span class="identity-label">Artist Name:</span>
+                    <span class="identity-value">Prince Ube</span>
+                </div>
+                <div class="identity-item">
+                    <span class="identity-label">Genre:</span>
+                    <span class="identity-value">Spiritual Winter Indie Hip-Hop/R&B</span>
+                </div>
+                <div class="identity-item">
+                    <span class="identity-label">Sound:</span>
+                    <span class="identity-value">Drake (emotional) + Joji (melancholic) + Tyler (production) + spiritual depth</span>
+                </div>
+                <div class="identity-item">
+                    <span class="identity-label">Aesthetic:</span>
+                    <span class="identity-value">Japanese temples in winter + minimalist luxury + "Child of God"</span>
+                </div>
+                <div class="identity-item">
+                    <span class="identity-label">Audience:</span>
+                    <span class="identity-value">Emotionally intelligent women 18-28, primarily France/EU</span>
+                </div>
+                <div class="identity-item">
+                    <span class="identity-label">Framework:</span>
+                    <span class="identity-value">The Nikola Jokić Path (smart, patient, international-first)</span>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>Your Advantage:</strong>
+                <ul class="custom-list">
+                    <li>40+ countries already streaming your music</li>
+                    <li>France connecting organically (your golden market)</li>
+                    <li>100% ownership of catalog and masters</li>
+                    <li>Video game + Japanese fusion (nobody else has this)</li>
+                    <li>Distinct aesthetic that doesn't exist in market</li>
+                </ul>
+            </div>
+
+            <div class="quote-box">
+                "Build a timeless catalog that earns passive income for 20+ years through emotional vulnerability, spiritual depth, and aesthetic consistency."
+            </div>
+        </section>
+
+        <!-- SECTION 2: BEAT CREATION -->
+        <section id="beats" class="section">
+            <div class="section-header">
+                <span class="section-icon">🎹</span>
+                <div>
+                    <h2 class="section-title">The Sushi Formula</h2>
+                    <p class="section-subtitle">4 ingredients per beat, every time</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Philosophy:</strong> Just like sushi = rice + fish + nori + wasabi, your beats = 4 core elements. Simple. Minimal. Elegant. Timeless.
+            </div>
+
+            <!-- Ingredient 1: Rhythm -->
+            <div class="ingredient-card">
+                <h4>
+                    <span class="ingredient-icon">🥁</span>
+                    INGREDIENT 1: RHYTHM
+                </h4>
+                
+                <div style="margin-bottom: 15px;">
+                    <strong>Primary (60%):</strong> <span class="percentage-badge">60%</span>
+                    <div style="margin-left: 20px; margin-top: 8px;">
+                        <strong>Lo-Fi Boom Bap</strong>
+                        <ul class="custom-list">
+                            <li>Warm, dusty, soft (70-85 BPM)</li>
+                            <li>Vinyl crackle integrated</li>
+                            <li>Source: Splice "lo-fi boom bap loops"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <strong>Secondary (25%):</strong> <span class="percentage-badge">25%</span>
+                    <div style="margin-left: 20px; margin-top: 8px;">
+                        <strong>DnB/Breakbeat</strong>
+                        <ul class="custom-list">
+                            <li>Amen break (160-180 BPM, half-time)</li>
+                            <li>Emotional, not aggressive</li>
+                            <li>Source: Splice "drum & bass"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <strong>Tertiary (15%):</strong> <span class="percentage-badge">15%</span>
+                    <div style="margin-left: 20px; margin-top: 8px;">
+                        <strong>Minimal/No Drums</strong>
+                        <ul class="custom-list">
+                            <li>Light percussion or ambient</li>
+                            <li>For winter signature songs</li>
+                            <li>Let space and silence speak</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <strong>NON-NEGOTIABLE:</strong> Drums ALWAYS softer than vocals. Never overpowering. Felt more than heard.
+                </div>
+            </div>
+
+            <!-- Ingredient 2: Harmony -->
+            <div class="ingredient-card">
+                <h4>
+                    <span class="ingredient-icon">🎹</span>
+                    INGREDIENT 2: HARMONY
+                </h4>
+                
+                <div style="margin-bottom: 15px;">
+                    <strong>Primary (60%):</strong> <span class="percentage-badge">60%</span>
+                    <div style="margin-left: 20px; margin-top: 8px;">
+                        <strong>Rhodes Electric Piano</strong>
+                        <ul class="custom-list">
+                            <li>Warm, nostalgic, lo-fi aesthetic</li>
+                            <li>Must appear in EVERY song</li>
+                            <li>Source: Splice "Rhodes chord loops"</li>
+                            <li>Jazzy voicings (Maj7, Min7, Min9)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <strong>Secondary (25%):</strong> <span class="percentage-badge">25%</span>
+                    <div style="margin-left: 20px; margin-top: 8px;">
+                        <strong>Jazz Piano</strong>
+                        <ul class="custom-list">
+                            <li>Sophisticated, emotional</li>
+                            <li>For winter ambient songs</li>
+                            <li>Complex voicings, minimal</li>
+                            <li>Source: Splice "jazz piano"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <strong>Tertiary (15%):</strong> <span class="percentage-badge">15%</span>
+                    <div style="margin-left: 20px; margin-top: 8px;">
+                        <strong>Synth Pads</strong>
+                        <ul class="custom-list">
+                            <li>Warm analog or cold digital</li>
+                            <li>For video game aesthetic tracks</li>
+                            <li>Source: Splice "ambient pads"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <strong>NON-NEGOTIABLE:</strong> Rhodes foundation is MANDATORY (your signature). Keep it simple (4-8 chords max).
+                </div>
+            </div>
+
+            <!-- Ingredient 3: Low End -->
+            <div class="ingredient-card">
+                <h4>
+                    <span class="ingredient-icon">🔊</span>
+                    INGREDIENT 3: LOW END
+                </h4>
+                
+                <div style="margin-bottom: 15px;">
+                    <strong>Primary (90%):</strong> <span class="percentage-badge">90%</span>
+                    <div style="margin-left: 20px; margin-top: 8px;">
+                        <strong>Clean Sub Bass</strong>
+                        <ul class="custom-list">
+                            <li>Pure sine wave, felt not heard</li>
+                            <li>Below 60Hz, just root notes</li>
+                            <li>Minimal movement, max weight</li>
+                            <li>Program yourself</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <strong>Secondary (10%):</strong> <span class="percentage-badge">10%</span>
+                    <div style="margin-left: 20px; margin-top: 8px;">
+                        <strong>Warm Synth Bass</strong>
+                        <ul class="custom-list">
+                            <li>Only for tropical/summer songs</li>
+                            <li>60-250Hz range, more melodic</li>
+                            <li>Source: Splice "warm bass loops"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <strong>NON-NEGOTIABLE:</strong> Sub bass ALWAYS clean, NEVER distorted. Felt in chest, not speakers.
+                </div>
+            </div>
+
+            <!-- Ingredient 4: Texture -->
+            <div class="ingredient-card">
+                <h4>
+                    <span class="ingredient-icon">✨</span>
+                    INGREDIENT 4: TEXTURE
+                </h4>
+                
+                <div style="margin-bottom: 15px;">
+                    <strong>Primary (50%):</strong> <span class="percentage-badge">50%</span>
+                    <div style="margin-left: 20px; margin-top: 8px;">
+                        <strong>Video Game Sounds</strong>
+                        <ul class="custom-list">
+                            <li>8-bit bleeps, retro game SFX</li>
+                            <li>ONE per song (not both types)</li>
+                            <li>Nostalgic for Gen Z childhood</li>
+                            <li>Source: Freesound.org "8-bit"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <strong>Secondary (30%):</strong> <span class="percentage-badge">30%</span>
+                    <div style="margin-left: 20px; margin-top: 8px;">
+                        <strong>Japanese Instruments</strong>
+                        <ul class="custom-list">
+                            <li>Temple bells (1 hit per 8 bars MAX)</li>
+                            <li>Koto (tiny flourishes)</li>
+                            <li>Shakuhachi (breathy flute)</li>
+                            <li>Source: Splice "Japanese instruments"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <strong>Tertiary (20%):</strong> <span class="percentage-badge">20%</span>
+                    <div style="margin-left: 20px; margin-top: 8px;">
+                        <strong>Vinyl/Nature Ambience</strong>
+                        <ul class="custom-list">
+                            <li>Vinyl crackle (10-15% volume)</li>
+                            <li>Rain, wind, snow (winter songs)</li>
+                            <li>Ocean waves (tropical songs)</li>
+                            <li>Source: Freesound.org, BBC SFX</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <strong>NON-NEGOTIABLE:</strong> Textures feel like MEMORIES. Subtle, never competing with vocals. ONE texture per song.
+                </div>
+            </div>
+
+            <!-- Beat-Making Workflow -->
+            <h3>The Beat-Making Workflow</h3>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-title">PREP (Monthly - 1-2 hours)</div>
+                    <div class="timeline-content">
+                        Download 20-30 samples from Splice. Organize into folders: DRUMS, CHORDS, MELODIES, TEXTURES, BASS
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-title">DAY 1: Gather (30 min)</div>
+                    <div class="timeline-content">
+                        Pick 1 drum loop, 1 chord progression, 1-2 textures. Drop into DAW.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-title">DAY 2: Combine (45 min)</div>
+                    <div class="timeline-content">
+                        Arrange drums, layer chords, program sub bass (10 min), add textures, create dynamics
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-title">DAY 3: Mix (45 min)</div>
+                    <div class="timeline-content">
+                        Level balance, EQ, compression, saturation, reverb, add vinyl crackle, export
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>The Quality Tests:</strong> 
+                <ul class="custom-list">
+                    <li><strong>Winter Test:</strong> Cold, contemplative, peaceful?</li>
+                    <li><strong>Sushi Test:</strong> 4 ingredients clear? Not cluttered?</li>
+                    <li><strong>France Test:</strong> Would Paris at 2am understand?</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SECTION 3: LYRICS (Condensed for mobile) -->
+        <section id="lyrics" class="section">
+            <div class="section-header">
+                <span class="section-icon">📝</span>
+                <div>
+                    <h2 class="section-title">Lyrical Strategy</h2>
+                    <p class="section-subtitle">9 timeless themes</p>
+                </div>
+            </div>
+
+            <h3>The 9 Core Themes</h3>
+
+            <div class="theme-card">
+                <div class="theme-header">
+                    <h4 class="theme-title">❄️ Winter Heartbreak</h4>
+                    <span class="theme-percentage">30%</span>
+                </div>
+                <p class="theme-description">Lost love in cold season, loneliness amplified by winter</p>
+            </div>
+
+            <div class="theme-card">
+                <div class="theme-header">
+                    <h4 class="theme-title">❤️ Romantic Devotion</h4>
+                    <span class="theme-percentage">25%</span>
+                </div>
+                <p class="theme-description">Found the one, she's your peace, spiritual connection</p>
+            </div>
+
+            <div class="theme-card">
+                <div class="theme-header">
+                    <h4 class="theme-title">🙏 Spiritual Seeking</h4>
+                    <span class="theme-percentage">20%</span>
+                </div>
+                <p class="theme-description">Talking to God, purpose, faith journey</p>
+                <div class="warning-box">
+                    <strong>CRITICAL:</strong> Never preach. Share YOUR journey only.
+                </div>
+            </div>
+
+            <div class="theme-card">
+                <div class="theme-header">
+                    <h4 class="theme-title">🎮 Nostalgic Reflection</h4>
+                    <span class="theme-percentage">10%</span>
+                </div>
+                <p class="theme-description">Childhood memories, video games, simpler times</p>
+            </div>
+
+            <div class="theme-card">
+                <div class="theme-header">
+                    <h4 class="theme-title">🌸 Seasonal Duality</h4>
+                    <span class="theme-percentage">8%</span>
+                </div>
+                <p class="theme-description">Winter = sadness, summer = joy, balance</p>
+            </div>
+
+            <div class="theme-card">
+                <div class="theme-header">
+                    <h4 class="theme-title">🌊 Gratitude & Peace</h4>
+                    <span class="theme-percentage">3%</span>
+                </div>
+                <p class="theme-description">Found inner peace, grateful (for tropical songs)</p>
+            </div>
+
+            <div class="theme-card">
+                <div class="theme-header">
+                    <h4 class="theme-title">🏀 Aspiration</h4>
+                    <span class="theme-percentage">2%</span>
+                </div>
+                <p class="theme-description">Building dreams patiently (keep minimal)</p>
+            </div>
+
+            <div class="theme-card">
+                <div class="theme-header">
+                    <h4 class="theme-title">🕊️ Forgiveness Arcs</h4>
+                    <span class="theme-percentage">2%</span>
+                </div>
+                <p class="theme-description">Forgiving her or yourself, mature healing</p>
+            </div>
+
+            <div class="theme-card">
+                <div class="theme-header">
+                    <h4 class="theme-title">📱 Late-Night Monologue</h4>
+                    <span class="theme-percentage"><1%</span>
+                </div>
+                <p class="theme-description">Talking TO her directly, voicemail energy</p>
+                <div class="success-box">
+                    <strong>SECRET WEAPON:</strong> Drake "Marvin's Room" energy
+                </div>
+            </div>
+
+            <h3>The 5 Writing Principles</h3>
+
+            <div class="content-card">
+                <h4>1. Concrete Imagery Over Abstract</h4>
+                <div style="background: #FFEBEE; padding: 15px; border-radius: 6px; margin-bottom: 10px;">
+                    <strong>❌ BAD:</strong> "I'm feeling sad and alone"
+                </div>
+                <div style="background: #E8F5E9; padding: 15px; border-radius: 6px;">
+                    <strong>✅ GOOD:</strong> "Walking through Tokyo in December snow, temple bells ringing"
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h4>2. Personal → Universal</h4>
+                <p>Specific details (how she laughed) become universal feelings (missing someone)</p>
+            </div>
+
+            <div class="content-card">
+                <h4>3. Conversational Tone</h4>
+                <p>You're TALKING to her, to God, to yourself. Natural, not performed.</p>
+            </div>
+
+            <div class="content-card">
+                <h4>4. Spiritual but Not Preachy</h4>
+                <p>Share YOUR journey with God. Don't preach to them.</p>
+            </div>
+
+            <div class="content-card">
+                <h4>5. Use Your Metaphor Bank</h4>
+                <ul class="custom-list">
+                    <li>❄️ Winter = heartbreak, frozen emotions</li>
+                    <li>🌸 Spring = hope, healing, new beginnings</li>
+                    <li>⛩️ Temple = spirituality, seeking God</li>
+                    <li>🎮 Video Games = nostalgia, childhood</li>
+                    <li>🍜 Ramen = comfort, simple pleasures</li>
+                </ul>
+            </div>
+
+            <h3>Song Structure</h3>
+
+            <div class="code-block">INTRO (4-8 bars) - Set atmosphere
+↓
+VERSE 1 (12-16 bars) - Tell story
+↓
+CHORUS (4-8 bars) - Emotional core
+↓
+VERSE 2 (12-16 bars) - Deepen story
+↓
+CHORUS (4-8 bars) - Repeat
+↓
+OUTRO (4-8 bars) - Resolution
+
+Total: 2:30 - 3:30 minutes</div>
+
+            <div class="success-box">
+                <strong>The Micro-Hook System:</strong> Every song needs ONE line that appears in Verse, Chorus, AND Outro. This line defines the song.
+                <br><br>
+                Examples: "I pray, I pray" | "Frozen in this moment"
+            </div>
+        </section>
+
+        <!-- SECTION 4: DISTRIBUTION (Fixed for mobile) -->
+        <section id="distribution" class="section">
+            <div class="section-header">
+                <span class="section-icon">📱</span>
+                <div>
+                    <h2 class="section-title">Distribution Strategy</h2>
+                    <p class="section-subtitle">2.5 hours/week. Simple & sustainable.</p>
+                </div>
+            </div>
+
+            <h3>The Hashtag System</h3>
+            
+            <div class="info-box">
+                <strong>Formula:</strong> Use 8-10 hashtags per post: 2 Genre + 3 Aesthetic + 2 Emotion + 1 Spiritual + 1 Discovery + 1 Location
+            </div>
+
+            <div class="content-card">
+                <h4>SET A: Winter Lo-Fi Core <span class="frequency-badge">Use 60%</span></h4>
+                <div class="hashtag-container">
+                    <span class="hashtag">#lofirnb</span>
+                    <span class="hashtag">#dreampop</span>
+                    <span class="hashtag">#winteraesthetic</span>
+                    <span class="hashtag">#moodyaesthetic</span>
+                    <span class="hashtag">#nightwalks</span>
+                    <span class="hashtag">#heartbreaksongs</span>
+                    <span class="hashtag">#latenightthoughts</span>
+                    <span class="hashtag">#childofgod</span>
+                    <span class="hashtag">#newmusic</span>
+                </div>
+                <p style="font-size: 0.9em; color: var(--soft-gray);">
+                    <strong>When:</strong> Winter heartbreak songs, lo-fi beats, introspective content
+                </p>
+            </div>
+
+            <div class="content-card">
+                <h4>SET B: Anime Nostalgia <span class="frequency-badge">Use 30%</span></h4>
+                <div class="hashtag-container">
+                    <span class="hashtag">#emotionalmusic</span>
+                    <span class="hashtag">#alternativernb</span>
+                    <span class="hashtag">#animevibes</span>
+                    <span class="hashtag">#tokyovibes</span>
+                    <span class="hashtag">#softaesthetic</span>
+                    <span class="hashtag">#selfreflection</span>
+                    <span class="hashtag">#romanticenergy</span>
+                    <span class="hashtag">#faithjourney</span>
+                </div>
+                <p style="font-size: 0.9em; color: var(--soft-gray);">
+                    <strong>When:</strong> Video game textures, nostalgic posts, romantic songs
+                </p>
+            </div>
+
+            <div class="content-card">
+                <h4>SET C: Spiritual Seeker <span class="frequency-badge">Use 10%</span></h4>
+                <div class="hashtag-container">
+                    <span class="hashtag">#dreampop</span>
+                    <span class="hashtag">#indieartist</span>
+                    <span class="hashtag">#japanesestreet</span>
+                    <span class="hashtag">#winteraesthetic</span>
+                    <span class="hashtag">#healingjourney</span>
+                    <span class="hashtag">#findingpeace</span>
+                    <span class="hashtag">#godlymenexist</span>
+                    <span class="hashtag">#newmusic</span>
+                </div>
+                <p style="font-size: 0.9em; color: var(--soft-gray);">
+                    <strong>When:</strong> Spiritual songs, temple imagery, gratitude posts
+                </p>
+            </div>
+
+            <h3>The 3 Content Types</h3>
+
+            <div class="content-card">
+                <div class="content-header">
+                    <h4 class="content-title">1. Polished Aesthetic Clip</h4>
+                    <span class="frequency-badge">3x/week (60%)</span>
+                </div>
+                
+                <p><strong>Format:</strong> 10-20 seconds, cinematic visual + your music</p>
+                
+                <div style="background: var(--warm-cream); padding: 15px; border-radius: 6px; margin: 15px 0;">
+                    <strong>Polish Requirements:</strong>
+                    <ul class="custom-list">
+                        <li>Color graded (VSCO A6 or M5)</li>
+                        <li>Stabilized (no shaky footage)</li>
+                        <li>Grain overlay (cinematic)</li>
+                        <li>Text overlay (one lyric line)</li>
+                    </ul>
+                </div>
+
+                <p><strong>Caption Examples:</strong> "winter makes every memory louder" | "prayed for peace, still miss you"</p>
+                <p><strong>Post:</strong> Mon/Wed/Fri at 10am-12pm or 6pm-9pm EST</p>
+            </div>
+
+            <div class="content-card">
+                <div class="content-header">
+                    <h4 class="content-title">2. Intimate Voice Note</h4>
+                    <span class="frequency-badge">1x/week (20%)</span>
+                </div>
+                
+                <p><strong>Format:</strong> 20-45 seconds, you speaking softly over your beat</p>
+                
+                <div class="success-box">
+                    <strong>YOUR SECRET WEAPON:</strong> Soft voice like talking to her at 1am. No camera. Your beat underneath. Intimate, vulnerable, NOT scripted.
+                </div>
+
+                <p><strong>Why:</strong> Women 18-28 LOVE vulnerability + soft masculinity. Builds parasocial connection. Nobody else in your lane does this.</p>
+                
+                <p><strong>Post:</strong> Sunday night, 9pm-11pm EST</p>
+            </div>
+
+            <div class="content-card">
+                <div class="content-header">
+                    <h4 class="content-title">3. Making-Of Moment</h4>
+                    <span class="frequency-badge">1x/week (20%)</span>
+                </div>
+                
+                <p><strong>Format:</strong> 8-15 seconds, showing your 4-ingredient process</p>
+                
+                <p><strong>Show:</strong> Drop boom bap loop → Add Rhodes chords → Layer sub bass → Add video game/temple bell texture</p>
+                
+                <p><strong>Caption:</strong> "the sushi formula 🍣❄️" | "4 ingredients. every time."</p>
+                
+                <p><strong>Post:</strong> Thursday, 6pm-8pm EST</p>
+            </div>
+
+            <h3>Your Weekly Posting Schedule</h3>
+
+            <div class="schedule-grid">
+                <div class="schedule-item">
+                    <div class="schedule-day">MONDAY</div>
+                    <div class="schedule-time">11am EST</div>
+                    <div class="schedule-action">Polished Aesthetic Clip | Set A | TikTok + IG</div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-day">WEDNESDAY</div>
+                    <div class="schedule-time">3pm EST</div>
+                    <div class="schedule-action">Polished Aesthetic Clip | Set B | TikTok + IG</div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-day">THURSDAY</div>
+                    <div class="schedule-time">7pm EST</div>
+                    <div class="schedule-action">Making-Of Moment | Set A | TikTok + IG</div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-day">FRIDAY</div>
+                    <div class="schedule-time">8pm EST</div>
+                    <div class="schedule-action">Polished Aesthetic Clip | Set A/B | TikTok + IG</div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-day">SUNDAY</div>
+                    <div class="schedule-time">10pm EST</div>
+                    <div class="schedule-action">Intimate Voice Note | Set C/A | TikTok + IG</div>
+                </div>
+            </div>
+
+            <h3>The Sunday Batch System</h3>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-title">Morning (90 min)</div>
+                    <div class="timeline-content">
+                        Film 3 aesthetic clips (30 min), edit them (30 min), film 1 making-of (5 min), edit it (10 min)
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-title">Night (15 min)</div>
+                    <div class="timeline-content">
+                        Record voice note (2-3 takes), add beat underneath
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-title">Throughout Week (10 min)</div>
+                    <div class="timeline-content">
+                        Post each piece (2 min per post)
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>Result:</strong> 2.5 hours on Sunday = entire week covered
+            </div>
+
+            <h3>Platform Focus</h3>
+
+            <div class="content-card">
+                <h4>PRIMARY: TikTok (70% focus)</h4>
+                <ul class="custom-list">
+                    <li>All 5 posts per week</li>
+                    <li>#1 source of Spotify streams</li>
+                    <li>Algorithm favors new creators</li>
+                    <li>International reach (France, Japan, EU)</li>
+                </ul>
+            </div>
+
+            <div class="content-card">
+                <h4>SECONDARY: Instagram (30% focus)</h4>
+                <ul class="custom-list">
+                    <li>Same 5 posts (cross-post from TikTok)</li>
+                    <li>Use Reels (same format)</li>
+                    <li>Add Stories 2-3x/week</li>
+                    <li>Professional brand building</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <strong>IGNORE:</strong> YouTube (Year 2+), Twitter/X, Facebook, Snapchat. Focus = 2 platforms only.
+            </div>
+
+            <h3>Success Metrics (Check Month 3 & 6 Only)</h3>
+
+            <div class="content-card">
+                <h4>Month 3 Goals:</h4>
+                <ul class="custom-list">
+                    <li>TikTok: 1K+ avg views per post</li>
+                    <li>Instagram: 400+ profile visits/month</li>
+                    <li>Spotify: 1K+ streams across catalog</li>
+                    <li>France: Top 3 listening country</li>
+                </ul>
+            </div>
+
+            <div class="content-card">
+                <h4>Month 6 Goals:</h4>
+                <ul class="custom-list">
+                    <li>TikTok: 5K+ avg views per post</li>
+                    <li>Instagram: 1K+ profile visits/month</li>
+                    <li>Spotify: 5K+ streams across catalog</li>
+                    <li>Monthly listeners: 500-1,000</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SECTION 5: TIMELINE -->
+        <section id="timeline" class="section">
+            <div class="section-header">
+                <span class="section-icon">⏱️</span>
+                <div>
+                    <h2 class="section-title">The Timeline</h2>
+                    <p class="section-subtitle">The Jokić Framework: 6-8 years</p>
+                </div>
+            </div>
+
+            <h3>The 6-Month Commitment</h3>
+
+            <div class="success-box">
+                <strong>You will:</strong>
+                <ul class="custom-list">
+                    <li>NOT delete, archive, or reset any accounts</li>
+                    <li>Post 5x/week consistently</li>
+                    <li>Release 3-4 songs (1 every 6-8 weeks)</li>
+                    <li>Check data ONLY at month 3 and month 6</li>
+                    <li>Trust the garden</li>
+                </ul>
+            </div>
+
+            <h3>Your Weekly Schedule</h3>
+
+            <div class="schedule-grid">
+                <div class="schedule-item">
+                    <div class="schedule-day">SUNDAY</div>
+                    <div class="schedule-action">Content creation day (2.5 hours) + Post voice note (10pm)</div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-day">MONDAY</div>
+                    <div class="schedule-action">Post aesthetic clip (11am) + Work on music</div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-day">WEDNESDAY</div>
+                    <div class="schedule-action">Post aesthetic clip (3pm) + Work on music</div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-day">THURSDAY</div>
+                    <div class="schedule-action">Post making-of clip (7pm) + Work on music</div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-day">FRIDAY</div>
+                    <div class="schedule-action">Post aesthetic clip (8pm) + Work on music</div>
+                </div>
+            </div>
+
+            <h3>The Jokić Timeline</h3>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-title">Years 1-2 (NOW)</div>
+                    <div class="timeline-content">Build fundamentals, nobody watches. <strong>You are here.</strong></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-title">Years 3-4</div>
+                    <div class="timeline-content">Show flashes, algorithms/France notice. Small breakthrough moments.</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-title">Years 5-6</div>
+                    <div class="timeline-content">Indie artist status, can't be ignored. 5K-15K monthly listeners.</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-title">Years 7-8</div>
+                    <div class="timeline-content">International recognition, touring sustainable. 15K-50K monthly listeners.</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-title">Years 8+</div>
+                    <div class="timeline-content">Legacy artist, catalog generates passive income forever.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: NON-NEGOTIABLES -->
+        <section id="rules" class="section">
+            <div class="section-header">
+                <span class="section-icon">🎯</span>
+                <div>
+                    <h2 class="section-title">The Non-Negotiables</h2>
+                    <p class="section-subtitle">Rules that are ALWAYS true</p>
+                </div>
+            </div>
+
+            <h3>Production Rules</h3>
+            <div class="rule-card">1. Rhodes must appear in every song</div>
+            <div class="rule-card">2. Drums always softer than vocals</div>
+            <div class="rule-card">3. Sub bass always clean, never distorted</div>
+            <div class="rule-card">4. Textures feel like memories, not sound design</div>
+            <div class="rule-card">5. Every beat = 4 ingredients max</div>
+
+            <h3>Lyrical Rules</h3>
+            <div class="rule-card">1. Always personal + universal</div>
+            <div class="rule-card">2. Always concrete imagery over abstract</div>
+            <div class="rule-card">3. Never preachy spirituality</div>
+            <div class="rule-card">4. Always conversational tone</div>
+            <div class="rule-card">5. Every song has micro-hook</div>
+
+            <h3>Content Rules</h3>
+            <div class="rule-card">1. Always polished (gift to listeners)</div>
+            <div class="rule-card">2. Never trending (timeless only)</div>
+            <div class="rule-card">3. Always aesthetic-consistent</div>
+            <div class="rule-card">4. 5 posts per week, no more, no less</div>
+            <div class="rule-card">5. Voice notes = your secret weapon</div>
+
+            <h3>Career Rules</h3>
+            <div class="rule-card">1. 100% ownership always</div>
+            <div class="rule-card">2. Release every 6-8 weeks</div>
+            <div class="rule-card">3. No deleting/archiving for 6 months</div>
+            <div class="rule-card">4. Check data quarterly only</div>
+            <div class="rule-card">5. Trust the Jokić timeline (6-8 years)</div>
+
+            <h3>Daily Checklist</h3>
+            
+            <div class="content-card">
+                <h4>Ask yourself daily:</h4>
+                <ul class="checklist">
+                    <li class="checklist-item">Using only 4 ingredients per beat</li>
+                    <li class="checklist-item">Rhodes in every song</li>
+                    <li class="checklist-item">Drums softer than vocals</li>
+                    <li class="checklist-item">Concrete imagery, not abstract</li>
+                    <li class="checklist-item">Posted 5x this week</li>
+                    <li class="checklist-item">All content polished</li>
+                    <li class="checklist-item">Trusted the process</li>
+                    <li class="checklist-item">Didn't check streams obsessively</li>
+                    <li class="checklist-item">Lived life (90%), created (10%)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SECTION 7: VISION -->
+        <section id="vision" class="section">
+            <div class="section-header">
+                <span class="section-icon">🏆</span>
+                <div>
+                    <h2 class="section-title">The Vision</h2>
+                    <p class="section-subtitle">Why you're doing this</p>
+                </div>
+            </div>
+
+            <div class="vision-card">
+                <div class="vision-year">Year 3</div>
+                <div class="vision-item">25-30 song catalog</div>
+                <div class="vision-item">2,000-5,000 monthly listeners</div>
+                <div class="vision-item">$1,000-3,000/year passive income</div>
+                <div class="vision-item">First France/EU tour possible</div>
+            </div>
+
+            <div class="vision-card">
+                <div class="vision-year">Year 5</div>
+                <div class="vision-item">40-50 song catalog</div>
+                <div class="vision-item">5,000-15,000 monthly listeners</div>
+                <div class="vision-item">$3,000-8,000/year passive income</div>
+                <div class="vision-item">Regular EU tours</div>
+                <div class="vision-item">Considering quitting day job</div>
+            </div>
+
+            <div class="vision-card">
+                <div class="vision-year">Year 8</div>
+                <div class="vision-item">60-80 song catalog</div>
+                <div class="vision-item">15,000-50,000 monthly listeners</div>
+                <div class="vision-item">$10,000-30,000/year passive income</div>
+                <div class="vision-item">International touring artist</div>
+                <div class="vision-item">Full-time music career, sustainable</div>
+            </div>
+
+            <div class="vision-card">
+                <div class="vision-year">Year 10+</div>
+                <div class="vision-item">100+ song catalog (your life's work)</div>
+                <div class="vision-item">25,000-100,000+ monthly listeners</div>
+                <div class="vision-item">$20,000-60,000/year passive income</div>
+                <div class="vision-item">Legacy artist, inspiring next generation</div>
+                <div class="vision-item">Your kids still earning from catalog</div>
+            </div>
+
+            <div class="quote-box">
+                "The narrow path doesn't pay in months. It pays in YEARS. But once it pays, it pays FOREVER."
+            </div>
+
+            <h3>When You Doubt</h3>
+
+            <div class="content-card">
+                <h4>When you want to quit:</h4>
+                <p>
+                    Remember: You're in year 2. Jokić didn't win MVP until year 6. Your 40+ countries proved it works. France connecting organically is RARE.
+                    <br><br>
+                    <strong>Close computer. Walk in nature. Pray. Come back tomorrow.</strong>
+                </p>
+            </div>
+
+            <div class="content-card">
+                <h4>When you feel impatient:</h4>
+                <p>
+                    Drake didn't blow up until year 3. Tyler didn't win Grammy until year 11. The narrow path pays in YEARS, not months.
+                    <br><br>
+                    <strong>Check your data from 6 months ago. See the growth. Trust the process.</strong>
+                </p>
+            </div>
+
+            <div class="content-card">
+                <h4>When you compare yourself:</h4>
+                <p>
+                    You're comparing your month 18 to their year 10. Everyone started where you are. Your path = Drake business + Tyler artistry + Jokić patience.
+                    <br><br>
+                    <strong>Focus on YOUR month 1 vs YOUR month 18. That's your only competition.</strong>
+                </p>
+            </div>
+
+            <div class="content-card">
+                <h4>When the numbers look small:</h4>
+                <p>
+                    579 streams = 579 real people. 40 countries = international validation. France = golden ticket market. Compound interest takes TIME.
+                    <br><br>
+                    <strong>Small numbers compound into big numbers. Water the garden.</strong>
+                </p>
+            </div>
+
+            <div class="hero" style="margin-top: 40px; padding: 40px 20px;">
+                <h2 style="margin-bottom: 20px;">The Final Word</h2>
+                <p style="font-size: 1.1em; line-height: 1.8; max-width: 700px; margin: 0 auto;">
+                    You have everything you need. The beat formula. The lyrical themes. The distribution plan. The data. The timeline.
+                    <br><br>
+                    The only question: <strong>Will you do it?</strong>
+                    <br><br>
+                    Will you commit to 6 months without quitting? Will you post 5x/week even when views are low? Will you trust the process when you can't see results?
+                    <br><br>
+                    <strong>Your music deserves to exist. Your French fans are waiting. Your winter aesthetic needs to be in the world.</strong>
+                    <br><br>
+                    Lock in. Start Sunday. Water the garden. Build the legacy.
+                    <br><br>
+                    <span style="font-size: 2em;">🏀🍣🎹❄️🙏</span>
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer Navigation -->
+    <div class="footer-nav">
+        <a href="#identity" class="footer-nav-item">
+            <span class="footer-icon">📍</span>
+            Identity
+        </a>
+        <a href="#beats" class="footer-nav-item">
+            <span class="footer-icon">🎹</span>
+            Beats
+        </a>
+        <a href="#lyrics" class="footer-nav-item">
+            <span class="footer-icon">📝</span>
+            Lyrics
+        </a>
+        <a href="#distribution" class="footer-nav-item">
+            <span class="footer-icon">📱</span>
+            Media
+        </a>
+        <a href="#vision" class="footer-nav-item">
+            <span class="footer-icon">🏆</span>
+            Vision
+        </a>
+    </div>
+
+    <script>
+        // Download functionality
+        document.getElementById('downloadBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get the entire HTML content
+            const htmlContent = document.documentElement.outerHTML;
+            
+            // Create a Blob with the HTML content
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            
+            // Create a download link
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'prince-ube-blueprint.html';
+            
+            // Trigger the download
+            document.body.appendChild(a);
+            a.click();
+            
+            // Clean up
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        });
+
+        // Smooth scroll with offset for sticky nav
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const navHeight = document.querySelector('.nav').offsetHeight;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Active nav highlighting on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const navItems = document.querySelectorAll('.nav-item, .footer-nav-item');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === `#${current}`) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Checklist interactivity
+        document.querySelectorAll('.checklist-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (this.style.opacity === '0.5') {
+                    this.style.opacity = '1';
+                    this.style.textDecoration = 'none';
+                } else {
+                    this.style.opacity = '0.5';
+                    this.style.textDecoration = 'line-through';
+                }
+            });
+        });
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section, .content-card, .theme-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>
