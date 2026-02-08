@@ -10,17 +10,27 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root{--glass:rgba(12,12,12,.55);--glass-border:rgba(255,255,255,.08);--glass-hover:rgba(255,255,255,.04);--blur:blur(20px);--radius:14px;--radius-sm:10px}
-[data-theme="dark"]{--bg:#050505;--surface:rgba(15,15,15,.7);--elevated:rgba(22,22,22,.75);--border:rgba(255,255,255,.06);--border-l:rgba(255,255,255,.12);--t1:#f5f5f5;--t2:#b0b0b0;--t3:#808080;--t4:#505050;--accent-dim:rgba(255,255,255,.04);--accent-soft:rgba(255,255,255,.08);--logo-color:#f5f5f5;--toast-bg:rgba(20,20,20,.85);--positive:#6c9;--negative:#c77;--special:#c8f;--card-bg:rgba(255,255,255,.04);--card-border:rgba(255,255,255,.08)}
-[data-theme="light"]{--bg:#f0ede8;--surface:rgba(235,232,226,.75);--elevated:rgba(224,221,214,.8);--border:rgba(0,0,0,.06);--border-l:rgba(0,0,0,.12);--t1:#1a1816;--t2:#5a5650;--t3:#8a857e;--t4:#b0aba4;--accent-dim:rgba(0,0,0,.03);--accent-soft:rgba(0,0,0,.06);--logo-color:#1a1816;--toast-bg:rgba(224,221,214,.9);--positive:#3a7;--negative:#b55;--special:#a6c;--card-bg:rgba(0,0,0,.03);--card-border:rgba(0,0,0,.06);--glass:rgba(240,237,232,.6);--glass-border:rgba(0,0,0,.06)}
-*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden;max-width:100vw}
+[data-theme="dark"]{--bg:#050505;--surface:rgba(15,15,15,.7);--border:rgba(255,255,255,.06);--border-l:rgba(255,255,255,.12);--t1:#f5f5f5;--t2:#b0b0b0;--t3:#808080;--t4:#505050;--accent-dim:rgba(255,255,255,.04);--accent-soft:rgba(255,255,255,.08);--logo-color:#f5f5f5;--toast-bg:rgba(20,20,20,.9);--positive:#6c9;--negative:#c77;--special:#c8f;--card-bg:rgba(255,255,255,.04);--card-border:rgba(255,255,255,.08)}
+[data-theme="light"]{--bg:#f0ede8;--surface:rgba(235,232,226,.75);--border:rgba(0,0,0,.06);--border-l:rgba(0,0,0,.12);--t1:#1a1816;--t2:#5a5650;--t3:#8a857e;--t4:#b0aba4;--accent-dim:rgba(0,0,0,.03);--accent-soft:rgba(0,0,0,.06);--logo-color:#1a1816;--toast-bg:rgba(224,221,214,.9);--positive:#3a7;--negative:#b55;--special:#a6c;--card-bg:rgba(0,0,0,.03);--card-border:rgba(0,0,0,.06);--glass:rgba(240,237,232,.6);--glass-border:rgba(0,0,0,.06)}
+*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden}
 body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;transition:background .4s,color .4s}
+/* ONBOARD */
 .onboard{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .4s}.onboard.gone{opacity:0;pointer-events:none}
 .ob-inner{width:100%;max-width:380px;padding:0 28px;text-align:center}.ob-icon{width:80px;height:80px;margin:0 auto 16px;border-radius:50%;overflow:hidden}.ob-icon img{width:100%;height:100%;object-fit:cover}
 .ob-title{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:500;margin-bottom:8px}.ob-desc{font-size:.85rem;color:var(--t2);line-height:1.5;margin-bottom:28px}
 .ob-dots{display:flex;gap:6px;justify-content:center;margin-bottom:24px}.ob-dot{width:8px;height:8px;border-radius:50%;background:var(--t4);transition:all .2s}.ob-dot.on{background:var(--t1);width:20px;border-radius:4px}
 .ob-btn{padding:13px 32px;background:var(--t1);color:var(--bg);border:none;border-radius:8px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer}.ob-skip{display:block;margin:12px auto 0;background:none;border:none;color:var(--t4);font-family:inherit;font-size:.7rem;cursor:pointer}
+/* WELCOME BACK */
+.wb-overlay{position:fixed;inset:0;z-index:150;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .5s}.wb-overlay.gone{opacity:0;pointer-events:none}
+.wb-inner{width:100%;max-width:360px;padding:0 28px;text-align:center}
+.wb-portrait{width:72px;height:72px;border-radius:50%;overflow:hidden;margin:0 auto 16px;border:2px solid var(--card-border)}.wb-portrait img{width:100%;height:100%;object-fit:cover}
+.wb-msg{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:300;font-style:italic;color:var(--t1);margin-bottom:8px;line-height:1.4}
+.wb-gains{font-size:.75rem;color:var(--t2);margin-bottom:24px;line-height:1.6}
+.wb-btn{padding:13px 32px;background:var(--t1);color:var(--bg);border:none;border-radius:8px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer}
+/* GUEST BANNER */
 .guest-banner{position:fixed;bottom:0;left:0;right:0;z-index:60;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-top:1px solid var(--glass-border);padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:16px;transform:translateY(100%);transition:transform .4s}.guest-banner.show{transform:translateY(0)}
 .guest-banner-text{font-size:.8rem;color:var(--t2)}.guest-banner-text b{color:var(--t1)}.guest-banner-btn{padding:8px 20px;background:var(--t1);color:var(--bg);border:none;border-radius:8px;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer}
+/* LOGIN */
 .login{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .5s}.login.gone{opacity:0;pointer-events:none}
 .login-inner{width:100%;max-width:360px;padding:0 28px}.login-brand{text-align:center;margin-bottom:48px}
 .login-brand h1{font-family:'Fraunces',serif;font-size:2rem;font-weight:300;font-style:italic;color:var(--logo-color);margin-bottom:4px}.login-brand .sub{font-size:.6rem;color:var(--t3);letter-spacing:.25em;text-transform:uppercase}
@@ -31,83 +41,109 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);-webki
 .l-secondary{width:100%;padding:12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--t2);font-family:inherit;font-size:.85rem;cursor:pointer}.l-secondary:hover{border-color:var(--border-l);color:var(--t1)}
 .l-toggle{display:block;text-align:center;margin-top:20px;background:none;border:none;color:var(--t3);font-family:inherit;font-size:.75rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .l-error{color:#e55;font-size:.75rem;text-align:center;margin-top:12px;min-height:18px}.l-error.ok{color:#5b5}
+/* SHELL */
 .shell{height:100vh;height:100dvh;display:flex;flex-direction:column;opacity:0;transition:opacity .4s .2s;overflow:hidden}.shell.on{opacity:1}
+/* TOPBAR */
 .topbar{height:48px;min-height:48px;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--glass-border);display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:10;flex-shrink:0}
-.tb-brand{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:300;font-style:italic;color:var(--logo-color)}.tb-right{display:flex;align-items:center;gap:10px}
-.tb-egg-badge{display:flex;align-items:center;gap:5px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;padding:5px 12px}
-.tb-egg-badge-icon{font-size:.75rem}.tb-egg-badge-num{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:500}.tb-egg-badge-label{font-size:.55rem;color:var(--t3)}
-.tb-gear{background:none;border:none;color:var(--t2);cursor:pointer;padding:6px;line-height:1;border-radius:6px;display:flex;align-items:center}.tb-gear:hover{color:var(--t1);background:var(--glass-hover)}.tb-user{font-size:.7rem;color:var(--t2)}
+.tb-brand{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:300;font-style:italic;color:var(--logo-color)}
+.tb-right{display:flex;align-items:center;gap:10px}
+.tb-rank{display:flex;align-items:center;gap:6px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;padding:5px 12px}
+.tb-rank-name{font-size:.65rem;font-weight:500}.tb-rank-pts{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3)}
+.tb-gear{background:none;border:none;color:var(--t2);cursor:pointer;padding:6px;line-height:1;border-radius:6px;display:flex;align-items:center}.tb-gear:hover{color:var(--t1);background:var(--glass-hover)}
+.tb-signin{background:none;border:1px solid var(--glass-border);border-radius:6px;padding:4px 12px;color:var(--t2);font-family:inherit;font-size:.65rem;cursor:pointer}.tb-signin:hover{border-color:var(--border-l);color:var(--t1)}
+.tb-user{font-size:.7rem;color:var(--t2)}
+/* SETTINGS DROP */
 .settings-drop{position:fixed;top:52px;right:12px;z-index:40;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);border-radius:var(--radius);padding:8px;min-width:180px;box-shadow:0 8px 32px rgba(0,0,0,.3);opacity:0;transform:translateY(-6px);pointer-events:none;transition:all .2s}.settings-drop.open{opacity:1;transform:translateY(0);pointer-events:all}
 .sd-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:.75rem;color:var(--t2);transition:background .1s}.sd-item:hover{background:var(--glass-hover)}.sd-item-label{display:flex;align-items:center;gap:8px}
 .sd-toggle{width:34px;height:18px;border-radius:9px;background:var(--border);position:relative;transition:background .2s;cursor:pointer}.sd-toggle.on{background:var(--t2)}.sd-toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--t1);transition:transform .2s}.sd-toggle.on::after{transform:translateX(16px)}.sd-divider{height:1px;background:var(--border);margin:4px 0}
+/* CONTENT */
 .content{flex:1;display:flex;overflow:hidden;min-height:0}
+/* VIDEO */
 .video-area{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;background:#000}
 .video-embed{flex:1;position:relative;min-height:0}.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
 .video-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;background:var(--bg);cursor:pointer}.video-placeholder:hover{background:var(--surface)}
 .vp-play{width:64px;height:64px;border-radius:50%;border:1.5px solid var(--t4);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--t3)}.vp-text{font-size:.7rem;color:var(--t4);letter-spacing:.15em;text-transform:uppercase}.video-embed.loaded .video-placeholder{display:none}
-.player-strip{height:48px;min-height:48px;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-top:1px solid var(--glass-border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0}
-.ps-play{width:30px;height:30px;background:var(--t1);color:var(--bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;cursor:pointer;flex-shrink:0}
-.ps-info{flex:1;min-width:0}.ps-title{font-size:.75rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ps-sub{font-size:.55rem;color:var(--t3)}
-.ps-pills{display:flex;gap:4px}.ps-pill{padding:4px 12px;border-radius:12px;border:1px solid var(--glass-border);background:transparent;color:var(--t3);font-family:inherit;font-size:.65rem;cursor:pointer}.ps-pill:hover{border-color:var(--border-l)}.ps-pill.on{border-color:var(--border-l);color:var(--t1);background:var(--accent-soft)}
-.mobile-pl-bar{display:none;height:32px;min-height:32px;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-top:1px solid var(--glass-border);align-items:center;justify-content:center;gap:4px;padding:0 8px}
-.mobile-pl-btn{flex:1;padding:5px 0;border-radius:6px;border:1px solid var(--glass-border);background:transparent;color:var(--t3);font-family:inherit;font-size:.6rem;cursor:pointer;text-align:center}.mobile-pl-btn.on{border-color:var(--border-l);color:var(--t1);background:var(--accent-soft)}
+/* PLAYER STRIP — simplified */
+.player-strip{height:44px;min-height:44px;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-top:1px solid var(--glass-border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0}
+.ps-play{width:28px;height:28px;background:var(--t1);color:var(--bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;cursor:pointer;flex-shrink:0}
+.ps-info{flex:1;min-width:0}.ps-title{font-size:.7rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ps-sub{font-size:.5rem;color:var(--positive);display:flex;align-items:center;gap:4px}
+.ps-live-dot{width:5px;height:5px;border-radius:50%;background:var(--positive);animation:livePulse 2s infinite}
+@keyframes livePulse{0%,100%{opacity:1}50%{opacity:.4}}
+/* EGG PROGRESS — replaces egg-mini */
+.egg-progress{padding:8px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.egg-progress-label{font-size:.55rem;color:var(--t3);flex-shrink:0}.egg-progress-bar{flex:1;height:2px;background:var(--border);border-radius:2px;overflow:hidden}.egg-progress-fill{height:100%;background:var(--t1);border-radius:2px;transition:width .5s linear;width:0%}.egg-progress-time{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--t3);min-width:40px;text-align:right}
+/* SIDEBAR */
 .sidebar{width:320px;min-width:320px;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-left:1px solid var(--glass-border);display:flex;flex-direction:column;overflow:hidden}
-.egg-mini{padding:8px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.egg-mini-label{font-size:.55rem;color:var(--t3);flex-shrink:0}.egg-mini-bar{flex:1;height:2px;background:var(--border);border-radius:2px;overflow:hidden}.egg-mini-fill{height:100%;background:var(--t1);border-radius:2px;transition:width .5s linear;width:0%}.egg-mini-time{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--t3);min-width:40px;text-align:right}
+/* TABS */
 .tab-nav{display:flex;border-bottom:1px solid var(--border);padding:4px 10px;gap:2px}
 .tab-btn{flex:1;padding:7px 0;background:none;border:none;border-radius:8px;color:var(--t3);font-family:inherit;font-size:.6rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}.tab-btn:hover{color:var(--t2);background:var(--glass-hover)}.tab-btn.on{color:var(--t1);background:var(--accent-soft)}
 .tab-panels{flex:1;overflow:hidden;position:relative}.tab-panel{position:absolute;inset:0;overflow-y:auto;padding:10px;opacity:0;pointer-events:none;transition:opacity .2s}.tab-panel.on{opacity:1;pointer-events:all}.tab-panel::-webkit-scrollbar{width:3px}.tab-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-/* SPIRIT CARDS with XP bar */
-.spirits-grid{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+/* SPIRIT CARDS */
+.spirits-grid{display:flex;flex-direction:column;gap:5px}
+.spirits-count{font-size:.5rem;color:var(--t3);text-align:center;padding:8px 0;letter-spacing:.1em}
 .spirit-card{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s}.spirit-card:hover{background:var(--accent-soft);border-color:var(--border-l)}
-.spirit-card-img{width:44px;height:44px;border-radius:50%;overflow:hidden;border:2px solid var(--card-border);flex-shrink:0}.spirit-card-img img{width:100%;height:100%;object-fit:cover}
-.spirit-card-info{flex:1;min-width:0}.spirit-card-name{font-size:.75rem;font-weight:600}.spirit-card-meta{font-size:.55rem;color:var(--t3);margin-top:1px}
+.spirit-card-img{width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;position:relative}
+.spirit-card-img img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
+.spirit-card-img::before{content:'';position:absolute;inset:-3px;border-radius:50%;z-index:0;opacity:0}
+/* Shimmer auras */
+.spirit-card-img.evo-1::before{opacity:1;background:conic-gradient(from 0deg,transparent,rgba(140,180,255,.3),transparent,rgba(200,220,255,.2),transparent);animation:auraRotate 4s linear infinite}
+.spirit-card-img.evo-2::before{opacity:1;background:conic-gradient(from 0deg,transparent,rgba(255,215,140,.35),transparent,rgba(255,240,200,.25),transparent);animation:auraRotate 3s linear infinite}
+@keyframes auraRotate{to{transform:rotate(360deg)}}
+.spirit-card-info{flex:1;min-width:0}.spirit-card-name{font-size:.75rem;font-weight:600}
+.spirit-card-meta{font-size:.55rem;color:var(--t3);margin-top:1px}
+/* Shimmer text for evolved labels */
+.evo-text-1{background:linear-gradient(90deg,#f5f5f5,#8ab4ff,#f5f5f5);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
+.evo-text-2{background:linear-gradient(90deg,#f5f5f5,#ffd480,#f5f5f5);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
+@keyframes shimText{0%{background-position:200% 0}100%{background-position:-200% 0}}
+[data-theme="light"] .evo-text-1{background:linear-gradient(90deg,#1a1816,#4477cc,#1a1816);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
+[data-theme="light"] .evo-text-2{background:linear-gradient(90deg,#1a1816,#cc8800,#1a1816);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
 .spirit-card-xp{width:100%;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:3px}.spirit-card-xp-fill{height:100%;background:var(--positive);border-radius:2px;transition:width 1s linear}
 .spirit-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
 .spirit-card-dots{display:flex;gap:3px}.spirit-card-dot{width:4px;height:4px;border-radius:50%;background:var(--t4)}.spirit-card-dot.on{background:var(--t1)}
 .spirit-card-lvl{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--t3)}
-.spirit-empty{text-align:center;padding:20px;font-size:.7rem;color:var(--t3)}
-.spirit-detail{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:14px;margin-bottom:8px;display:none}.spirit-detail.open{display:block;animation:fadeIn .2s ease-out}
+.spirit-empty{text-align:center;padding:24px 16px}.spirit-empty-msg{font-size:.75rem;color:var(--t3);margin-bottom:4px}.spirit-empty-hint{font-size:.6rem;color:var(--t4)}
+/* SPIRIT DETAIL */
+.spirit-detail{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:14px;margin-top:8px;display:none}.spirit-detail.open{display:block;animation:fadeIn .2s ease-out}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .sd-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}.sd-portrait{width:52px;height:52px;border-radius:12px;overflow:hidden;border:1px solid var(--card-border);flex-shrink:0}.sd-portrait img{width:100%;height:100%;object-fit:cover}
 .sd-info{flex:1}.sd-name{font-size:.9rem;font-weight:600}.sd-stage{font-size:.55rem;color:var(--t2)}.sd-bio{font-size:.5rem;color:var(--t3);margin-top:2px;font-style:italic;line-height:1.3}
 .sd-close{background:none;border:none;color:var(--t4);cursor:pointer;font-size:.8rem;padding:4px;align-self:flex-start}
 .sd-section{font-size:.5rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin:8px 0 4px;font-weight:500}
 .sd-bar-wrap{display:flex;align-items:center;gap:8px}.sd-bar{flex:1;height:3px;background:var(--border);border-radius:3px;overflow:hidden}.sd-bar-fill{height:100%;background:var(--positive);border-radius:3px;transition:width .3s}.sd-lvl{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3)}
-.trait-tags{display:flex;flex-wrap:wrap;gap:3px}.trait-tag{padding:2px 8px;border-radius:8px;font-size:.5rem;font-weight:500;background:var(--card-bg);color:var(--t2);border:1px solid var(--card-border)}.trait-tag.positive{color:var(--positive);border-color:rgba(102,187,153,.12)}.trait-tag.negative{color:var(--negative);border-color:rgba(204,119,119,.12)}
-.trait-effect{font-size:.45rem;color:var(--t3);margin-left:2px}
+.trait-tags{display:flex;flex-wrap:wrap;gap:3px}.trait-tag{padding:2px 8px;border-radius:8px;font-size:.5rem;font-weight:500;background:var(--card-bg);color:var(--t2);border:1px solid var(--card-border)}.trait-tag.positive{color:var(--positive);border-color:rgba(102,187,153,.12)}.trait-tag.neutral{color:var(--t3)}
 .sd-evolve-btn{width:100%;margin-top:10px;padding:10px;border-radius:var(--radius-sm);border:none;background:var(--t1);color:var(--bg);font-family:inherit;font-size:.7rem;font-weight:600;cursor:pointer}.sd-evolve-btn:disabled{opacity:.15;cursor:not-allowed}.sd-evolve-cost{font-size:.55rem;color:var(--t3);text-align:center;margin-top:4px}
-.section-label{font-size:.5rem;color:var(--t3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;font-weight:500}
-.hatchery-grid{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
-.hatch-slot{flex:1;min-width:50px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:8px 4px;text-align:center;cursor:pointer;transition:all .2s;min-height:65px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.hatch-slot:hover{border-color:var(--border-l)}.hatch-slot.locked{opacity:.3;cursor:default}.hatch-slot.unlockable{border-color:var(--special);border-style:dashed;opacity:.7;cursor:pointer}
+/* ITEMS TAB */
+.section-label{font-size:.5rem;color:var(--t3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;margin-top:10px;font-weight:500}.section-label:first-child{margin-top:0}
+.hatchery-grid{display:flex;gap:5px;flex-wrap:wrap}
+.hatch-slot{flex:1;min-width:50px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:8px 4px;text-align:center;cursor:pointer;transition:all .2s;min-height:65px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.hatch-slot:hover{border-color:var(--border-l)}.hatch-slot.locked{opacity:.25;cursor:default}.hatch-slot.unlockable{border-color:var(--special);border-style:dashed;opacity:.7;cursor:pointer}
 .hatch-slot.ready{border-color:var(--positive);animation:readyPulse 2s infinite}
+.hatch-slot.starter{border-color:var(--positive);animation:starterGlow 1.5s ease-in-out infinite}
 @keyframes readyPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 10px rgba(102,187,153,.12)}}
+@keyframes starterGlow{0%,100%{box-shadow:0 0 6px rgba(102,187,153,.1)}50%{box-shadow:0 0 14px rgba(102,187,153,.2)}}
 .hatch-slot-icon{font-size:.9rem}.hatch-slot-label{font-size:.45rem;color:var(--t3)}.hatch-slot-timer{font-family:'JetBrains Mono',monospace;font-size:.45rem;color:var(--t3)}.hatch-slot-rarity{font-size:.45rem;font-weight:500}
 .hatch-slot-bar{width:80%;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:2px}.hatch-slot-bar-fill{height:100%;background:var(--t2);border-radius:2px}
-.pending-label{font-size:.5rem;color:var(--t3);margin:3px 0}.pending-list{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:10px}
-.pending-egg{padding:3px 8px;border-radius:6px;font-size:.5rem;background:var(--card-bg);border:1px solid var(--card-border)}.pending-egg:hover{border-color:var(--border-l)}
-.ing-grid{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}.ing-row{display:flex;align-items:center;gap:8px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:7px 10px}
+.hatch-slot-eggs{font-size:.4rem;color:var(--t3);margin-top:1px}
+.ing-grid{display:flex;flex-direction:column;gap:4px}.ing-row{display:flex;align-items:center;gap:8px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:7px 10px}
 .ing-icon{font-size:.8rem;flex-shrink:0}.ing-name{font-size:.6rem;color:var(--t2);flex:1}.ing-count{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:500}
-.pill-grid{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
-.pill-row{display:flex;align-items:center;gap:8px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:7px 10px;cursor:pointer;transition:border-color .15s}.pill-row:hover{border-color:var(--border-l)}
+.ing-swap{background:none;border:none;color:var(--t4);cursor:pointer;font-size:.65rem;padding:2px 6px;border-radius:4px}.ing-swap:hover{color:var(--t2);background:var(--glass-hover)}
+.pill-grid{display:flex;flex-direction:column;gap:4px}
+.pill-row{display:flex;align-items:center;gap:8px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:7px 10px;cursor:pointer;transition:border-color .15s}.pill-row:hover{border-color:var(--border-l)}.pill-row.disabled{opacity:.35;pointer-events:none}
 .pill-icon{font-size:.8rem}.pill-info{flex:1}.pill-name{font-size:.6rem;font-weight:500}.pill-desc{font-size:.45rem;color:var(--t3)}.pill-cost{font-size:.45rem;color:var(--t3);white-space:nowrap}
-.convert-row{display:flex;gap:4px;margin-bottom:10px}.convert-btn{flex:1;padding:6px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);color:var(--t3);font-family:inherit;font-size:.5rem;cursor:pointer;text-align:center}.convert-btn:hover{border-color:var(--border-l)}
+/* VILLAGE */
 .village-rank-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:14px;text-align:center;margin-bottom:10px}
 .village-rank-label{font-size:.5rem;color:var(--t3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px}.village-rank-name{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:500;margin-bottom:2px}.village-rank-desc{font-size:.55rem;color:var(--t2)}
 .village-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:10px}.village-stat{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:8px;text-align:center}
 .village-stat-num{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:500}.village-stat-label{font-size:.45rem;color:var(--t3);text-transform:uppercase;letter-spacing:.05em}
-.feed-section{border-top:1px solid var(--border);display:flex;flex-direction:column;max-height:28%;min-height:60px;flex-shrink:0}.feed-head{padding:6px 10px;flex-shrink:0}
-.feed-head-label{font-size:.5rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;font-weight:500}.feed-scroll{flex:1;overflow-y:auto;padding:2px 6px}
-.fi{display:flex;gap:6px;padding:3px;border-radius:4px;animation:fiIn .3s ease-out}@keyframes fiIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
-.fi-icon{width:16px;height:16px;border-radius:4px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:.5rem;flex-shrink:0}
-.fi-body{flex:1;min-width:0}.fi-text{font-size:.55rem;color:var(--t2);line-height:1.3}.fi-text b{color:var(--t1);font-weight:600}.fi-time{font-family:'JetBrains Mono',monospace;font-size:.4rem;color:var(--t4)}
-.fi.major .fi-icon{background:var(--accent-soft)}.fi.minor{opacity:.4}
+/* TOAST */
 .toast{position:fixed;top:56px;left:16px;z-index:50;background:var(--toast-bg);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 12px 40px rgba(0,0,0,.3);opacity:0;transform:translateX(-20px);transition:all .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none}.toast.show{opacity:1;transform:translateX(0)}.toast-icon{font-size:1.2rem}.toast-text{font-size:.8rem;font-weight:500}.toast-sub{font-size:.5rem;color:var(--t3)}
+/* MODAL */
 .modal-bg{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}.modal-bg.open{opacity:1;pointer-events:all}
 .modal-box{background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);border-radius:var(--radius);width:90%;max-width:360px;padding:20px;text-align:center;transform:scale(.95);transition:transform .25s;max-height:80vh;overflow-y:auto}.modal-bg.open .modal-box{transform:scale(1)}
 .modal-title{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:500;margin-bottom:10px}.modal-desc{font-size:.7rem;color:var(--t2);margin-bottom:12px;line-height:1.5}.modal-desc b{color:var(--t1)}
 .modal-btn{padding:10px 20px;border-radius:var(--radius-sm);border:none;background:var(--t1);color:var(--bg);font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;margin:4px}.modal-btn:disabled{opacity:.15}.modal-btn.secondary{background:transparent;border:1px solid var(--glass-border);color:var(--t2)}
 .modal-select-grid{display:flex;flex-direction:column;gap:5px;margin:8px 0;text-align:left}.modal-select-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);cursor:pointer}.modal-select-row:hover{border-color:var(--border-l)}
+.pp-content{text-align:left;font-size:.65rem;color:var(--t2);line-height:1.6;max-height:60vh;overflow-y:auto}.pp-content h3{font-size:.75rem;color:var(--t1);margin:10px 0 4px}.pp-content p{margin-bottom:8px}
+/* HATCH ANIM */
 .hatch-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;opacity:0;pointer-events:none;transition:opacity .4s}.hatch-overlay.show{opacity:1;pointer-events:all}
 .hatch-egg-anim{width:120px;height:120px;display:flex;align-items:center;justify-content:center;font-size:4rem;animation:eggShake .3s ease-in-out infinite}
 @keyframes eggShake{0%,100%{transform:rotate(0)}25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
@@ -115,71 +151,56 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);-webki
 @keyframes eggCrack{0%{transform:scale(1)}30%{transform:scale(1.15)}60%{transform:scale(1.3);opacity:.8}100%{transform:scale(1.6);opacity:0}}
 .hatch-reveal{opacity:0;transform:scale(.5);transition:all .6s cubic-bezier(.34,1.56,.64,1)}.hatch-reveal.show{opacity:1;transform:scale(1)}
 .hatch-reveal img{width:128px;height:128px;border-radius:50%;border:3px solid var(--t1)}.hatch-reveal-name{font-family:'Fraunces',serif;font-size:1.4rem;margin-top:12px;color:var(--t1)}.hatch-reveal-rarity{font-size:.7rem;margin-top:4px;font-weight:500}.hatch-reveal-tap{font-size:.55rem;color:var(--t4);margin-top:16px}
-.pp-content{text-align:left;font-size:.65rem;color:var(--t2);line-height:1.6;max-height:60vh;overflow-y:auto}.pp-content h3{font-size:.75rem;color:var(--t1);margin:10px 0 4px}.pp-content p{margin-bottom:8px}
-/* MOBILE — complete rework */
+/* MOBILE */
 @media(max-width:768px){
-  .content{flex-direction:column}
-  .video-area{flex:none;height:50vh;min-height:220px}
-  .sidebar{width:100%;min-width:unset;flex:1;border-left:none;border-top:1px solid var(--glass-border);min-height:0}
-  .player-strip{height:38px;min-height:38px;padding:0 10px;gap:6px}
-  .ps-pills{display:none}
-  .ps-play{width:26px;height:26px;font-size:.55rem}
-  .ps-title{font-size:.65rem}
-  .ps-sub{font-size:.5rem}
-  .mobile-pl-bar{display:flex}
-  .topbar{height:40px;min-height:40px;padding:0 12px}
-  .tb-brand{font-size:.85rem}
-  .tb-egg-badge{padding:4px 8px}
-  .tb-egg-badge-num{font-size:.65rem}
-  .tab-nav{padding:3px 8px}
-  .tab-btn{padding:6px 0;font-size:.55rem}
-  .tab-panel{padding:8px}
-  .egg-mini{padding:6px 10px}
-  .feed-section{max-height:24%;min-height:50px}
-  .feed-head{padding:4px 8px}
-  .spirit-card{padding:7px 8px;gap:8px}
-  .spirit-card-img{width:38px;height:38px}
-  .spirit-card-name{font-size:.7rem}
-  .spirit-card-meta{font-size:.5rem}
-  .spirit-detail{padding:10px}
-  .sd-portrait{width:44px;height:44px}
-  .hatch-slot{min-height:58px;padding:6px 3px}
-  .toast{top:44px;left:8px;padding:10px 12px}
-  .toast-icon{font-size:1rem}
-  .toast-text{font-size:.7rem}
-  .ing-row{padding:6px 8px}
-  .pill-row{padding:6px 8px}
-  .section-label{font-size:.45rem;margin-bottom:4px}
-  .village-rank-card{padding:10px}
-  .village-rank-name{font-size:1rem}
-  .village-stat{padding:6px}
-  .village-stat-num{font-size:.7rem}
+.content{flex-direction:column}
+.video-area{flex:none;height:50vh;min-height:220px}
+.sidebar{width:100%;min-width:unset;flex:1;border-left:none;border-top:1px solid var(--glass-border);min-height:0}
+.player-strip{height:36px;min-height:36px;padding:0 10px;gap:6px}
+.ps-play{width:24px;height:24px;font-size:.5rem}
+.ps-title{font-size:.65rem}.ps-sub{font-size:.45rem}
+.topbar{height:40px;min-height:40px;padding:0 12px}
+.tb-brand{font-size:.85rem}
+.tb-rank{padding:4px 8px}.tb-rank-name{font-size:.6rem}.tb-rank-pts{font-size:.5rem}
+.tab-nav{padding:3px 8px}.tab-btn{padding:6px 0;font-size:.55rem}
+.tab-panel{padding:8px}
+.egg-progress{padding:6px 10px}
+.spirit-card{padding:7px 8px;gap:8px}.spirit-card-img{width:38px;height:38px}.spirit-card-name{font-size:.7rem}.spirit-card-meta{font-size:.5rem}
+.spirit-detail{padding:10px}.sd-portrait{width:44px;height:44px}
+.hatch-slot{min-height:58px;padding:6px 3px}
+.toast{top:44px;left:8px;padding:10px 12px}.toast-icon{font-size:1rem}.toast-text{font-size:.7rem}
+.ing-row{padding:6px 8px}.pill-row{padding:6px 8px}
+.section-label{font-size:.45rem;margin-bottom:4px}
+.village-rank-card{padding:10px}.village-rank-name{font-size:1rem}
+.village-stat{padding:6px}.village-stat-num{font-size:.7rem}
+.wb-inner{padding:0 20px}.wb-msg{font-size:1.1rem}.wb-portrait{width:60px;height:60px}
 }
 @media(max-width:420px){.video-area{height:48vh;min-height:200px}}
 
 </style>
 </head>
 <body>
+
 <div class="onboard gone" id="onboard"><div class="ob-inner"><div class="ob-icon" id="obIcon"></div><div class="ob-title" id="obTitle"></div><div class="ob-desc" id="obDesc"></div><div class="ob-dots"><div class="ob-dot on" id="obD0"></div><div class="ob-dot" id="obD1"></div><div class="ob-dot" id="obD2"></div></div><button class="ob-btn" id="obBtn" onclick="nextOnboard()">Next</button><button class="ob-skip" onclick="finishOnboard()">Skip</button></div></div>
+<div class="wb-overlay gone" id="welcomeBack"><div class="wb-inner"><div class="wb-portrait" id="wbPortrait"></div><div class="wb-msg" id="wbMsg"></div><div class="wb-gains" id="wbGains"></div><button class="wb-btn" onclick="dismissWB()">Enter Village</button></div></div>
 <div class="guest-banner" id="guestBanner"><span class="guest-banner-text">You got an egg! <b>Create an account</b> to keep it</span><button class="guest-banner-btn" onclick="showLogin()">Sign Up</button></div>
 <div class="toast" id="toast"><div class="toast-icon" id="toastI"></div><div><div class="toast-text" id="toastT"></div><div class="toast-sub" id="toastS"></div></div></div>
 <div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box" id="modalBox"></div></div>
 <div class="hatch-overlay" id="hatchOverlay" onclick="closeHatchAnim()"><div class="hatch-egg-anim" id="hatchEgg">&#x1F95A;</div><div class="hatch-reveal" id="hatchReveal"><img id="hatchImg" src=""><div class="hatch-reveal-name" id="hatchName"></div><div class="hatch-reveal-rarity" id="hatchRarity"></div><div class="hatch-reveal-tap">tap anywhere to continue</div></div></div>
-<div class="settings-drop" id="settingsDrop"><div class="sd-item" onclick="toggleTheme()"><span class="sd-item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> Theme</span><div class="sd-toggle" id="themeToggle"></div></div><div class="sd-divider"></div><div class="sd-item" onclick="showPrivacy()"><span class="sd-item-label">&#x1F4DC; Privacy Policy</span></div><div class="sd-divider"></div><div class="sd-item" onclick="doLogout()"><span class="sd-item-label">&#x21A9; Logout</span></div></div>
+<div class="settings-drop" id="settingsDrop"><div class="sd-item" onclick="toggleTheme()"><span class="sd-item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> Theme</span><div class="sd-toggle" id="themeToggle"></div></div><div class="sd-divider"></div><div class="sd-item" onclick="showPrivacy()"><span class="sd-item-label">&#x1F4DC; Privacy</span></div><div class="sd-divider sdLogoutDiv"></div><div class="sd-item sdLogoutItem" onclick="doLogout()"><span class="sd-item-label">&#x21A9; Logout</span></div></div>
 <div class="login gone" id="login"><div class="login-inner"><div class="login-brand"><h1>Ehoro Village</h1><p class="sub">lo-fi &middot; spirits &middot; cultivate</p></div><div class="login-field" id="usernameField" style="display:none"><label>Username</label><input type="text" id="inUser" placeholder="pick a username"></div><div class="login-field"><label>Email</label><input type="email" id="inEmail" placeholder="you@email.com"></div><div class="login-field"><label>Password</label><input type="password" id="inPass" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" minlength="6"></div><button class="l-btn" id="authBtn" onclick="doAuth()">Sign In</button><div class="l-error" id="authError"></div><div class="l-div">or</div><button class="l-secondary" onclick="enterGuest()">Watch as Guest</button><button class="l-toggle" id="authToggle" onclick="toggleAuthMode()">Need an account? Sign up</button></div></div>
 <div class="shell on" id="shell">
-<div class="topbar"><div class="tb-brand">Ehoro Village</div><div class="tb-right"><div class="tb-egg-badge"><span class="tb-egg-badge-icon">&#x1F95A;</span><span class="tb-egg-badge-num" id="eggCount">0</span><span class="tb-egg-badge-label">eggs</span></div><button class="tb-gear" onclick="toggleSettings()" title="Settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button><span class="tb-user" id="userName">guest</span></div></div>
+<div class="topbar"><div class="tb-brand">Ehoro Village</div><div class="tb-right"><div class="tb-rank"><span class="tb-rank-name" id="tbRankName">Ember</span><span class="tb-rank-pts" id="tbRankPts">0 prestige</span></div><button class="tb-gear" onclick="toggleSettings()" title="Settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button><div id="tbAuth"><span class="tb-user">guest</span></div></div></div>
 <div class="content">
-<div class="video-area"><div class="video-embed" id="videoEmbed"><div class="video-placeholder" id="videoPlaceholder" onclick="startStream()"><div class="vp-play">&#x25B6;</div><div class="vp-text">Start Lo-Fi Stream</div></div></div><div class="player-strip"><button class="ps-play" id="psPlay" onclick="startStream()">&#x25B6;</button><div class="ps-info"><div class="ps-title" id="psTitle">lo-fi hip hop radio</div><div class="ps-sub" id="psSub">Caf&#233; vibes</div></div><div class="ps-pills"><button class="ps-pill on" data-pl="cafe" onclick="setPl(this)">Caf&#233;</button><button class="ps-pill" data-pl="outdoors" onclick="setPl(this)">Outdoors</button><button class="ps-pill" data-pl="focus" onclick="setPl(this)">Focus</button></div></div><div class="mobile-pl-bar"><button class="mobile-pl-btn on" data-pl="cafe" onclick="setPlMobile(this)">&#9749; Caf&#233;</button><button class="mobile-pl-btn" data-pl="outdoors" onclick="setPlMobile(this)">&#127807; Outdoors</button><button class="mobile-pl-btn" data-pl="focus" onclick="setPlMobile(this)">&#9889; Focus</button></div></div>
-<div class="sidebar"><div class="egg-mini"><span class="egg-mini-label">Next egg</span><div class="egg-mini-bar"><div class="egg-mini-fill" id="eggFill"></div></div><span class="egg-mini-time" id="eggTimer">&mdash;</span></div><div class="tab-nav"><button class="tab-btn on" data-tab="spirits" onclick="switchTab(this)">Spirits</button><button class="tab-btn" data-tab="items" onclick="switchTab(this)">Items</button><button class="tab-btn" data-tab="village" onclick="switchTab(this)">Village</button></div><div class="tab-panels"><div class="tab-panel on" id="tab-spirits"></div><div class="tab-panel" id="tab-items"></div><div class="tab-panel" id="tab-village"></div></div><div class="feed-section"><div class="feed-head"><span class="feed-head-label">Activity</span></div><div class="feed-scroll" id="feed"></div></div></div>
+<div class="video-area"><div class="video-embed" id="videoEmbed"><div class="video-placeholder" id="videoPlaceholder" onclick="startStream()"><div class="vp-play">&#x25B6;</div><div class="vp-text">Start Lo-Fi Stream</div></div></div><div class="player-strip"><button class="ps-play" id="psPlay" onclick="startStream()">&#x25B6;</button><div class="ps-info"><div class="ps-title">Lofi Girl</div><div class="ps-sub"><span class="ps-live-dot"></span> live</div></div></div></div>
+<div class="sidebar"><div class="egg-progress"><span class="egg-progress-label">Next egg</span><div class="egg-progress-bar"><div class="egg-progress-fill" id="eggFill"></div></div><span class="egg-progress-time" id="eggTimer">&mdash;</span></div><div class="tab-nav"><button class="tab-btn on" data-tab="spirits" onclick="switchTab(this)">Spirits</button><button class="tab-btn" data-tab="items" onclick="switchTab(this)">Items</button><button class="tab-btn" data-tab="village" onclick="switchTab(this)">Village</button></div><div class="tab-panels"><div class="tab-panel on" id="tab-spirits"></div><div class="tab-panel" id="tab-items"></div><div class="tab-panel" id="tab-village"></div></div></div>
 </div></div>
 
 <script>
 const SUPABASE_URL='https://eyqddqtlgthgkiqjavyx.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_CsTLSJj1YwgiHMxUTa685Q_2TVvZa2Q';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-const PL={cafe:{yt:'jfKfPfyJRdk',title:'lofi hip hop radio',sub:'Café vibes'},outdoors:{yt:'jfKfPfyJRdk',title:'lofi hip hop radio',sub:'Outdoors'},focus:{yt:'jfKfPfyJRdk',title:'lofi hip hop radio',sub:'Deep Focus'}};
-const PL_ORDER=['cafe','outdoors','focus'];
+const STREAM_YT='jfKfPfyJRdk';
 const RARITY_COLORS={mundane:'#888',adept:'#8ab',refined:'#7a7',illustrious:'#ba8',sovereign:'#a8c',celestial:'#8cf',transcendent:'#fc8',mysterious:'#c8f',ancestral:'#f88',paradox:'#fff'};
 const INCUB_MINS={mundane:5,adept:10,refined:20,illustrious:30,sovereign:45,celestial:60,transcendent:90,mysterious:120,ancestral:120,paradox:120};
 const VILLAGE_RANKS=[{name:'Ember',min:0,desc:'Your village is a spark.'},{name:'Stone',min:50,desc:'Solid foundation.'},{name:'Bronze',min:150,desc:'A real village.'},{name:'Silver',min:400,desc:'Respected.'},{name:'Gold',min:800,desc:'Prosperous.'},{name:'Emerald',min:1500,desc:'A beacon.'},{name:'Celestial',min:3000,desc:'Transcendent.'}];
@@ -191,242 +212,113 @@ function spiritImg(t,s){const k=spiritKey(t),d=SPIRIT_DATA[k];return d?d.img[Mat
 function spiritName(t){return SPIRIT_DATA[spiritKey(t)]?.name||t}
 function spiritBio(t){return SPIRIT_DATA[spiritKey(t)]?.bio||''}
 const EVO_LABELS=['Seedling','Awakened','Ascended'];
+const WB_MESSAGES=['The village rested while you were away...','Your spirits kept watch in the quiet hours...','The lo-fi played on while you were gone...','A gentle hum welcomes you home...','The spirits sensed your return...'];
 
-let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0},hatchery:[],pendingEggs:[],pillRecipes:[],playing:false,pl:'cafe',eggT:0,EGG_SEC:3600,FIRST_EGG_SEC:1800,GUEST_EGG_SEC:30,sessionId:null,ticker:null,hatchTicker:null,cultTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null};
+let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0},hatchery:[],pendingEggs:[],pillRecipes:[],playing:false,eggT:0,EGG_SEC:3600,FIRST_EGG_SEC:1800,GUEST_EGG_SEC:30,sessionId:null,ticker:null,hatchTicker:null,cultTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null};
 
-// Onboarding
+// ═══ ONBOARDING ═══
 const OB_STEPS=[{img:'sprites/timi_1.png',title:'Listen to Lo-Fi',desc:'Stream curated lo-fi playlists while you study, work, or chill.'},{img:'sprites/mowang_1.png',title:'Collect Eggs & Spirits',desc:'Eggs drop while you listen. Hatch them to discover spirits.'},{img:'sprites/bayo_1.png',title:'Grow Your Village',desc:'Cultivate spirits, evolve them, watch your village rank rise.'}];
 function showOnboard(){S.obStep=0;renderOB();document.getElementById('onboard').classList.remove('gone')}
 function renderOB(){const s=OB_STEPS[S.obStep];document.getElementById('obIcon').innerHTML='<img src="'+s.img+'">';document.getElementById('obTitle').textContent=s.title;document.getElementById('obDesc').textContent=s.desc;document.getElementById('obBtn').textContent=S.obStep<2?'Next':'Get Started';[0,1,2].forEach(i=>document.getElementById('obD'+i).className='ob-dot'+(i===S.obStep?' on':''))}
 function nextOnboard(){if(S.obStep<2){S.obStep++;renderOB()}else finishOnboard()}
 function finishOnboard(){document.getElementById('onboard').classList.add('gone');if(!S.isGuest){sb.from('profiles').update({onboarding_done:true}).eq('id',S.user.id);claimNewbieGift()}}
-async function claimNewbieGift(){if(S.profile?.newbie_gift_claimed)return;try{const{data}=await sb.rpc('claim_newbie_gift');if(data?.error)return;S.emblems.cafe_bean+=6;S.emblems.wild_essence+=6;S.emblems.focus_shard+=6;S.profile.newbie_gift_claimed=true;renderItemsTab();showToast('gift');feed('🎁','<b>Welcome Gift!</b> +6 of each ingredient','major')}catch(e){}}
+async function claimNewbieGift(){if(S.profile?.newbie_gift_claimed)return;try{const{data}=await sb.rpc('claim_newbie_gift');if(data?.error)return;S.emblems.cafe_bean+=6;S.emblems.wild_essence+=6;S.emblems.focus_shard+=6;S.profile.newbie_gift_claimed=true;renderItemsTab();showToast('gift')}catch(e){}}
 
-// Settings
+// ═══ WELCOME BACK ═══
+function showWelcomeBack(xpGained,hoursAway){const wb=document.getElementById('welcomeBack');if(!wb)return;const sp=S.spirits.length?S.spirits[Math.floor(Math.random()*S.spirits.length)]:null;const msg=WB_MESSAGES[Math.floor(Math.random()*WB_MESSAGES.length)];document.getElementById('wbMsg').textContent=msg;if(sp)document.getElementById('wbPortrait').innerHTML='<img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'">';let gains='';if(xpGained>0)gains+='Your spirits gained +'+xpGained+' XP';if(hoursAway>0)gains+=(gains?' \u00b7 ':'')+Math.round(hoursAway)+'h away';document.getElementById('wbGains').textContent=gains||'Everything is as you left it.';wb.classList.remove('gone')}
+function dismissWB(){document.getElementById('welcomeBack').classList.add('gone')}
+
+// ═══ SETTINGS ═══
 function toggleSettings(){S.settingsOpen=!S.settingsOpen;document.getElementById('settingsDrop').classList.toggle('open',S.settingsOpen)}
 document.addEventListener('click',e=>{if(S.settingsOpen&&!e.target.closest('.settings-drop')&&!e.target.closest('.tb-gear')){S.settingsOpen=false;document.getElementById('settingsDrop').classList.remove('open')}});
 function toggleTheme(){S.theme=S.theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',S.theme);document.getElementById('themeToggle').classList.toggle('on',S.theme==='light')}
 function switchTab(btn){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));btn.classList.add('on');document.getElementById('tab-'+btn.dataset.tab).classList.add('on')}
+function showPrivacy(){toggleSettings();const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Privacy Policy</div><div class="pp-content"><h3>Super Ube LLC</h3><p>Ehoro Village is operated by Super Ube LLC, based in Georgia, United States.</p><h3>What We Collect</h3><p>When you create an account, we store your email address, username, and gameplay data (spirits, eggs, ingredients, listening time). We use Supabase for authentication and data storage.</p><h3>How We Use Your Data</h3><p>Your data is used solely to provide and improve the Ehoro Village experience. We do not sell, share, or distribute your personal information to third parties.</p><h3>Analytics</h3><p>We collect anonymized gameplay analytics to improve game balance. No personal information is included.</p><h3>Cookies</h3><p>We use essential cookies for authentication only. No tracking cookies.</p><h3>Data Deletion</h3><p>Request deletion of your account and data by contacting support@superube.com.</p><p style="color:var(--t4);margin-top:12px">Last updated: February 2026</p></div><button class="modal-btn secondary" onclick="closeModal()">Close</button>';document.getElementById('modal').classList.add('open')}
 
-// Auth
+// ═══ AUTH ═══
 function showLogin(){document.getElementById('login').classList.remove('gone');S.authMode='signup';document.getElementById('authBtn').textContent='Create Account';document.getElementById('authToggle').textContent='Already have an account? Sign in';document.getElementById('usernameField').style.display=''}
 function toggleAuthMode(){S.authMode=S.authMode==='login'?'signup':'login';const u=S.authMode==='signup';document.getElementById('authBtn').textContent=u?'Create Account':'Sign In';document.getElementById('authToggle').textContent=u?'Already have an account? Sign in':'Need an account? Sign up';document.getElementById('usernameField').style.display=u?'':'none';document.getElementById('authError').textContent=''}
 async function doAuth(){const email=document.getElementById('inEmail').value.trim(),pass=document.getElementById('inPass').value,btn=document.getElementById('authBtn'),err=document.getElementById('authError');err.textContent='';err.className='l-error';if(!email||!pass){err.textContent='Email and password required';return}if(pass.length<6){err.textContent='Password must be 6+ characters';return}btn.disabled=true;try{let r;if(S.authMode==='signup'){const un=document.getElementById('inUser').value.trim()||'user_'+Math.random().toString(36).slice(2,8);r=await sb.auth.signUp({email,password:pass,options:{data:{username:un}}});if(r.data?.user&&!r.data.session){err.className='l-error ok';err.textContent='Check email to confirm!';btn.disabled=false;return}}else{r=await sb.auth.signInWithPassword({email,password:pass})}if(r.error)throw r.error;S.user=r.data.user;S.isGuest=false;await loadUserData();enterApp()}catch(e){err.textContent=e.message||'Auth failed'}finally{btn.disabled=false}}
-function enterGuest(){document.getElementById('login').classList.add('gone');S.isGuest=true;S.user=null;document.getElementById('userName').textContent='guest';loadGuestDefaults();feed('👋','Welcome! Hit play to start','major')}
-function loadGuestDefaults(){S.spirits=[];S.traits={};S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0};S.profile={total_eggs:0,total_listen_seconds:0,username:'guest'};S.hatchery=[{id:'gs1',slot_number:1,unlocked:true,egg_id:null},{id:'gs2',slot_number:2,unlocked:true,egg_id:null},{id:'gs3',slot_number:3,unlocked:false},{id:'gs4',slot_number:4,unlocked:false},{id:'gs5',slot_number:5,unlocked:false}];S.pendingEggs=[];S.pillRecipes=[{id:'demo1',pill_name:'Growth Pill',pill_type:'growth',description:'Grants 50 XP to a spirit.',effect_type:'xp_flat',effect_value:50,cost_cafe_bean:4,cost_wild_essence:2,cost_focus_shard:2},{id:'demo2',pill_name:'Clarity Pill',pill_type:'clarity',description:'Grants 100 XP to a spirit.',effect_type:'xp_flat',effect_value:100,cost_cafe_bean:6,cost_wild_essence:6,cost_focus_shard:6},{id:'demo3',pill_name:'Harmony Pill',pill_type:'harmony',description:'Grants 25 XP to ALL spirits.',effect_type:'xp_all',effect_value:25,cost_cafe_bean:3,cost_wild_essence:3,cost_focus_shard:8}];updateAllUI()}
-async function doLogout(){toggleSettings();if(S.sessionId){try{await sb.rpc('end_session',{p_session_id:S.sessionId})}catch(e){}S.sessionId=null}await sb.auth.signOut();S.user=null;S.playing=false;S.isGuest=true;[S.ticker,S.hatchTicker,S.cultTicker].forEach(t=>{if(t)clearInterval(t)});S.ticker=S.hatchTicker=S.cultTicker=null;const em=document.getElementById('videoEmbed'),ifr=em.querySelector('iframe');if(ifr)ifr.remove();em.classList.remove('loaded');document.getElementById('userName').textContent='guest';loadGuestDefaults()}
+function enterGuest(){document.getElementById('login').classList.add('gone');S.isGuest=true;S.user=null;updateTopBar();loadGuestDefaults()}
+function loadGuestDefaults(){S.spirits=[];S.traits={};S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0};S.profile={total_eggs:0,total_listen_seconds:0,username:'guest'};S.hatchery=[{id:'gs1',slot_number:1,unlocked:true,egg_id:null},{id:'gs2',slot_number:2,unlocked:true,egg_id:null},{id:'gs3',slot_number:3,unlocked:false},{id:'gs4',slot_number:4,unlocked:false},{id:'gs5',slot_number:5,unlocked:false}];S.pendingEggs=[];S.pillRecipes=[{id:'d1',pill_name:'Cultivation Pill',pill_type:'growth',description:'Grants 50 XP to a spirit.',effect_type:'xp_flat',effect_value:50,cost_cafe_bean:4,cost_wild_essence:2,cost_focus_shard:2},{id:'d2',pill_name:'Greater Cultivation Pill',pill_type:'clarity',description:'Grants 100 XP to a spirit.',effect_type:'xp_flat',effect_value:100,cost_cafe_bean:6,cost_wild_essence:6,cost_focus_shard:6},{id:'d3',pill_name:'Village Cultivation Pill',pill_type:'harmony',description:'Grants 25 XP to ALL spirits.',effect_type:'xp_all',effect_value:25,cost_cafe_bean:3,cost_wild_essence:3,cost_focus_shard:8}];updateAllUI()}
+async function doLogout(){toggleSettings();if(S.sessionId){try{await sb.rpc('end_session',{p_session_id:S.sessionId})}catch(e){}S.sessionId=null}await sb.auth.signOut();S.user=null;S.playing=false;S.isGuest=true;[S.ticker,S.hatchTicker,S.cultTicker].forEach(t=>{if(t)clearInterval(t)});S.ticker=S.hatchTicker=S.cultTicker=null;const em=document.getElementById('videoEmbed'),ifr=em.querySelector('iframe');if(ifr)ifr.remove();em.classList.remove('loaded');updateTopBar();loadGuestDefaults()}
 async function checkSession(){const{data:{session}}=await sb.auth.getSession();if(session){S.user=session.user;S.isGuest=false;await loadUserData();enterApp()}}
-async function loadUserData(){if(!S.user)return;const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:pend},{data:pills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).single(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).eq('status','pending').order('created_at',{ascending:false}).limit(10),sb.from('pill_recipes').select('*')]);S.profile=prof;S.spirits=spirits||[];S.hatchery=hatch||[];S.pendingEggs=pend||[];S.pillRecipes=pills||[];if(emb)emb.forEach(e=>{S.emblems[e.emblem_type]=e.quantity});S.traits={};if(traits)traits.forEach(t=>{if(!S.traits[t.spirit_id])S.traits[t.spirit_id]=[];S.traits[t.spirit_id].push(t)})}
-async function enterApp(){document.getElementById('login').classList.add('gone');document.getElementById('guestBanner').classList.remove('show');document.getElementById('userName').textContent=S.profile?.username||'user';updateAllUI();feed('👋','Welcome back, <b>'+(S.profile?.username||'user')+'</b>','major');if(!S.profile?.onboarding_done)showOnboard();startHatcheryTicker();startCultivationTicker();try{const{data}=await sb.rpc('claim_passive_cultivation');if(data&&data.xp_granted>0){feed('🌙','Spirits gained <b>+'+data.xp_granted+' XP</b> while away ('+data.hours_away+'h)','major');await loadUserData();updateAllUI()}}catch(e){}}
-function updateAllUI(){document.getElementById('eggCount').textContent=S.profile?.total_eggs||0;renderSpiritsTab();renderItemsTab();renderVillageTab()}
+async function loadUserData(){if(!S.user)return;const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:pend},{data:pills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).single(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).eq('status','pending').order('created_at',{ascending:false}).limit(20),sb.from('pill_recipes').select('*')]);S.profile=prof;S.spirits=spirits||[];S.hatchery=hatch||[];S.pendingEggs=pend||[];S.pillRecipes=pills||[];if(emb)emb.forEach(e=>{S.emblems[e.emblem_type]=e.quantity});S.traits={};if(traits)traits.forEach(t=>{if(!S.traits[t.spirit_id])S.traits[t.spirit_id]=[];S.traits[t.spirit_id].push(t)})}
 
-// SPIRITS TAB - glass cards
-function renderSpiritsTab(){const el=document.getElementById('tab-spirits');if(!S.spirits.length){el.innerHTML='<div class="spirit-empty">No spirits yet! Hatch eggs to discover spirits.</div>';return}let h='<div class="spirits-grid">';S.spirits.forEach(sp=>{const lvl=Math.floor((sp.xp||0)/100)+1,xpP=(sp.xp||0)%100;h+='<div class="spirit-card" onclick="selectSpirit(\''+sp.id+'\')"><div class="spirit-card-img"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div><div class="spirit-card-info"><div class="spirit-card-name">'+sp.name+'</div><div class="spirit-card-meta">'+EVO_LABELS[sp.evo_stage]+' \u00b7 Lv.'+lvl+'</div><div class="spirit-card-xp"><div class="spirit-card-xp-fill" style="width:'+xpP+'%"></div></div></div><div class="spirit-card-right"><div class="spirit-card-dots">'+[0,1,2].map(i=>'<div class="spirit-card-dot'+(i<=sp.evo_stage?' on':'')+'"></div>').join('')+'</div><div class="spirit-card-lvl">'+xpP+'/100</div></div></div>'});h+='</div><div id="spiritDetail" class="spirit-detail"></div>';el.innerHTML=h;if(S.selectedSpirit)showSpiritDetail(S.selectedSpirit)}
+// ═══ ENTER APP ═══
+async function enterApp(){document.getElementById('login').classList.add('gone');document.getElementById('guestBanner').classList.remove('show');updateTopBar();updateAllUI();if(S.profile?.onboarding_done===false){showOnboard();return}startHatcheryTicker();startCultivationTicker();try{const{data}=await sb.rpc('claim_passive_cultivation');if(data&&data.xp_granted>0&&data.hours_away>=1){await loadUserData();updateAllUI();showWelcomeBack(data.xp_granted,data.hours_away)}else{showToast('welcome')}}catch(e){}}
+
+// ═══ TOPBAR ═══
+function updateTopBar(){const p=calcPrestige();const rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0];document.getElementById('tbRankName').textContent=rank.name;document.getElementById('tbRankPts').textContent=p+' prestige';const authArea=document.getElementById('tbAuth');if(S.isGuest){authArea.innerHTML='<button class="tb-signin" onclick="showLogin()">Sign In</button>'}else{authArea.innerHTML='<span class="tb-user">'+(S.profile?.username||'user')+'</span>'}document.querySelectorAll('.sdLogoutDiv,.sdLogoutItem').forEach(el=>el.style.display=S.isGuest?'none':'')}
+function updateAllUI(){updateTopBar();renderSpiritsTab();renderItemsTab();renderVillageTab()}
+
+// ═══ SPIRITS TAB ═══
+function renderSpiritsTab(){const el=document.getElementById('tab-spirits');if(!S.spirits.length){el.innerHTML='<div class="spirit-empty"><div class="spirit-empty-msg">No spirits yet</div><div class="spirit-empty-hint">Hatch eggs to discover spirits</div></div>';return}let h='<div class="spirits-grid">';S.spirits.forEach(sp=>{const lvl=Math.floor((sp.xp||0)/100)+1,xpP=(sp.xp||0)%100,evoClass=sp.evo_stage>0?'evo-'+sp.evo_stage:'',evoText=sp.evo_stage===1?'evo-text-1':sp.evo_stage===2?'evo-text-2':'';h+='<div class="spirit-card" onclick="selectSpirit(\''+sp.id+'\')"><div class="spirit-card-img '+evoClass+'"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div><div class="spirit-card-info"><div class="spirit-card-name">'+sp.name+'</div><div class="spirit-card-meta"><span class="'+evoText+'">'+EVO_LABELS[sp.evo_stage]+'</span> \u00b7 Lv.'+lvl+'</div><div class="spirit-card-xp"><div class="spirit-card-xp-fill" style="width:'+xpP+'%"></div></div></div><div class="spirit-card-right"><div class="spirit-card-dots">'+[0,1,2].map(i=>'<div class="spirit-card-dot'+(i<=sp.evo_stage?' on':'')+'"></div>').join('')+'</div><div class="spirit-card-lvl">'+xpP+'/100</div></div></div>'});h+='</div><div class="spirits-count">'+S.spirits.length+' of 30 discovered</div>';el.innerHTML=h+'<div id="spiritDetail" class="spirit-detail"></div>';if(S.selectedSpirit)showSpiritDetail(S.selectedSpirit)}
 function selectSpirit(id){S.selectedSpirit=id;showSpiritDetail(id)}
-function showSpiritDetail(id){const sp=S.spirits.find(s=>s.id===id);if(!sp)return;const el=document.getElementById('spiritDetail'),lvl=Math.floor((sp.xp||0)/100)+1,xpP=(sp.xp||0)%100,tr=S.traits[sp.id]||[],cost=sp.evo_stage===0?5:12,can=sp.evo_stage<2&&!S.isGuest&&S.emblems.cafe_bean>=cost&&S.emblems.wild_essence>=cost&&S.emblems.focus_shard>=cost;el.className='spirit-detail open';el.innerHTML='<div class="sd-header"><div class="sd-portrait"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div><div class="sd-info"><div class="sd-name">'+sp.name+'</div><div class="sd-stage">'+EVO_LABELS[sp.evo_stage]+' · '+spiritName(sp.spirit_type)+'</div><div class="sd-bio">'+spiritBio(sp.spirit_type)+'</div></div><button class="sd-close" onclick="closeSpiritDetail()">✕</button></div><div class="sd-section">Cultivation</div><div class="sd-bar-wrap"><div class="sd-bar"><div class="sd-bar-fill" style="width:'+xpP+'%"></div></div><span class="sd-lvl">Lv.'+lvl+' ('+xpP+'/100)</span></div><div class="sd-section">Traits</div><div class="trait-tags">'+(tr.length?tr.map(t=>'<span class="trait-tag '+t.trait_type+'">'+t.trait_name+'</span>').join(''):'<span style="font-size:.55rem;color:var(--t4)">No traits yet</span>')+'</div>'+(sp.evo_stage<2?'<button class="sd-evolve-btn" '+(can?'':'disabled')+' onclick="doEvolve(\''+sp.id+'\')">Evolve to '+EVO_LABELS[sp.evo_stage+1]+'</button><div class="sd-evolve-cost">Cost: '+cost+'× each (☕'+S.emblems.cafe_bean+' 🌿'+S.emblems.wild_essence+' ⚡'+S.emblems.focus_shard+')</div>':'<div style="text-align:center;font-size:.65rem;color:var(--t3);margin-top:12px">✨ Fully Ascended</div>')}
+function showSpiritDetail(id){const sp=S.spirits.find(s=>s.id===id);if(!sp)return;const el=document.getElementById('spiritDetail'),lvl=Math.floor((sp.xp||0)/100)+1,xpP=(sp.xp||0)%100,tr=S.traits[sp.id]||[],cost=sp.evo_stage===0?5:12,can=sp.evo_stage<2&&!S.isGuest&&S.emblems.cafe_bean>=cost&&S.emblems.wild_essence>=cost&&S.emblems.focus_shard>=cost,evoText=sp.evo_stage===1?'evo-text-1':sp.evo_stage===2?'evo-text-2':'';el.className='spirit-detail open';el.innerHTML='<div class="sd-header"><div class="sd-portrait"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div><div class="sd-info"><div class="sd-name">'+sp.name+'</div><div class="sd-stage"><span class="'+evoText+'">'+EVO_LABELS[sp.evo_stage]+'</span> \u00b7 '+spiritName(sp.spirit_type)+'</div><div class="sd-bio">'+spiritBio(sp.spirit_type)+'</div></div><button class="sd-close" onclick="closeSpiritDetail()">\u2715</button></div><div class="sd-section">Cultivation</div><div class="sd-bar-wrap"><div class="sd-bar"><div class="sd-bar-fill" style="width:'+xpP+'%"></div></div><span class="sd-lvl">Lv.'+lvl+' ('+xpP+'/100)</span></div><div class="sd-section">Traits</div><div class="trait-tags">'+(tr.length?tr.map(t=>'<span class="trait-tag '+t.trait_type+'">'+t.trait_name+'</span>').join(''):'<span style="font-size:.5rem;color:var(--t4)">Evolve to gain traits</span>')+'</div>'+(sp.evo_stage<2?'<button class="sd-evolve-btn" '+(can?'':'disabled')+' onclick="doEvolve(\''+sp.id+'\')">Evolve to '+EVO_LABELS[sp.evo_stage+1]+'</button><div class="sd-evolve-cost">Cost: '+cost+'\u00d7 each (\u2615'+S.emblems.cafe_bean+' \uD83C\uDF3F'+S.emblems.wild_essence+' \u26A1'+S.emblems.focus_shard+')</div>':'<div style="text-align:center;font-size:.6rem;color:var(--t3);margin-top:10px">\u2728 Fully Ascended</div>')}
 function closeSpiritDetail(){S.selectedSpirit=null;document.getElementById('spiritDetail').className='spirit-detail'}
 
-// ITEMS TAB
-function renderItemsTab(){const el=document.getElementById('tab-items'),prest=calcPrestige();let h='<div class="section-label">Hatchery</div><div class="hatchery-grid">';
-S.hatchery.forEach(slot=>{if(!slot.unlocked){const req=SLOT_UNLOCK[slot.slot_number],canU=req&&prest>=req;h+='<div class="hatch-slot '+(canU?'unlockable':'locked')+'" '+(canU?'onclick="unlockSlot('+slot.slot_number+')"':'')+'><div class="hatch-slot-icon">'+(canU?'🔓':'🔒')+'</div><div class="hatch-slot-label">'+(canU?'Unlock!':req?req+' prestige':'Locked')+'</div></div>';return}if(!slot.egg_id){h+='<div class="hatch-slot" onclick="openPlaceEggModal(\''+slot.id+'\')"><div class="hatch-slot-icon">＋</div><div class="hatch-slot-label">Empty</div></div>';return}const egg=S.pendingEggs.find(e=>e.id===slot.egg_id)||{rarity:'mundane'},started=new Date(slot.started_at),durMs=(slot.hatch_duration_minutes||5)*60*1000,elapsed=Date.now()-started.getTime(),ready=elapsed>=durMs,pct=Math.min(elapsed/durMs*100,100),rem=Math.max(0,Math.ceil((durMs-elapsed)/1000)),rs=rem>60?Math.ceil(rem/60)+'m':rem+'s';h+='<div class="hatch-slot'+(ready?' ready':'')+'" onclick="'+(ready?'doHatch(\''+slot.id+'\')':'')+'"><div class="hatch-slot-icon">'+(ready?'🐣':'🥚')+'</div><div class="hatch-slot-rarity" style="color:'+(RARITY_COLORS[egg.rarity]||'#888')+'">'+(egg.rarity||'')+'</div>'+(ready?'<div class="hatch-slot-label" style="color:var(--positive)">Hatch!</div>':'<div class="hatch-slot-timer">'+rs+'</div><div class="hatch-slot-bar"><div class="hatch-slot-bar-fill" style="width:'+pct+'%"></div></div>')+'</div>'});
-h+='</div>';const pend=S.pendingEggs.filter(e=>e.status==='pending');if(pend.length)h+='<div class="pending-label">Pending ('+pend.length+')</div><div class="pending-list">'+pend.map(e=>'<div class="pending-egg" style="color:'+(RARITY_COLORS[e.rarity]||'#888')+'">'+e.rarity+'</div>').join('')+'</div>';
-h+='<div class="section-label">Ingredients</div><div class="ing-grid"><div class="ing-row"><span class="ing-icon">☕</span><span class="ing-name">Café Bean</span><span class="ing-count">'+S.emblems.cafe_bean+'</span></div><div class="ing-row"><span class="ing-icon">🌿</span><span class="ing-name">Wild Essence</span><span class="ing-count">'+S.emblems.wild_essence+'</span></div><div class="ing-row"><span class="ing-icon">⚡</span><span class="ing-name">Focus Shard</span><span class="ing-count">'+S.emblems.focus_shard+'</span></div></div>';
-h+='<div class="section-label">Craft Pills</div><div class="pill-grid">';const pIcons={growth:'💊',clarity:'✨',harmony:'🎵'};S.pillRecipes.forEach(p=>{const ok=S.emblems.cafe_bean>=p.cost_cafe_bean&&S.emblems.wild_essence>=p.cost_wild_essence&&S.emblems.focus_shard>=p.cost_focus_shard;h+='<div class="pill-row" style="'+(ok?'':'opacity:.4;pointer-events:none')+'" onclick="openCraftModal(\''+p.id+'\',\''+p.pill_name+'\',\''+p.effect_type+'\')">'+'<span class="pill-icon">'+(pIcons[p.pill_type]||'💊')+'</span><div class="pill-info"><div class="pill-name">'+p.pill_name+'</div><div class="pill-desc">'+p.description+'</div></div><div class="pill-cost">☕'+p.cost_cafe_bean+' 🌿'+p.cost_wild_essence+' ⚡'+p.cost_focus_shard+'</div></div>'});
-h+='</div><div class="section-label">Convert (3→1)</div><div class="convert-row"><button class="convert-btn" onclick="openConvertModal(\'cafe_bean\')">☕→</button><button class="convert-btn" onclick="openConvertModal(\'wild_essence\')">🌿→</button><button class="convert-btn" onclick="openConvertModal(\'focus_shard\')">⚡→</button></div>';el.innerHTML=h}
+// ═══ ITEMS TAB — simplified: hatchery, ingredients, pills ═══
+function renderItemsTab(){const el=document.getElementById('tab-items'),prest=calcPrestige(),pendCount=S.pendingEggs.filter(e=>e.status==='pending').length;let h='<div class="section-label">Hatchery</div><div class="hatchery-grid">';
+S.hatchery.forEach(slot=>{if(!slot.unlocked){const req=SLOT_UNLOCK[slot.slot_number],canU=req&&prest>=req;h+='<div class="hatch-slot '+(canU?'unlockable':'locked')+'" '+(canU?'onclick="unlockSlot('+slot.slot_number+')"':'')+'><div class="hatch-slot-icon">'+(canU?'\uD83D\uDD13':'\uD83D\uDD12')+'</div><div class="hatch-slot-label">'+(canU?'Unlock!':req?req+' prestige':'Locked')+'</div></div>';return}if(!slot.egg_id){h+='<div class="hatch-slot" onclick="openPlaceEggModal(\''+slot.id+'\')"><div class="hatch-slot-icon">\uFF0B</div><div class="hatch-slot-label">Place Egg</div>'+(pendCount>0?'<div class="hatch-slot-eggs">('+pendCount+' available)</div>':'')+'</div>';return}const egg=S.pendingEggs.find(e=>e.id===slot.egg_id)||{rarity:'mundane'},started=new Date(slot.started_at),durMs=(slot.hatch_duration_minutes||INCUB_MINS[egg.rarity]||5)*60*1000,elapsed=Date.now()-started.getTime(),ready=elapsed>=durMs,pct=Math.min(elapsed/durMs*100,100),rem=Math.max(0,Math.ceil((durMs-elapsed)/1000)),rs=rem>60?Math.ceil(rem/60)+'m':rem+'s';h+='<div class="hatch-slot'+(ready?' ready':'')+'" onclick="'+(ready?'doHatch(\''+slot.id+'\')':'')+'"><div class="hatch-slot-icon">'+(ready?'\uD83D\uDC23':'\uD83E\uDD5A')+'</div><div class="hatch-slot-rarity" style="color:'+(RARITY_COLORS[egg.rarity]||'#888')+'">'+(egg.rarity||'')+'</div>'+(ready?'<div class="hatch-slot-label" style="color:var(--positive)">Hatch!</div>':'<div class="hatch-slot-timer">'+rs+'</div><div class="hatch-slot-bar"><div class="hatch-slot-bar-fill" style="width:'+pct+'%"></div></div>')+'</div>'});
+h+='</div><div class="section-label">Ingredients</div><div class="ing-grid">';
+h+='<div class="ing-row"><span class="ing-icon">\u2615</span><span class="ing-name">Caf\u00e9 Bean</span><span class="ing-count">'+S.emblems.cafe_bean+'</span><button class="ing-swap" onclick="openConvertModal(\'cafe_bean\')" title="Convert">\u21C4</button></div>';
+h+='<div class="ing-row"><span class="ing-icon">\uD83C\uDF3F</span><span class="ing-name">Wild Essence</span><span class="ing-count">'+S.emblems.wild_essence+'</span><button class="ing-swap" onclick="openConvertModal(\'wild_essence\')" title="Convert">\u21C4</button></div>';
+h+='<div class="ing-row"><span class="ing-icon">\u26A1</span><span class="ing-name">Focus Shard</span><span class="ing-count">'+S.emblems.focus_shard+'</span><button class="ing-swap" onclick="openConvertModal(\'focus_shard\')" title="Convert">\u21C4</button></div></div>';
+h+='<div class="section-label">Craft Cultivation Pills</div><div class="pill-grid">';
+const pIcons={growth:'\uD83D\uDC8A',clarity:'\u2728',harmony:'\uD83C\uDFB5'};S.pillRecipes.forEach(p=>{const ok=S.emblems.cafe_bean>=p.cost_cafe_bean&&S.emblems.wild_essence>=p.cost_wild_essence&&S.emblems.focus_shard>=p.cost_focus_shard;h+='<div class="pill-row'+(ok?'':' disabled')+'" onclick="openCraftModal(\''+p.id+'\',\''+p.pill_name+'\',\''+p.effect_type+'\')">'+'<span class="pill-icon">'+(pIcons[p.pill_type]||'\uD83D\uDC8A')+'</span><div class="pill-info"><div class="pill-name">'+p.pill_name+'</div><div class="pill-desc">'+p.description+'</div></div><div class="pill-cost">\u2615'+p.cost_cafe_bean+' \uD83C\uDF3F'+p.cost_wild_essence+' \u26A1'+p.cost_focus_shard+'</div></div>'});
+h+='</div>';el.innerHTML=h}
+
+// ═══ VILLAGE TAB ═══
 function renderVillageTab(){const el=document.getElementById('tab-village'),p=calcPrestige(),rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0],next=VILLAGE_RANKS[VILLAGE_RANKS.indexOf(rank)+1],mins=Math.floor((S.profile?.total_listen_seconds||0)/60);el.innerHTML='<div class="village-rank-card"><div class="village-rank-label">Village Rank</div><div class="village-rank-name">'+rank.name+'</div><div class="village-rank-desc">'+rank.desc+'</div>'+(next?'<div style="font-size:.5rem;color:var(--t4);margin-top:6px">Next: '+next.name+' ('+next.min+')</div>':'')+'</div><div class="village-stat-grid"><div class="village-stat"><div class="village-stat-num">'+p+'</div><div class="village-stat-label">Prestige</div></div><div class="village-stat"><div class="village-stat-num">'+(S.profile?.total_eggs||0)+'</div><div class="village-stat-label">Eggs</div></div><div class="village-stat"><div class="village-stat-num">'+S.spirits.length+'</div><div class="village-stat-label">Spirits</div></div><div class="village-stat"><div class="village-stat-num">'+mins+'m</div><div class="village-stat-label">Listened</div></div></div>'}
 function calcPrestige(){let p=0;S.spirits.forEach(sp=>{p+=(sp.evo_stage+1)*10;p+=Math.floor((sp.xp||0)/100)*5});p+=(S.profile?.total_eggs||0)*2;p+=Math.floor((S.profile?.total_listen_seconds||0)/3600)*3;return p}
 
-// HATCH
-async function doHatch(slotId){if(S.isGuest)return;try{const{data,error}=await sb.rpc('hatch_egg',{p_slot_id:slotId});if(error)throw error;if(data.error){feed('❌',data.error,'minor');return}await loadUserData();updateAllUI();showHatchAnimation(data.rarity);feed('🐣','<b>'+(data.rarity||'').charAt(0).toUpperCase()+(data.rarity||'').slice(1)+'</b> hatched!','major')}catch(e){feed('❌','Hatch failed','minor')}}
-function showHatchAnimation(rarity){const ov=document.getElementById('hatchOverlay'),eg=document.getElementById('hatchEgg'),rv=document.getElementById('hatchReveal');eg.style.display='block';eg.className='hatch-egg-anim';rv.className='hatch-reveal';ov.classList.add('show');const sk=['timi','bayo','mowang'],rk=sk[Math.floor(Math.random()*3)],st=Math.floor(Math.random()*3);document.getElementById('hatchImg').src=SPIRIT_DATA[rk].img[st];document.getElementById('hatchName').textContent=SPIRIT_DATA[rk].name;document.getElementById('hatchRarity').textContent=(rarity||'').charAt(0).toUpperCase()+(rarity||'').slice(1);document.getElementById('hatchRarity').style.color=RARITY_COLORS[rarity]||'#888';setTimeout(()=>eg.classList.add('crack'),1500);setTimeout(()=>{eg.style.display='none';rv.classList.add('show')},2100)}
+// ═══ HATCH ═══
+async function doHatch(slotId){if(S.isGuest)return;try{const{data,error}=await sb.rpc('hatch_egg',{p_slot_id:slotId});if(error)throw error;if(data.error){showToast('error');return}await loadUserData();updateAllUI();showHatchAnimation(data);try{sb.rpc('log_event',{p_event:'hatch',p_data:{rarity:data.rarity}})}catch(e){}}catch(e){showToast('error')}}
+function showHatchAnimation(data){const ov=document.getElementById('hatchOverlay'),eg=document.getElementById('hatchEgg'),rv=document.getElementById('hatchReveal');eg.style.display='block';eg.className='hatch-egg-anim';rv.className='hatch-reveal';ov.classList.add('show');const spiritType=data.spirit_type||null;const sk=['timi','bayo','mowang'];const rk=spiritType?spiritKey(spiritType):sk[Math.floor(Math.random()*3)];const st=data.evo_stage||0;document.getElementById('hatchImg').src=SPIRIT_DATA[rk]?.img[st]||'sprites/timi_1.png';document.getElementById('hatchName').textContent=SPIRIT_DATA[rk]?.name||'Spirit';const r=data.rarity||'mundane';document.getElementById('hatchRarity').textContent=r.charAt(0).toUpperCase()+r.slice(1);document.getElementById('hatchRarity').style.color=RARITY_COLORS[r]||'#888';setTimeout(()=>eg.classList.add('crack'),1500);setTimeout(()=>{eg.style.display='none';rv.classList.add('show')},2100)}
 function closeHatchAnim(){document.getElementById('hatchOverlay').classList.remove('show')}
 
-// UNLOCK SLOT
-async function unlockSlot(num){if(S.isGuest)return;try{const{data}=await sb.rpc('unlock_hatchery_slot',{p_slot_number:num});if(data?.error){feed('🔒',data.error==='insufficient_prestige'?'Need '+data.required+' prestige':'Cannot unlock','minor');return}await loadUserData();updateAllUI();feed('🔓','<b>Slot '+num+'</b> unlocked!','major')}catch(e){feed('❌','Failed','minor')}}
+// ═══ SLOT UNLOCK ═══
+async function unlockSlot(num){if(S.isGuest)return;try{const{data}=await sb.rpc('unlock_hatchery_slot',{p_slot_number:num});if(data?.error){showToast('error');return}await loadUserData();updateAllUI();showToast('unlock')}catch(e){showToast('error')}}
 
-// PLACE EGG
-function openPlaceEggModal(slotId){const pend=S.pendingEggs.filter(e=>e.status==='pending');if(!pend.length){feed('🥚','No pending eggs','minor');return}const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Place an Egg</div><div class="modal-select-grid">'+pend.map(e=>'<div class="modal-select-row" onclick="placeEgg(\''+e.id+'\',\''+slotId+'\')"><span>🥚</span><span style="color:'+(RARITY_COLORS[e.rarity]||'#888')+'">'+e.rarity+'</span><span style="font-size:.55rem;color:var(--t4);margin-left:auto">'+INCUB_MINS[e.rarity]+'m</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
-async function placeEgg(eId,sId){if(S.isGuest)return;closeModal();try{await sb.rpc('place_egg_in_slot',{p_egg_id:eId,p_slot_id:sId});await loadUserData();updateAllUI();feed('🥚','Egg placed','minor')}catch(e){feed('❌','Failed','minor')}}
+// ═══ PLACE EGG ═══
+function openPlaceEggModal(slotId){const pend=S.pendingEggs.filter(e=>e.status==='pending');if(!pend.length){showToast('no_eggs');return}const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Place an Egg</div><div class="modal-select-grid">'+pend.map(e=>'<div class="modal-select-row" onclick="placeEgg(\''+e.id+'\',\''+slotId+'\')"><span>\uD83E\uDD5A</span><span style="color:'+(RARITY_COLORS[e.rarity]||'#888')+'">'+e.rarity+'</span><span style="font-size:.5rem;color:var(--t4);margin-left:auto">'+(INCUB_MINS[e.rarity]||5)+'m</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
+async function placeEgg(eId,sId){if(S.isGuest)return;closeModal();try{await sb.rpc('place_egg_in_slot',{p_egg_id:eId,p_slot_id:sId});await loadUserData();updateAllUI()}catch(e){showToast('error')}}
 function startHatcheryTicker(){if(S.hatchTicker)return;S.hatchTicker=setInterval(()=>{if(!S.isGuest)renderItemsTab()},5000)}
 
-// CRAFT PILLS
-function openCraftModal(recipeId,pillName,effectType){if(S.isGuest){feed('🔒','Create account to craft','minor');return}if(effectType==='xp_all'){doCraft(recipeId,null);return}const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Use '+pillName+'</div><div class="modal-desc">Choose a spirit:</div><div class="modal-select-grid">'+S.spirits.map(sp=>'<div class="modal-select-row" onclick="doCraft(\''+recipeId+'\',\''+sp.id+'\')"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'" style="width:28px;height:28px;border-radius:50%"><span style="font-size:.75rem">'+sp.name+'</span><span style="font-size:.55rem;color:var(--t4);margin-left:auto">Lv.'+(Math.floor((sp.xp||0)/100)+1)+'</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
-async function doCraft(recipeId,spiritId){closeModal();try{const{data,error}=await sb.rpc('craft_pill',{p_recipe_id:recipeId,p_spirit_id:spiritId});if(error)throw error;if(data?.error){feed('❌',data.error==='insufficient_ingredients'?'Not enough ingredients':data.error,'minor');return}await loadUserData();updateAllUI();if(data.leveled_up)feed('⬆','<b>'+data.spirit_name+'</b> leveled up to Lv.'+data.new_level+'!','major');else feed('💊','<b>'+data.pill_name+'</b> used! +'+(data.xp_gained||0)+' XP','minor')}catch(e){feed('❌','Craft failed','minor')}}
+// ═══ CRAFT PILLS ═══
+function openCraftModal(recipeId,pillName,effectType){if(S.isGuest)return;if(effectType==='xp_all'){doCraft(recipeId,null);return}const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Use '+pillName+'</div><div class="modal-desc">Choose a spirit:</div><div class="modal-select-grid">'+S.spirits.map(sp=>'<div class="modal-select-row" onclick="doCraft(\''+recipeId+'\',\''+sp.id+'\')"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'" style="width:28px;height:28px;border-radius:50%"><span style="font-size:.7rem">'+sp.name+'</span><span style="font-size:.5rem;color:var(--t4);margin-left:auto">Lv.'+(Math.floor((sp.xp||0)/100)+1)+'</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
+async function doCraft(recipeId,spiritId){closeModal();try{const{data,error}=await sb.rpc('craft_pill',{p_recipe_id:recipeId,p_spirit_id:spiritId});if(error)throw error;if(data?.error){showToast('error');return}await loadUserData();updateAllUI();showToast(data.leveled_up?'levelup':'craft');try{sb.rpc('log_event',{p_event:'craft',p_data:{pill:data.pill_name}})}catch(e){}}catch(e){showToast('error')}}
 
-// CONVERT
-function openConvertModal(from){if(S.isGuest){feed('🔒','Create account','minor');return}const n={cafe_bean:'Café Bean',wild_essence:'Wild Essence',focus_shard:'Focus Shard'},ic={cafe_bean:'☕',wild_essence:'🌿',focus_shard:'⚡'},oth=Object.keys(n).filter(k=>k!==from);const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Convert '+ic[from]+'</div><div class="modal-desc">3 <b>'+n[from]+'</b> → 1 other. You have: <b>'+S.emblems[from]+'</b></div><div class="modal-select-grid">'+oth.map(to=>'<div class="modal-select-row'+(S.emblems[from]<3?' style="opacity:.3;pointer-events:none"':'')+'" onclick="doConvert(\''+from+'\',\''+to+'\')"><span>'+ic[to]+' '+n[to]+'</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
-async function doConvert(from,to){closeModal();try{const{data}=await sb.rpc('convert_ingredient',{p_from:from,p_to:to,p_amount:1});if(data?.error){feed('❌','Not enough','minor');return}S.emblems[from]-=3;S.emblems[to]+=1;renderItemsTab();renderSpiritsTab();feed('🔄','Converted','minor')}catch(e){feed('❌','Failed','minor')}}
+// ═══ CONVERT ═══
+function openConvertModal(from){if(S.isGuest)return;const n={cafe_bean:'Caf\u00e9 Bean',wild_essence:'Wild Essence',focus_shard:'Focus Shard'},ic={cafe_bean:'\u2615',wild_essence:'\uD83C\uDF3F',focus_shard:'\u26A1'},oth=Object.keys(n).filter(k=>k!==from);const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Convert '+ic[from]+'</div><div class="modal-desc">3 <b>'+n[from]+'</b> \u2192 1 other. You have: <b>'+S.emblems[from]+'</b></div><div class="modal-select-grid">'+oth.map(to=>'<div class="modal-select-row'+(S.emblems[from]<3?' style="opacity:.3;pointer-events:none"':'')+'" onclick="doConvert(\''+from+'\',\''+to+'\')"><span>'+ic[to]+' '+n[to]+'</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
+async function doConvert(from,to){closeModal();try{const{data}=await sb.rpc('convert_ingredient',{p_from:from,p_to:to,p_amount:1});if(data?.error){showToast('error');return}S.emblems[from]-=3;S.emblems[to]+=1;renderItemsTab();renderSpiritsTab()}catch(e){showToast('error')}}
 function closeModal(){document.getElementById('modal').classList.remove('open')}
 
-// ACTIVE CULTIVATION - 1 XP per 20 min while streaming
-function startCultivationTicker(){if(S.cultTicker||S.isGuest)return;S.cultTicker=setInterval(async()=>{if(!S.playing||S.isGuest)return;try{const oldLvls=S.spirits.map(sp=>Math.floor((sp.xp||0)/100)+1);const{data}=await sb.rpc('tick_active_cultivation');if(data?.success){await loadUserData();const newLvls=S.spirits.map(sp=>Math.floor((sp.xp||0)/100)+1);S.spirits.forEach((sp,i)=>{if(newLvls[i]>oldLvls[i])feed('⬆','<b>'+sp.name+'</b> reached Lv.'+newLvls[i]+'!','major')});updateAllUI()}}catch(e){}},1200000)}
-
-// ═══ PRIVACY POLICY ═══
-function showPrivacy(){toggleSettings();const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Privacy Policy</div><div class="pp-content"><h3>Super Ube LLC</h3><p>Ehoro Village is operated by Super Ube LLC, based in Georgia, United States.</p><h3>What We Collect</h3><p>When you create an account, we store your email address, username, and gameplay data (spirits, eggs, ingredients, listening time). We use Supabase for authentication and data storage.</p><h3>How We Use Your Data</h3><p>Your data is used solely to provide and improve the Ehoro Village experience. We do not sell, share, or distribute your personal information to third parties.</p><h3>Analytics</h3><p>We collect anonymized gameplay analytics (actions like hatching, evolving, crafting) to improve game balance. No personal information is included in analytics.</p><h3>Cookies</h3><p>We use essential cookies for authentication session management only. No tracking cookies are used.</p><h3>Data Deletion</h3><p>You may request deletion of your account and all associated data by contacting us at support@superube.com.</p><h3>Changes</h3><p>We may update this policy. Continued use of Ehoro Village constitutes acceptance of any changes.</p><p style="color:var(--t4);margin-top:12px">Last updated: February 2026</p></div><button class="modal-btn secondary" onclick="closeModal()">Close</button>';document.getElementById('modal').classList.add('open')}
-
-// ═══ XP BAR TICKER ═══
-// Tick XP bars visually every 30 seconds to show growth
-setInterval(()=>{if(!S.playing)return;document.querySelectorAll('.spirit-card-xp-fill').forEach((bar,i)=>{const sp=S.spirits[i];if(!sp)return;const xpP=(sp.xp||0)%100;bar.style.width=xpP+'%'})},30000);
+// ═══ ACTIVE CULTIVATION TICKER ═══
+function startCultivationTicker(){if(S.cultTicker||S.isGuest)return;S.cultTicker=setInterval(async()=>{if(!S.playing||S.isGuest)return;try{const{data}=await sb.rpc('tick_active_cultivation');if(data?.success){await loadUserData();updateAllUI()}}catch(e){}},1200000)}
 
 // ═══ EVOLUTION ═══
-async function doEvolve(spiritId){
-  if(S.isGuest)return;
-  try{
-    const{data,error}=await sb.rpc('evolve_spirit',{p_spirit_id:spiritId});
-    if(error)throw error;
-    if(data.error){feed('❌','Evolution failed: '+data.error,'minor');return;}
-    await loadUserData();updateAllUI();
-    const sp=S.spirits.find(s=>s.id===spiritId);
-    feed('🌟','<b>'+(sp?.name||'Spirit')+'</b> evolved to '+EVO_LABELS[data.new_stage]+'!','major');
-    if(data.trait_gained)feed('✨','Gained trait: <b>'+data.trait_gained+'</b>','major');
-    showToast('evolution');
-    if(S.selectedSpirit===spiritId)showSpiritDetail(spiritId);
-  }catch(e){feed('❌','Evolution failed','minor');}
-}
+async function doEvolve(spiritId){if(S.isGuest)return;try{const{data,error}=await sb.rpc('evolve_spirit',{p_spirit_id:spiritId});if(error)throw error;if(data.error){showToast('error');return}await loadUserData();updateAllUI();showToast('evolution');if(S.selectedSpirit===spiritId)showSpiritDetail(spiritId)}catch(e){showToast('error')}}
 
-// ═══ STREAM ═══
-async function startStream(){
-  if(S.playing)return;
-  S.playing=true;
-  const embed=document.getElementById('videoEmbed');
-  const pl=PL[S.pl];
-  const iframe=document.createElement('iframe');
-  iframe.src='https://www.youtube.com/embed/'+pl.yt+'?autoplay=1&rel=0';
-  iframe.allow='autoplay; encrypted-media';
-  iframe.allowFullscreen=true;
-  embed.insertBefore(iframe,embed.firstChild);
-  embed.classList.add('loaded');
-  document.getElementById('psPlay').textContent='⏸';
-  feed('🎵','Now streaming <b>'+pl.title+'</b>');
-  if(!S.isGuest){
-    try{const{data}=await sb.rpc('start_session',{p_playlist:S.pl});S.sessionId=data;}catch(e){}
-  }
-  startTicker();
-}
-async function swapStream(){
-  if(S.sessionId){try{await sb.rpc('end_session',{p_session_id:S.sessionId});}catch(e){}S.sessionId=null;}
-  const embed=document.getElementById('videoEmbed');
-  const old=embed.querySelector('iframe');if(old)old.remove();
-  if(S.playing){
-    const pl=PL[S.pl];
-    const iframe=document.createElement('iframe');
-    iframe.src='https://www.youtube.com/embed/'+pl.yt+'?autoplay=1&rel=0';
-    iframe.allow='autoplay; encrypted-media';
-    iframe.allowFullscreen=true;
-    embed.insertBefore(iframe,embed.firstChild);
-    embed.classList.add('loaded');
-    feed('🎵','Switched to <b>'+PL[S.pl].title+'</b>');
-    if(!S.isGuest){try{const{data}=await sb.rpc('start_session',{p_playlist:S.pl});S.sessionId=data;}catch(e){}}
-  }
-  document.getElementById('psTitle').textContent=PL[S.pl].title;
-  document.getElementById('psSub').textContent=PL[S.pl].sub;
-}
-function setPl(el){
-  document.querySelectorAll('.ps-pill').forEach(p=>p.classList.remove('on'));
-  el.classList.add('on');
-  S.pl=el.dataset.pl;S.plIndex=PL_ORDER.indexOf(S.pl);S.eggT=0;
-  document.querySelectorAll('.mobile-pl-btn').forEach(b=>b.classList.toggle('on',b.dataset.pl===S.pl));
-  swapStream();
-}
-function setPlMobile(el){
-  document.querySelectorAll('.mobile-pl-btn').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on');
-  S.pl=el.dataset.pl;S.plIndex=PL_ORDER.indexOf(S.pl);S.eggT=0;
-  document.querySelectorAll('.ps-pill').forEach(p=>p.classList.toggle('on',p.dataset.pl===S.pl));
-  swapStream();
-}
+// ═══ STREAM — single stream ═══
+async function startStream(){if(S.playing)return;S.playing=true;const embed=document.getElementById('videoEmbed');const iframe=document.createElement('iframe');iframe.src='https://www.youtube.com/embed/'+STREAM_YT+'?autoplay=1&rel=0';iframe.allow='autoplay; encrypted-media';iframe.allowFullscreen=true;embed.insertBefore(iframe,embed.firstChild);embed.classList.add('loaded');document.getElementById('psPlay').textContent='\u23F8';if(!S.isGuest){try{const{data}=await sb.rpc('start_session',{p_playlist:'cafe'});S.sessionId=data;sb.rpc('log_event',{p_event:'stream_start'})}catch(e){}}startTicker()}
 
 // ═══ GAME TICK ═══
-function startTicker(){
-  if(S.ticker)return;
-  const eggTime=()=>S.isGuest&&!S.guestEggGiven?S.GUEST_EGG_SEC:(!S.profile?.first_egg_claimed?S.FIRST_EGG_SEC:S.EGG_SEC);
-  S.ticker=setInterval(async()=>{
-    if(!S.playing)return;
-    S.eggT+=0.5;
-    const total=eggTime();
-    const pct=Math.min((S.eggT/total)*100,100);
-    document.getElementById('eggFill').style.width=pct+'%';
-    const rem=Math.max(0,Math.ceil(total-S.eggT));
-    const mins=Math.floor(rem/60);const secs=rem%60;
-    document.getElementById('eggTimer').textContent=mins>0?mins+'m '+secs+'s':secs+'s';
+function startTicker(){if(S.ticker)return;const eggTime=()=>S.isGuest&&!S.guestEggGiven?S.GUEST_EGG_SEC:(!S.profile?.first_egg_claimed?S.FIRST_EGG_SEC:S.EGG_SEC);S.ticker=setInterval(async()=>{if(!S.playing)return;S.eggT+=0.5;const total=eggTime();const pct=Math.min((S.eggT/total)*100,100);document.getElementById('eggFill').style.width=pct+'%';const rem=Math.max(0,Math.ceil(total-S.eggT));const mins=Math.floor(rem/60),secs=rem%60;document.getElementById('eggTimer').textContent=mins>0?mins+'m '+secs+'s':secs+'s';
+// Ingredient drops — ~1 per 8 min = 0.001 per 500ms tick, random type
+if(!S.isGuest&&Math.random()<0.001){const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;renderItemsTab();showToast('ingredient')}
+// Egg drop
+if(S.eggT>=total){S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane');setTimeout(()=>{document.getElementById('guestBanner').classList.add('show')},2000)}}else{try{const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];S.emblems[types[Math.floor(Math.random()*3)]]++;await loadUserData();updateAllUI();showToast(data.rarity);try{sb.rpc('log_event',{p_event:'egg_drop',p_data:{rarity:data.rarity}})}catch(e){}}catch(e){}}}},500)}
 
-    // Ingredient drops (~1 per 15 min = 0.00055 per 500ms tick)
-    if(!S.isGuest&&Math.random()<0.00055){
-      const mat=S.pl==='cafe'?'cafe_bean':S.pl==='outdoors'?'wild_essence':'focus_shard';
-      S.emblems[mat]++;renderItemsTab();
-      const names={cafe_bean:'☕ Café Bean',wild_essence:'🌿 Wild Essence',focus_shard:'⚡ Focus Shard'};
-      feed('✨','Found <b>'+names[mat]+'</b>','minor');
-    }
-
-    // Egg drop
-    if(S.eggT>=total){
-      S.eggT=0;
-      if(S.isGuest){
-        if(!S.guestEggGiven){
-          S.guestEggGiven=true;
-          const rarities=['mundane','mundane','adept','adept','refined'];
-          const r=rarities[Math.floor(Math.random()*rarities.length)];
-          showToast(r);
-          feed('🥚','<b>'+r.charAt(0).toUpperCase()+r.slice(1)+'</b> egg dropped!','major');
-          setTimeout(()=>{document.getElementById('guestBanner').classList.add('show');},2000);
-        }
-      }else{
-        try{
-          const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:S.pl});
-          if(error)throw error;
-          if(data.error==='too_fast')return;
-          if(data.error==='pending_full'){feed('📦','Egg inventory full! Hatch some eggs first','major');return;}
-          S.profile.total_eggs=data.total_eggs;
-          S.emblems[data.emblem_granted]++;
-          document.getElementById('eggCount').textContent=data.total_eggs;
-          // Reload hatchery data to see new egg
-          const{data:hatch}=await sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number');
-          const{data:pending}=await sb.from('eggs').select('*').eq('user_id',S.user.id).eq('status','pending').order('created_at',{ascending:false}).limit(10);
-          S.hatchery=hatch||[];S.pendingEggs=pending||[];
-          updateAllUI();
-          const rName=data.rarity.charAt(0).toUpperCase()+data.rarity.slice(1);
-          showToast(data.rarity);try{sb.rpc('log_event',{p_event:'egg_drop',p_data:{rarity:data.rarity}})}catch(e){}
-          feed('🥚','<b>'+rName+'</b> egg '+(data.auto_placed?'placed in hatchery!':'dropped! Place it in your hatchery.'),'major');
-        }catch(e){feed('❌','Egg drop failed','minor');}
-      }
-    }
-  },500);
-}
-
-// ═══ TOAST ═══
-function showToast(rarity){
-  const t=document.getElementById('toast');
-  const isEvo=rarity==='evolution';
-  const isGift=rarity==='gift';
-  document.getElementById('toastI').textContent=isEvo?'✨':isGift?'🎁':'🥚';
-  document.getElementById('toastT').textContent=isEvo?'Evolution!':isGift?'Welcome Gift!':rarity.charAt(0).toUpperCase()+rarity.slice(1)+' Egg';
-  document.getElementById('toastS').textContent=isEvo||isGift?'':(S.isGuest?'Create account to keep!':'#'+(S.profile?.total_eggs||0));
-  t.classList.add('show');
-  if(!isEvo&&!isGift)setTimeout(()=>{document.getElementById('toastI').textContent='🐣';document.getElementById('toastT').textContent='Incubating...';},1200);
-  setTimeout(()=>t.classList.remove('show'),3500);
-}
-
-// ═══ FEED ═══
-function feed(icon,text,importance){
-  const f=document.getElementById('feed');
-  const now=new Date();
-  const ts=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
-  const el=document.createElement('div');
-  el.className='fi'+(importance==='major'?' major':importance==='minor'?' minor':'');
-  el.innerHTML='<div class="fi-icon">'+icon+'</div><div class="fi-body"><div class="fi-text">'+text+'</div><div class="fi-time">'+ts+'</div></div>';
-  f.insertBefore(el,f.firstChild);
-  while(f.children.length>40)f.removeChild(f.lastChild);
-}
-
+// ═══ TOAST — simplified, handles all types ═══
+function showToast(type){const t=document.getElementById('toast');const msgs={welcome:{i:'\uD83D\uDC4B',t:'Welcome back'},gift:{i:'\uD83C\uDF81',t:'Welcome Gift!',s:'+6 of each ingredient'},evolution:{i:'\u2728',t:'Evolution!'},craft:{i:'\uD83D\uDC8A',t:'Pill used!'},levelup:{i:'\u2B06',t:'Level up!'},unlock:{i:'\uD83D\uDD13',t:'Slot unlocked!'},ingredient:{i:'\u2728',t:'Ingredient found'},error:{i:'\u274C',t:'Something went wrong'},no_eggs:{i:'\uD83E\uDD5A',t:'No pending eggs'},full:{i:'\uD83D\uDCE6',t:'Hatch some eggs first'}};const rr=RARITY_COLORS[type];if(rr){document.getElementById('toastI').textContent='\uD83E\uDD5A';document.getElementById('toastT').textContent=type.charAt(0).toUpperCase()+type.slice(1)+' Egg';document.getElementById('toastS').textContent=S.isGuest?'Sign up to keep!':''}else{const m=msgs[type]||msgs.welcome;document.getElementById('toastI').textContent=m.i;document.getElementById('toastT').textContent=m.t;document.getElementById('toastS').textContent=m.s||''}t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
 
 // ═══ PAGE CLOSE ═══
-window.addEventListener('beforeunload',()=>{
-  if(S.sessionId&&S.user){
-    navigator.sendBeacon(SUPABASE_URL+'/rest/v1/rpc/end_session',
-      new Blob([JSON.stringify({p_session_id:S.sessionId})],{type:'application/json'}));
-  }
-});
+window.addEventListener('beforeunload',()=>{if(S.sessionId&&S.user){navigator.sendBeacon(SUPABASE_URL+'/rest/v1/rpc/end_session',new Blob([JSON.stringify({p_session_id:S.sessionId})],{type:'application/json'}))}});
 
+// ═══ SAFETY CHECK — auto-place eggs if slots available ═══
+async function autoPlaceEggs(){if(S.isGuest)return;const pend=S.pendingEggs.filter(e=>e.status==='pending');const empty=S.hatchery.filter(s=>s.unlocked&&!s.egg_id);if(pend.length&&empty.length){for(let i=0;i<Math.min(pend.length,empty.length);i++){try{await sb.rpc('place_egg_in_slot',{p_egg_id:pend[i].id,p_slot_id:empty[i].id})}catch(e){}}await loadUserData();updateAllUI()}}
 
 // ═══ INIT ═══
 checkSession().then(()=>{if(!S.user)loadGuestDefaults()});
