@@ -229,6 +229,74 @@ function finishOnboard(){document.getElementById('onboard').classList.add('gone'
 function showGiftToastIfClaimed(){if(S.isGuest||!S.profile?.newbie_gift_claimed)return;const key='gift_toast_shown_'+S.user.id;if(localStorage.getItem(key))return;showToast('gift');localStorage.setItem(key,'1')}
 async function claimNewbieGift(){if(S.profile?.newbie_gift_claimed)return;try{const{data}=await sb.rpc('claim_newbie_gift');if(data?.error)return;S.emblems.cafe_bean+=15;S.emblems.wild_essence+=15;S.emblems.focus_shard+=15;S.profile.newbie_gift_claimed=true;renderItemsTab();showGiftToastIfClaimed()}catch(e){}}
 
+// ═══ STARTER PACK — bulletproof fallback ═══
+async function ensureStarterPack(){
+  if(!S.user||S.isGuest)return;
+  const uid=S.user.id;
+  const lsKey='starter_pack_done_'+uid;
+  // Quick gate: if we already granted this session, skip the heavy checks
+  if(localStorage.getItem(lsKey))return;
+  try{
+    // 1) Ensure profile exists (handle_new_user trigger may have failed)
+    if(!S.profile||!S.profile.id){
+      const uname=S.user.user_metadata?.username||'user_'+uid.slice(0,6);
+      await sb.from('profiles').upsert({id:uid,username:uname,starter_claimed:false,newbie_gift_claimed:false,onboarding_done:false,total_eggs:0,total_listen_seconds:0,first_egg_claimed:false},{onConflict:'id'});
+      // Reload profile
+      const{data:p}=await sb.from('profiles').select('*').eq('id',uid).maybeSingle();
+      S.profile=p||S.profile;
+    }
+    let gaveGifts=false;
+    // 2) Check spirits — if user has none, grant a random starter
+    if(!S.spirits||S.spirits.length===0){
+      // Try RPC first
+      try{
+        const{data,error}=await sb.rpc('claim_starter_spirit');
+        if(error)throw error;
+        if(data&&!data.error)gaveGifts=true;
+      }catch(e){
+        // RPC failed — direct insert fallback
+        const types=['timi','bayo','mowang'];
+        const pick=types[Math.floor(Math.random()*3)];
+        try{
+          await sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:SPIRIT_DATA[pick]?.name||pick,evo_stage:0,xp:0});
+          gaveGifts=true;
+        }catch(e2){console.warn('ensureStarterPack: spirit insert failed',e2)}
+      }
+    }
+    // 3) Check emblems — if any are below 15, top them up
+    const low=S.emblems.cafe_bean<15||S.emblems.wild_essence<15||S.emblems.focus_shard<15;
+    if(low){
+      // Try RPC first
+      try{
+        const{data,error}=await sb.rpc('ensure_newbie_pack');
+        if(error)throw error;
+        if(data&&!data.error)gaveGifts=true;
+      }catch(e){
+        // RPC failed — direct upsert fallback for each emblem type
+        const types=['cafe_bean','wild_essence','focus_shard'];
+        for(const t of types){
+          if(S.emblems[t]<15){
+            try{
+              await sb.from('emblems').upsert({user_id:uid,emblem_type:t,quantity:15},{onConflict:'user_id,emblem_type'});
+              gaveGifts=true;
+            }catch(e2){console.warn('ensureStarterPack: emblem upsert failed for '+t,e2)}
+          }
+        }
+      }
+      // Mark profile flags
+      try{await sb.from('profiles').update({starter_claimed:true,newbie_gift_claimed:true}).eq('id',uid)}catch(e){}
+    }
+    // 4) Reload data so UI reflects changes
+    if(gaveGifts){
+      await loadUserData();
+      updateAllUI();
+      showToast('new_user_gift');
+    }
+    // 5) Mark as done so we don't re-run every page load
+    localStorage.setItem(lsKey,'1');
+  }catch(e){console.warn('ensureStarterPack error:',e)}
+}
+
 // ═══ WELCOME BACK ═══
 function showWelcomeBack(xpGained,hoursAway){const wb=document.getElementById('welcomeBack');if(!wb)return;const sp=S.spirits.length?S.spirits[Math.floor(Math.random()*S.spirits.length)]:null;const msg=WB_MESSAGES[Math.floor(Math.random()*WB_MESSAGES.length)];document.getElementById('wbMsg').textContent=msg;if(sp)document.getElementById('wbPortrait').innerHTML='<img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'">';let gains='';if(xpGained>0)gains+='Your spirits gained +'+xpGained+' XP';if(hoursAway>0)gains+=(gains?' \u00b7 ':'')+Math.round(hoursAway)+'h away';document.getElementById('wbGains').textContent=gains||'Everything is as you left it.';wb.classList.remove('gone')}
 function dismissWB(){document.getElementById('welcomeBack').classList.add('gone')}
@@ -251,7 +319,8 @@ async function checkSession(){const{data:{session}}=await sb.auth.getSession();i
 async function loadUserData(){if(!S.user)return;const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:pend},{data:pills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).maybeSingle(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).eq('status','pending').limit(20),sb.from('pill_recipes').select('*')]);S.profile=prof||S.profile;if(S.profile&&S.profile.starter_claimed===undefined)S.profile.starter_claimed=false;S.spirits=spirits||[];S.hatchery=hatch||[];S.pendingEggs=pend||[];S.pillRecipes=pills||[];if(emb)emb.forEach(e=>{S.emblems[e.emblem_type]=e.quantity});S.traits={};if(traits)traits.forEach(t=>{if(!S.traits[t.spirit_id])S.traits[t.spirit_id]=[];S.traits[t.spirit_id].push(t)})}
 
 // ═══ ENTER APP ═══
-async function enterApp(){document.getElementById('login').classList.add('gone');document.getElementById('guestBanner').classList.remove('show');updateTopBar();updateAllUI();if(S.profile?.onboarding_done===false){showOnboard();return}startHatcheryTicker();startCultivationTicker();try{const{data}=await sb.rpc('claim_passive_cultivation');if(data&&data.xp_granted>0&&data.hours_away>=1){await loadUserData();updateAllUI();showWelcomeBack(data.xp_granted,data.hours_away)}else{showToast('welcome')}}catch(e){}}
+async function enterApp(){document.getElementById('login').classList.add('gone');document.getElementById('guestBanner').classList.remove('show');updateTopBar();updateAllUI();// Ensure starter pack before anything else
+await ensureStarterPack();if(S.profile?.onboarding_done===false){showOnboard();return}startHatcheryTicker();startCultivationTicker();try{const{data}=await sb.rpc('claim_passive_cultivation');if(data&&data.xp_granted>0&&data.hours_away>=1){await loadUserData();updateAllUI();showWelcomeBack(data.xp_granted,data.hours_away)}else{showToast('welcome')}}catch(e){}}
 
 // ═══ TOPBAR ═══
 function updateTopBar(){const p=calcPrestige();const rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0];document.getElementById('tbRankName').textContent=rank.name;document.getElementById('tbRankName').style.color=rank.color||'';document.getElementById('tbRankPts').textContent=p+' prestige';const authArea=document.getElementById('tbAuth');if(S.isGuest){authArea.innerHTML='<button class="tb-signin" onclick="showLogin()">Sign In</button>'}else{authArea.innerHTML='<span class="tb-user">'+(S.profile?.username||'user')+'</span>'}document.querySelectorAll('.sdLogoutDiv,.sdLogoutItem').forEach(el=>el.style.display=S.isGuest?'none':'')}
@@ -319,7 +388,7 @@ if(!S.isGuest&&Math.random()<0.0015){const types=['cafe_bean','wild_essence','fo
 if(S.eggT>=total){S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane')}}else{try{const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];S.emblems[types[Math.floor(Math.random()*3)]]++;await loadUserData();updateAllUI();showToast(data.rarity);try{sb.rpc('log_event',{p_event:'egg_drop',p_data:{rarity:data.rarity}})}catch(e){}}catch(e){}}}},500)}
 
 // ═══ TOAST — simplified, handles all types ═══
-function showToast(type){const t=document.getElementById('toast');const msgs={welcome:{i:'\uD83D\uDC4B',t:'Welcome back'},gift:{i:'\uD83C\uDF81',t:'Welcome Gift!',s:'+15 of each ingredient'},evolution:{i:'\u2728',t:'Evolution!'},craft:{i:'\uD83D\uDC8A',t:'Pill used!'},levelup:{i:'\u2B06',t:'Level up!'},unlock:{i:'\uD83D\uDD13',t:'Slot unlocked!'},ingredient:{i:'\u2728',t:'Ingredient found'},error:{i:'\u274C',t:'Something went wrong'},no_eggs:{i:'\uD83E\uDD5A',t:'No pending eggs'},full:{i:'\uD83D\uDCE6',t:'Hatch some eggs first'}};const rr=RARITY_COLORS[type];if(rr){document.getElementById('toastI').textContent='\uD83E\uDD5A';document.getElementById('toastT').textContent=type.charAt(0).toUpperCase()+type.slice(1)+' Egg';document.getElementById('toastS').textContent=S.isGuest?'Sign up to keep!':''}else{const m=msgs[type]||msgs.welcome;document.getElementById('toastI').textContent=m.i;document.getElementById('toastT').textContent=m.t;document.getElementById('toastS').textContent=m.s||''}t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+function showToast(type){const t=document.getElementById('toast');const msgs={welcome:{i:'\uD83D\uDC4B',t:'Welcome back'},gift:{i:'\uD83C\uDF81',t:'Welcome Gift!',s:'+15 of each ingredient'},evolution:{i:'\u2728',t:'Evolution!'},craft:{i:'\uD83D\uDC8A',t:'Pill used!'},levelup:{i:'\u2B06',t:'Level up!'},unlock:{i:'\uD83D\uDD13',t:'Slot unlocked!'},ingredient:{i:'\u2728',t:'Ingredient found'},error:{i:'\u274C',t:'Something went wrong'},no_eggs:{i:'\uD83E\uDD5A',t:'No pending eggs'},full:{i:'\uD83D\uDCE6',t:'Hatch some eggs first'},new_user_gift:{i:'\uD83C\uDF81',t:'New user gifts!',s:'Starter spirit + 15× each ingredient'}};const rr=RARITY_COLORS[type];if(rr){document.getElementById('toastI').textContent='\uD83E\uDD5A';document.getElementById('toastT').textContent=type.charAt(0).toUpperCase()+type.slice(1)+' Egg';document.getElementById('toastS').textContent=S.isGuest?'Sign up to keep!':''}else{const m=msgs[type]||msgs.welcome;document.getElementById('toastI').textContent=m.i;document.getElementById('toastT').textContent=m.t;document.getElementById('toastS').textContent=m.s||''}t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
 
 // ═══ PAGE CLOSE ═══
 window.addEventListener('beforeunload',()=>{if(S.sessionId&&S.user){navigator.sendBeacon(SUPABASE_URL+'/rest/v1/rpc/end_session',new Blob([JSON.stringify({p_session_id:S.sessionId})],{type:'application/json'}))}});
@@ -332,4 +401,5 @@ checkSession().then(()=>{if(!S.user)loadGuestDefaults()});
 
 </script>
 </body>
+</html>
 </html>
