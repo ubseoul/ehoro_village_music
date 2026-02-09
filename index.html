@@ -367,11 +367,36 @@ async function nextProfStep(){
 }
 async function finishProf(){
   document.getElementById('profOverlay').classList.remove('show');
-  if(!S.isGuest){
-    sb.from('profiles').update({onboarding_done:true}).eq('id',S.user.id);
-    // Grant chosen starter or random if skipped
+  if(!S.isGuest&&S.user){
+    const uid=S.user.id;
+    // 1) Mark onboarding complete
+    try{await sb.from('profiles').update({onboarding_done:true}).eq('id',uid)}catch(e){console.warn('finishProf: onboarding update failed',e)}
+    // 2) Grant chosen starter spirit
     await grantChosenStarter();
-    claimNewbieGift().finally(showGiftToastIfClaimed);
+    // 3) Grant starter emblems (15 each)
+    try{
+      const{data,error}=await sb.rpc('ensure_newbie_pack');
+      if(error)throw error;
+    }catch(e){
+      const types=['cafe_bean','wild_essence','focus_shard'];
+      for(const t of types){try{await sb.from('emblems').upsert({user_id:uid,emblem_type:t,quantity:15},{onConflict:'user_id,emblem_type'})}catch(e2){console.warn('finishProf: emblem upsert failed',e2)}}
+    }
+    try{await sb.from('profiles').update({starter_claimed:true,newbie_gift_claimed:true}).eq('id',uid)}catch(e){}
+    // 4) Grant starter egg + auto-place
+    try{
+      const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});
+      if(error)console.warn('finishProf: egg claim failed',error);
+    }catch(e){
+      try{await sb.from('eggs').insert({user_id:uid,rarity:'mundane',playlist:'cafe',status:'pending'})}catch(e2){}
+    }
+    // 5) Reload everything, auto-place egg, mark starter pack done
+    await loadUserData();
+    await autoPlaceEggs();
+    updateAllUI();
+    localStorage.setItem('starter_pack_done_'+uid,'1');
+    showToast('new_user_gift');
+    // 6) Start all game tickers
+    checkOfflineHatches();startHatcheryTicker();startCultivationTicker();startSpiritJiggle();startVillageTicker();
   }
 }
 async function grantChosenStarter(){
@@ -568,10 +593,44 @@ async function checkSession(){const{data:{session}}=await sb.auth.getSession();i
 async function loadUserData(){if(!S.user)return;const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:eggs},{data:pills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).maybeSingle(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).in('status',['pending','incubating']).limit(30),sb.from('pill_recipes').select('*')]);S.profile=prof||S.profile;if(S.profile&&S.profile.starter_claimed===undefined)S.profile.starter_claimed=false;S.spirits=spirits||[];S.hatchery=hatch||[];const allEggs=eggs||[];S.pendingEggs=allEggs.filter(e=>e.status==='pending');S.allEggs=allEggs;S.pillRecipes=pills||[];if(emb)emb.forEach(e=>{S.emblems[e.emblem_type]=e.quantity});S.traits={};if(traits)traits.forEach(t=>{if(!S.traits[t.spirit_id])S.traits[t.spirit_id]=[];S.traits[t.spirit_id].push(t)})}
 
 // ═══ ENTER APP ═══
-async function enterApp(){document.getElementById('login').classList.add('gone');document.getElementById('guestBanner').classList.remove('show');updateTopBar();updateAllUI();// Ensure starter pack before anything else
-await ensureStarterPack();if(S.profile?.onboarding_done===false){showProfTutorial();return}// Check for offline-hatched eggs
+async function enterApp(){document.getElementById('login').classList.add('gone');document.getElementById('guestBanner').classList.remove('show');updateTopBar();updateAllUI();
+// For brand new users: show tutorial BEFORE ensureStarterPack touches anything
+// Check if this user needs the tutorial (onboarding_done is false, null, or undefined)
+const needsTutorial=S.profile&&S.profile.onboarding_done!==true;
+const isNewUser=!localStorage.getItem('starter_pack_done_'+(S.user?.id||''));
+if(needsTutorial&&isNewUser){
+  // Ensure profile + hatchery exist but do NOT grant spirits/eggs/emblems yet
+  await ensureBasicsOnly();
+  showProfTutorial();return}
+// Returning user flow
+await ensureStarterPack();
+// Check for offline-hatched eggs
 checkOfflineHatches();startHatcheryTicker();startCultivationTicker();startSpiritJiggle();startVillageTicker();try{const{data}=await sb.rpc('claim_passive_cultivation');if(data&&data.xp_granted>0&&data.hours_away>=1){await loadUserData();updateAllUI();// Find the spirit that likely received XP for the welcome screen
 const topSpirit=S.spirits.length?S.spirits.reduce((a,b)=>(b.xp||0)>(a.xp||0)?b:a):null;showWelcomeBack(data.xp_granted,data.hours_away,topSpirit)}else{showToast('welcome')}}catch(e){}}
+
+// Lightweight setup for new users — just profile + hatchery, no spirits/eggs/emblems
+async function ensureBasicsOnly(){
+  if(!S.user||S.isGuest)return;
+  const uid=S.user.id;
+  try{
+    // Ensure profile exists
+    if(!S.profile||!S.profile.id){
+      const uname=S.user.user_metadata?.username||'user_'+uid.slice(0,6);
+      await sb.from('profiles').upsert({id:uid,username:uname,starter_claimed:false,newbie_gift_claimed:false,onboarding_done:false,total_eggs:0,total_listen_seconds:0,first_egg_claimed:false},{onConflict:'id'});
+      const{data:p}=await sb.from('profiles').select('*').eq('id',uid).maybeSingle();
+      S.profile=p||S.profile;
+    }
+    // Ensure hatchery rows exist
+    if(!S.hatchery.length){
+      const{data:existingH}=await sb.from('hatchery').select('*').eq('user_id',uid).order('slot_number');
+      if(!existingH||existingH.length===0){
+        for(let sn=1;sn<=5;sn++){try{await sb.from('hatchery').insert({user_id:uid,slot_number:sn,unlocked:sn<=2,hatch_duration_minutes:5})}catch(e){}}
+        const{data:h}=await sb.from('hatchery').select('*').eq('user_id',uid).order('slot_number');
+        S.hatchery=h||[];
+      }else{S.hatchery=existingH}
+    }
+  }catch(e){console.warn('ensureBasicsOnly error:',e)}
+}
 
 // ═══ TOPBAR ═══
 function updateTopBar(){const p=calcPrestige();const rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0];document.getElementById('tbRankName').textContent=rank.name;document.getElementById('tbRankName').style.color=rank.color||'';document.getElementById('tbRankPts').textContent=p+' prestige';const authArea=document.getElementById('tbAuth');if(S.isGuest){authArea.innerHTML='<button class="tb-signin" onclick="showLogin()">Sign In</button>'}else{const uname=S.profile?.username||S.user?.user_metadata?.username||S.user?.email?.split('@')[0]||'user';authArea.innerHTML='<span class="tb-user">'+uname+'</span>'}document.querySelectorAll('.sdLogoutDiv,.sdLogoutItem').forEach(el=>el.style.display=S.isGuest?'none':'')}
