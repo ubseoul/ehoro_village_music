@@ -303,19 +303,26 @@ async function ensureStarterPack(){
     }
     let gaveGifts=false;
     let starterSpiritType=null;
-    // 2) Check spirits — if user has none, grant a random starter
-    if(!S.spirits||S.spirits.length===0){
+    // 2) Reload spirits fresh to avoid duplicates
+    const{data:freshSpirits}=await sb.from('spirits').select('*').eq('user_id',uid);
+    S.spirits=freshSpirits||[];
+    // Only grant if truly zero spirits
+    if(S.spirits.length===0){
       try{
         const{data,error}=await sb.rpc('claim_starter_spirit');
         if(error)throw error;
         if(data&&!data.error){gaveGifts=true;starterSpiritType=data.spirit_type}
       }catch(e){
-        const types=['timi','bayo','mowang','florita','simi','basu_basu'];
-        const pick=types[Math.floor(Math.random()*types.length)];
-        try{
-          await sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:SPIRIT_DATA[pick]?.name||pick,evo_stage:0,xp:0});
-          gaveGifts=true;starterSpiritType=pick;
-        }catch(e2){console.warn('ensureStarterPack: spirit insert failed',e2)}
+        // Re-check in case RPC partially succeeded
+        const{data:recheck}=await sb.from('spirits').select('id').eq('user_id',uid);
+        if(!recheck||recheck.length===0){
+          const types=['timi','bayo','mowang','florita','simi','basu_basu'];
+          const pick=types[Math.floor(Math.random()*types.length)];
+          try{
+            await sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:SPIRIT_DATA[pick]?.name||pick,evo_stage:0,xp:0});
+            gaveGifts=true;starterSpiritType=pick;
+          }catch(e2){console.warn('ensureStarterPack: spirit insert failed',e2)}
+        }
       }
     }
     // 3) Check emblems — if any are below 15, top them up
@@ -341,7 +348,24 @@ async function ensureStarterPack(){
       // Mark profile flags
       try{await sb.from('profiles').update({starter_claimed:true,newbie_gift_claimed:true}).eq('id',uid)}catch(e){}
     }
-    // 4) Ensure user has at least one egg — if not, grant a mundane egg
+    // 4) Ensure hatchery rows exist (trigger may have failed)
+    if(!S.hatchery.length){
+      try{
+        // Check if rows exist in DB even though S.hatchery was empty at load time
+        const{data:existingH}=await sb.from('hatchery').select('*').eq('user_id',uid).order('slot_number');
+        if(!existingH||existingH.length===0){
+          // Create the 5 default slots
+          for(let sn=1;sn<=5;sn++){
+            try{await sb.from('hatchery').insert({user_id:uid,slot_number:sn,unlocked:sn<=2,hatch_duration_minutes:5})}catch(e){}
+          }
+          const{data:h}=await sb.from('hatchery').select('*').eq('user_id',uid).order('slot_number');
+          S.hatchery=h||[];
+        }else{
+          S.hatchery=existingH;
+        }
+      }catch(e){console.warn('ensureStarterPack: hatchery check failed',e)}
+    }
+    // 5) Ensure user has at least one egg — if not, grant a mundane egg
     if(!S.pendingEggs.length&&S.hatchery.every(s=>!s.egg_id)){
       try{
         const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});
@@ -354,7 +378,7 @@ async function ensureStarterPack(){
       await loadUserData();
       await autoPlaceEggs();
     }
-    // 4) Reload and show spirit arrival or gift toast
+    // 6) Reload and show spirit arrival or gift toast
     if(gaveGifts){
       await loadUserData();
       updateAllUI();
@@ -421,7 +445,7 @@ async function doAuth(){const email=document.getElementById('inEmail').value.tri
 async function doGoogleAuth(){try{const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin}});if(error)throw error}catch(e){document.getElementById('authError').textContent=e.message||'Google sign-in failed'}}
 function enterGuest(){document.getElementById('login').classList.add('gone');S.isGuest=true;S.user=null;updateTopBar();loadGuestDefaults()}
 function loadGuestDefaults(){S.spirits=[];S.traits={};S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0};S.profile={total_eggs:0,total_listen_seconds:0,username:'guest'};S.hatchery=[{id:'gs1',slot_number:1,unlocked:true,egg_id:null},{id:'gs2',slot_number:2,unlocked:true,egg_id:null},{id:'gs3',slot_number:3,unlocked:false},{id:'gs4',slot_number:4,unlocked:false},{id:'gs5',slot_number:5,unlocked:false}];S.pendingEggs=[];S.pillRecipes=[{id:'d1',pill_name:'Cultivation Pill',pill_type:'growth',description:'Grants 50 XP to a spirit.',effect_type:'xp_flat',effect_value:50,cost_cafe_bean:4,cost_wild_essence:2,cost_focus_shard:2},{id:'d2',pill_name:'Greater Cultivation Pill',pill_type:'clarity',description:'Grants 100 XP to a spirit.',effect_type:'xp_flat',effect_value:100,cost_cafe_bean:6,cost_wild_essence:6,cost_focus_shard:6},{id:'d3',pill_name:'Village Cultivation Pill',pill_type:'harmony',description:'Grants 25 XP to ALL spirits.',effect_type:'xp_all',effect_value:25,cost_cafe_bean:3,cost_wild_essence:3,cost_focus_shard:8}];updateAllUI();document.getElementById('guestBanner').classList.add('show')}
-async function doLogout(){toggleSettings();if(S.sessionId){try{await sb.rpc('end_session',{p_session_id:S.sessionId})}catch(e){}S.sessionId=null}await sb.auth.signOut();S.user=null;S.playing=false;S.isGuest=true;[S.ticker,S.hatchTicker,S.cultTicker,S.jiggleTicker].forEach(t=>{if(t)clearInterval(t)});S.ticker=S.hatchTicker=S.cultTicker=S.jiggleTicker=null;const em=document.getElementById('videoEmbed'),ifr=em.querySelector('iframe');if(ifr)ifr.remove();em.classList.remove('loaded');updateTopBar();loadGuestDefaults()}
+async function doLogout(){toggleSettings();if(S.sessionId){try{await sb.rpc('end_session',{p_session_id:S.sessionId})}catch(e){}S.sessionId=null}await sb.auth.signOut();S.user=null;S.playing=false;S.isGuest=true;S.spirits=[];S.hatchery=[];S.pendingEggs=[];S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0};[S.ticker,S.hatchTicker,S.cultTicker,S.jiggleTicker].forEach(t=>{if(t)clearInterval(t)});S.ticker=S.hatchTicker=S.cultTicker=S.jiggleTicker=null;const em=document.getElementById('videoEmbed'),ifr=em.querySelector('iframe');if(ifr)ifr.remove();em.classList.remove('loaded');document.getElementById('login').classList.remove('gone');updateTopBar()}
 async function checkSession(){const{data:{session}}=await sb.auth.getSession();if(session){S.user=session.user;S.isGuest=false;await loadUserData();enterApp()}}
 async function loadUserData(){if(!S.user)return;const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:pend},{data:pills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).maybeSingle(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).eq('status','pending').limit(20),sb.from('pill_recipes').select('*')]);S.profile=prof||S.profile;if(S.profile&&S.profile.starter_claimed===undefined)S.profile.starter_claimed=false;S.spirits=spirits||[];S.hatchery=hatch||[];S.pendingEggs=pend||[];S.pillRecipes=pills||[];if(emb)emb.forEach(e=>{S.emblems[e.emblem_type]=e.quantity});S.traits={};if(traits)traits.forEach(t=>{if(!S.traits[t.spirit_id])S.traits[t.spirit_id]=[];S.traits[t.spirit_id].push(t)})}
 
