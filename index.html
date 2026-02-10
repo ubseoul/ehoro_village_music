@@ -574,7 +574,7 @@ function showLogin(){document.getElementById('login').classList.remove('gone');S
 function toggleAuthMode(){S.authMode=S.authMode==='login'?'signup':'login';const u=S.authMode==='signup';document.getElementById('authBtn').textContent=u?'Create Account':'Sign In';document.getElementById('authToggle').textContent=u?'Already have an account? Sign in':'Need an account? Sign up';document.getElementById('usernameField').style.display=u?'':'none';document.getElementById('authError').textContent=''}
 async function doAuth(){const email=document.getElementById('inEmail').value.trim(),pass=document.getElementById('inPass').value,btn=document.getElementById('authBtn'),err=document.getElementById('authError');err.textContent='';err.className='l-error';if(!email||!pass){err.textContent='Email and password required';return}if(pass.length<6){err.textContent='Password must be 6+ characters';return}btn.disabled=true;try{let r;if(S.authMode==='signup'){const un=document.getElementById('inUser').value.trim()||'user_'+Math.random().toString(36).slice(2,8);r=await sb.auth.signUp({email,password:pass,options:{data:{username:un}}});if(r.data?.user&&!r.data.session){err.className='l-error ok';err.textContent='Check email to confirm!';btn.disabled=false;return}}else{r=await sb.auth.signInWithPassword({email,password:pass})}if(r.error)throw r.error;S.user=r.data.user;S.isGuest=false;await loadUserData();updateTopBar();enterApp()}catch(e){err.textContent=e.message||'Auth failed'}finally{btn.disabled=false}}
 async function doGoogleAuth(){try{const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin}});if(error)throw error}catch(e){document.getElementById('authError').textContent=e.message||'Google sign-in failed'}}
-function enterGuest(){document.getElementById('login').classList.add('gone');S.isGuest=true;S.user=null;updateTopBar();loadGuestDefaults()}
+function enterGuest(){document.getElementById('login').classList.add('gone');document.getElementById('shell').classList.add('on');S.isGuest=true;S.user=null;updateTopBar();loadGuestDefaults()}
 function loadGuestDefaults(){S.spirits=[];S.traits={};S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0};S.profile={total_eggs:0,total_listen_seconds:0,username:'guest'};S.hatchery=[{id:'gs1',slot_number:1,unlocked:true,egg_id:null},{id:'gs2',slot_number:2,unlocked:true,egg_id:null},{id:'gs3',slot_number:3,unlocked:false},{id:'gs4',slot_number:4,unlocked:false},{id:'gs5',slot_number:5,unlocked:false}];S.pendingEggs=[];S.pillRecipes=[{id:'d1',pill_name:'Cultivation Pill',pill_type:'growth',description:'Grants 50 XP to a spirit.',effect_type:'xp_flat',effect_value:50,cost_cafe_bean:4,cost_wild_essence:2,cost_focus_shard:2},{id:'d2',pill_name:'Greater Cultivation Pill',pill_type:'clarity',description:'Grants 100 XP to a spirit.',effect_type:'xp_flat',effect_value:100,cost_cafe_bean:6,cost_wild_essence:6,cost_focus_shard:6},{id:'d3',pill_name:'Village Cultivation Pill',pill_type:'harmony',description:'Grants 25 XP to ALL spirits.',effect_type:'xp_all',effect_value:25,cost_cafe_bean:3,cost_wild_essence:3,cost_focus_shard:8}];updateAllUI();document.getElementById('guestBanner').classList.add('show')}
 async function doLogout(){toggleSettings();
 // Persist listen time before logout
@@ -584,6 +584,7 @@ await sb.auth.signOut();S.user=null;S.playing=false;S.isGuest=true;S.spirits=[];
 [S.ticker,S.hatchTicker,S.cultTicker,S.jiggleTicker].forEach(t=>{if(t)clearInterval(t)});S.ticker=S.hatchTicker=S.cultTicker=S.jiggleTicker=null;
 const em=document.getElementById('videoEmbed'),ifr=em.querySelector('iframe');if(ifr)ifr.remove();em.classList.remove('loaded');
 document.getElementById('guestBanner').classList.remove('show');
+document.getElementById('shell').classList.remove('on');
 document.getElementById('login').classList.remove('gone');updateTopBar()}
 async function checkSession(){try{const{data:{session}}=await sb.auth.getSession();if(session?.user){S.user=session.user;S.isGuest=false;await loadUserData();enterApp();return true}}catch(e){console.warn('checkSession error:',e)}return false}
 async function loadUserData(){if(!S.user)return;const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:eggs},{data:pills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).maybeSingle(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).in('status',['pending','incubating']).limit(30),sb.from('pill_recipes').select('*')]);S.profile=prof||S.profile;if(S.profile&&S.profile.starter_claimed===undefined)S.profile.starter_claimed=false;S.spirits=spirits||[];S.hatchery=hatch||[];const allEggs=eggs||[];S.pendingEggs=allEggs.filter(e=>e.status==='pending');S.allEggs=allEggs;S.pillRecipes=pills||[];if(emb)emb.forEach(e=>{S.emblems[e.emblem_type]=e.quantity});S.traits={};if(traits)traits.forEach(t=>{if(!S.traits[t.spirit_id])S.traits[t.spirit_id]=[];S.traits[t.spirit_id].push(t)})}
@@ -750,14 +751,27 @@ sb.auth.onAuthStateChange(async(event,session)=>{
   }
   if(event==='SIGNED_OUT'){
     S.user=null;S.isGuest=true;_appEntered=false;
+    // Clear all data
+    S.playing=false;S.spirits=[];S.hatchery=[];S.pendingEggs=[];S.allEggs=[];
+    S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0};S.profile=null;
+    S.sessionStartedAt=null;S.eggAnchor=null;S.profStep=0;S.chosenStarter=null;
+    // Stop all tickers
+    [S.ticker,S.hatchTicker,S.cultTicker,S.jiggleTicker].forEach(t=>{if(t)clearInterval(t)});
+    S.ticker=S.hatchTicker=S.cultTicker=S.jiggleTicker=null;
+    // Hide app, show login
+    document.getElementById('shell').classList.remove('on');
     document.getElementById('login').classList.remove('gone');
-    loadGuestDefaults();
+    document.getElementById('guestBanner').classList.remove('show');
   }
 });
 // Initial session check
 checkSession().then(ok=>{
   if(ok){_appEntered=true}
-  else if(!S.user){loadGuestDefaults();document.getElementById('login').classList.remove('gone')}
+  else if(!S.user){
+    // No session - just show login screen
+    document.getElementById('shell').classList.remove('on');
+    document.getElementById('login').classList.remove('gone');
+  }
 });
 
 </script>
