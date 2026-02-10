@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" href="sprites/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
 :root{--glass:rgba(12,12,12,.55);--glass-border:rgba(255,255,255,.08);--glass-hover:rgba(255,255,255,.04);--blur:blur(20px);--radius:14px;--radius-sm:10px}
 [data-theme="dark"]{--bg:#050505;--surface:rgba(15,15,15,.7);--border:rgba(255,255,255,.06);--border-l:rgba(255,255,255,.12);--t1:#f5f5f5;--t2:#b0b0b0;--t3:#808080;--t4:#505050;--accent-dim:rgba(255,255,255,.04);--accent-soft:rgba(255,255,255,.08);--logo-color:#f5f5f5;--toast-bg:rgba(20,20,20,.9);--positive:#6c9;--negative:#c77;--special:#c8f;--card-bg:rgba(255,255,255,.04);--card-border:rgba(255,255,255,.08)}
@@ -380,12 +380,8 @@ button.action-busy{opacity:.5;pointer-events:none}
 const SUPABASE_URL='https://eyqddqtlgthgkiqjavyx.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_CsTLSJj1YwgiHMxUTa685Q_2TVvZa2Q';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});
-// Utility: wrap any promise with a timeout to prevent hangs (especially on mobile with ad blockers)
-function withTimeout(promise,ms=8000){return Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error('Request timed out — check your connection or disable ad blockers for this site')),ms))])}
-// Detect if Supabase is being blocked
-let _supabaseBlocked=false;
-async function checkSupabaseConnectivity(){try{const r=await fetch(SUPABASE_URL+'/rest/v1/',{method:'HEAD',headers:{'apikey':SUPABASE_ANON_KEY}});_supabaseBlocked=!r.ok}catch(e){_supabaseBlocked=true}if(_supabaseBlocked)console.warn('⚠️ Supabase appears blocked (ad blocker?). Some features may not work.')}
-checkSupabaseConnectivity();
+// Utility: wrap any promise with a timeout to prevent hangs
+function withTimeout(promise,ms=8000){return Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error('Request timed out — check your connection')),ms))])}
 const STREAM_YT='jfKfPfyJRdk';
 const STREAM_YT_FALLBACK='5qap5aO4i9A'; // Lofi Girl backup playlist
 const RARITY_COLORS={mundane:'#888',adept:'#8ab',refined:'#7a7',illustrious:'#ba8',sovereign:'#a8c',celestial:'#8cf',transcendent:'#fc8',mysterious:'#c8f',ancestral:'#f88',paradox:'#fff'};
@@ -540,9 +536,9 @@ async function finishProf(){
       showSpiritArrival(sp.spirit_type);
     }else{
       console.error('finishProf: Spirit creation failed after all attempts. User has 0 spirits');
-      // Show user-facing error with ad blocker hint
+      // Show user-facing error
       const errEl=document.getElementById('authError');
-      if(errEl){errEl.textContent='Spirit creation failed — if you have an ad blocker, please disable it for this site and refresh.';errEl.className='l-error'}
+      if(errEl){errEl.textContent='Spirit creation failed — please refresh and try again.';errEl.className='l-error'}
       showToast('new_user_gift');
     }
     // 7) Start all game tickers
@@ -703,8 +699,7 @@ function closePatchNotes(){document.getElementById('patchNotes').classList.remov
 function showLogin(){document.getElementById('login').classList.remove('gone');S.authMode='signup';document.getElementById('authBtn').textContent='Create Account';document.getElementById('authToggle').textContent='Already have an account? Sign in';document.getElementById('usernameField').style.display=''}
 function toggleAuthMode(){S.authMode=S.authMode==='login'?'signup':'login';const u=S.authMode==='signup';document.getElementById('authBtn').textContent=u?'Create Account':'Sign In';document.getElementById('authToggle').textContent=u?'Already have an account? Sign in':'Need an account? Sign up';document.getElementById('usernameField').style.display=u?'':'none';document.getElementById('authError').textContent=''}
 async function doAuth(){const email=document.getElementById('inEmail').value.trim(),pass=document.getElementById('inPass').value,btn=document.getElementById('authBtn'),err=document.getElementById('authError');err.textContent='';err.className='l-error';if(!email||!pass){err.textContent='Email and password required';return}if(pass.length<6){err.textContent='Password must be 6+ characters';return}
-if(_supabaseBlocked){err.textContent='Connection blocked — please disable your ad blocker for this site and refresh.';return}
-btn.disabled=true;btn.textContent='Loading...';try{let r;if(S.authMode==='signup'){const un=document.getElementById('inUser').value.trim()||'user_'+Math.random().toString(36).slice(2,8);r=await withTimeout(sb.auth.signUp({email,password:pass,options:{data:{username:un}}}),10000);if(r.data?.user&&!r.data.session){err.className='l-error ok';err.textContent='Check email to confirm!';btn.disabled=false;btn.textContent='Create Account';return}}else{r=await withTimeout(sb.auth.signInWithPassword({email,password:pass}),10000)}if(r.error)throw r.error;S.user=r.data.user;S.isGuest=false;await loadUserData();updateTopBar();enterApp()}catch(e){const msg=e.message||'Auth failed';err.textContent=msg.includes('abort')||msg.includes('timed out')?'Connection issue — try disabling ad blockers or check your internet':msg}finally{btn.disabled=false;btn.textContent=S.authMode==='signup'?'Create Account':'Sign In'}}
+btn.disabled=true;btn.textContent='Loading...';try{let r;if(S.authMode==='signup'){const un=document.getElementById('inUser').value.trim()||'user_'+Math.random().toString(36).slice(2,8);r=await withTimeout(sb.auth.signUp({email,password:pass,options:{data:{username:un}}}),10000);if(r.data?.user&&!r.data.session){err.className='l-error ok';err.textContent='Check email to confirm!';btn.disabled=false;btn.textContent='Create Account';return}}else{r=await withTimeout(sb.auth.signInWithPassword({email,password:pass}),10000)}if(r.error)throw r.error;S.user=r.data.user;S.isGuest=false;await loadUserData();updateTopBar();enterApp()}catch(e){const msg=e.message||'Auth failed';err.textContent=msg.includes('abort')||msg.includes('timed out')?'Connection issue — please check your internet connection':msg}finally{btn.disabled=false;btn.textContent=S.authMode==='signup'?'Create Account':'Sign In'}}
 async function doGoogleAuth(){try{const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin}});if(error)throw error}catch(e){document.getElementById('authError').textContent=e.message||'Google sign-in failed'}}
 function enterGuest(){document.getElementById('login').classList.add('gone');document.getElementById('shell').classList.add('on');S.isGuest=true;S.user=null;updateTopBar();loadGuestDefaults()}
 function loadGuestDefaults(){S.spirits=[];S.traits={};S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0};S.profile={total_eggs:0,total_listen_seconds:0,username:'guest'};S.hatchery=[{id:'gs1',slot_number:1,unlocked:true,egg_id:null},{id:'gs2',slot_number:2,unlocked:true,egg_id:null},{id:'gs3',slot_number:3,unlocked:false},{id:'gs4',slot_number:4,unlocked:false},{id:'gs5',slot_number:5,unlocked:false}];S.pendingEggs=[];S.expeditions=[];S.pillRecipes=[{id:'d1',pill_name:'Spirit Pill',pill_type:'growth',description:'Grants 50 XP to a spirit.',effect_type:'xp_flat',effect_value:50,cost_cafe_bean:4,cost_wild_essence:2,cost_focus_shard:2},{id:'d2',pill_name:'Greater Spirit Pill',pill_type:'clarity',description:'Grants 100 XP to a spirit.',effect_type:'xp_flat',effect_value:100,cost_cafe_bean:6,cost_wild_essence:6,cost_focus_shard:6},{id:'d3',pill_name:'Village Spirit Pill',pill_type:'harmony',description:'Grants 25 XP to ALL spirits.',effect_type:'xp_all',effect_value:25,cost_cafe_bean:3,cost_wild_essence:3,cost_focus_shard:8}];updateAllUI();document.getElementById('guestBanner').classList.add('show')}
