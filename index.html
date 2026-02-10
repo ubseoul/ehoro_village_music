@@ -360,11 +360,38 @@ async function finishProf(){
     const d=SPIRIT_DATA[pick];
     // Fresh check for existing spirits
     const{data:existing}=await sb.from('spirits').select('id').eq('user_id',uid);
+    let spiritCreated=false;
     if(!existing||existing.length===0){
+      // Try direct insert first
       try{
-        await sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:d?.name||pick,evo_stage:0,xp:0});
-      }catch(e){console.warn('finishProf: spirit insert failed',e)}
-      try{await sb.from('profiles').update({starter_claimed:true}).eq('id',uid)}catch(e){}
+        const{error:insertErr}=await sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:d?.name||pick,evo_stage:0,xp:0});
+        if(!insertErr){
+          spiritCreated=true;
+          console.log('finishProf: spirit created via direct insert');
+        }else{
+          console.warn('finishProf: spirit insert failed, trying RPC',insertErr);
+        }
+      }catch(e){console.warn('finishProf: spirit insert exception',e)}
+      
+      // If direct insert failed, try RPC as fallback
+      if(!spiritCreated){
+        try{
+          const{data:rpcData,error:rpcErr}=await sb.rpc('claim_starter_spirit',{p_spirit_type:pick});
+          if(!rpcErr&&rpcData){
+            spiritCreated=true;
+            console.log('finishProf: spirit created via RPC');
+          }else{
+            console.warn('finishProf: RPC also failed',rpcErr);
+          }
+        }catch(e){console.warn('finishProf: RPC exception',e)}
+      }
+      
+      // Verify the spirit actually exists now
+      if(spiritCreated){
+        try{await sb.from('profiles').update({starter_claimed:true}).eq('id',uid)}catch(e){}
+      }
+    }else{
+      spiritCreated=true; // Spirit already exists
     }
     // 3) Grant starter emblems (15 each)
     try{const{error}=await sb.rpc('ensure_newbie_pack');if(error)throw error}catch(e){
@@ -380,8 +407,14 @@ async function finishProf(){
     await autoPlaceEggs();
     updateAllUI();
     localStorage.setItem('starter_pack_done_'+uid,'1');
-    // 6) Show spirit arrival screen
-    showSpiritArrival(pick);
+    // 6) Verify spirit was created, then show arrival screen
+    const finalCheck=S.spirits.find(s=>s.spirit_type===pick);
+    if(finalCheck){
+      showSpiritArrival(pick);
+    }else{
+      console.error('finishProf: Spirit creation failed completely. User has',S.spirits.length,'spirits');
+      showToast('error');
+    }
     // 7) Start all game tickers
     startHatcheryTicker();startCultivationTicker();startSpiritJiggle();startVillageTicker();
   }
