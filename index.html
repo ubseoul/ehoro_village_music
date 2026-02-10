@@ -220,20 +220,16 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);-webki
 /* PROFESSOR MOWANG TUTORIAL */
 .prof-overlay{position:fixed;inset:0;z-index:190;background:var(--bg);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s}.prof-overlay.show{opacity:1;pointer-events:all}
 .prof-inner{width:100%;max-width:400px;padding:0 28px;text-align:center}
-.prof-portrait{width:88px;height:88px;border-radius:50%;overflow:hidden;margin:0 auto 12px;border:2px solid var(--card-border);position:relative}.prof-portrait img{width:100%;height:100%;object-fit:cover}
+.prof-portrait{width:88px;height:88px;border-radius:50%;overflow:hidden;margin:0 auto 12px;border:2px solid var(--card-border);position:relative}.prof-portrait img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
 .prof-portrait::after{content:'';position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(from 0deg,transparent,rgba(255,215,140,.25),transparent,rgba(255,240,200,.15),transparent);animation:auraRotate 3s linear infinite;z-index:0}
-.prof-portrait img{position:relative;z-index:1}
 .prof-name{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:500;color:var(--t1);margin-bottom:2px}
 .prof-role{font-size:.55rem;color:var(--t3);text-transform:uppercase;letter-spacing:.15em;margin-bottom:16px}
 .prof-bubble{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px;text-align:left;position:relative}
 .prof-bubble::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(45deg);width:12px;height:12px;background:var(--card-bg);border-left:1px solid var(--card-border);border-top:1px solid var(--card-border)}
-.prof-bubble-text{font-size:.8rem;color:var(--t2);line-height:1.65}
-.prof-bubble-text b{color:var(--t1);font-weight:600}
-.prof-bubble-text .prof-highlight{color:var(--positive);font-weight:500}
+.prof-bubble-text{font-size:.8rem;color:var(--t2);line-height:1.65}.prof-bubble-text b{color:var(--t1);font-weight:600}.prof-bubble-text .prof-highlight{color:var(--positive);font-weight:500}
 .prof-dots{display:flex;gap:6px;justify-content:center;margin-bottom:18px}.prof-dot{width:8px;height:8px;border-radius:50%;background:var(--t4);transition:all .25s}.prof-dot.on{background:var(--t1);width:20px;border-radius:4px}
 .prof-btn{padding:13px 32px;background:var(--t1);color:var(--bg);border:none;border-radius:8px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;transition:transform .1s}.prof-btn:active{transform:scale(.97)}
 .prof-skip{display:block;margin:10px auto 0;background:none;border:none;color:var(--t4);font-family:inherit;font-size:.65rem;cursor:pointer}
-/* Spirit picker grid */
 .prof-spirit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
 .prof-spirit-pick{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;background:var(--card-bg);border:2px solid var(--card-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s}
 .prof-spirit-pick:hover{border-color:var(--border-l);background:var(--accent-soft)}
@@ -242,7 +238,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);-webki
 .prof-spirit-pick-name{font-size:.6rem;font-weight:600;color:var(--t1)}
 .prof-spirit-pick-bio{font-size:.4rem;color:var(--t3);line-height:1.3;max-height:0;overflow:hidden;transition:max-height .3s}
 .prof-spirit-pick.selected .prof-spirit-pick-bio{max-height:40px;margin-top:2px}
-@media(max-width:768px){.prof-inner{padding:0 20px}.prof-portrait{width:72px;height:72px}.prof-bubble-text{font-size:.75rem}.prof-spirit-grid{grid-template-columns:repeat(3,1fr);gap:6px}.prof-spirit-pick img{width:40px;height:40px}}
+@media(max-width:768px){.prof-inner{padding:0 20px}.prof-portrait{width:72px;height:72px}.prof-bubble-text{font-size:.75rem}.prof-spirit-grid{gap:6px}.prof-spirit-pick img{width:40px;height:40px}}
 
 </style>
 </head>
@@ -304,14 +300,8 @@ const WB_MESSAGES=['The village rested while you were away...','Your spirits kep
 
 let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0},hatchery:[],pendingEggs:[],allEggs:[],pillRecipes:[],playing:false,eggT:0,eggAnchor:null,EGG_SEC:3600,FIRST_EGG_SEC:240,GUEST_EGG_SEC:30,sessionId:null,sessionStartedAt:null,ticker:null,hatchTicker:null,cultTicker:null,jiggleTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null,firstIngredientGiven:false,craftHintShown:false,wbTimer:null,profStep:0,chosenStarter:null};
 
-// ═══ ONBOARDING ═══
-const OB_STEPS=[{img:'sprites/timi_1.png',title:'Listen to Lo-Fi',desc:'Stream curated lo-fi playlists while you study, work, or chill.'},{img:'sprites/mowang_1.png',title:'Collect Eggs & Spirits',desc:'Eggs drop while you listen. Hatch them to discover spirits.'},{img:'sprites/bayo_1.png',title:'Grow Your Village',desc:'Cultivate spirits, evolve them, watch your village rank rise.'}];
-function showOnboard(){S.obStep=0;renderOB();document.getElementById('onboard').classList.remove('gone')}
-function renderOB(){const s=OB_STEPS[S.obStep];document.getElementById('obIcon').innerHTML='<img src="'+s.img+'">';document.getElementById('obTitle').textContent=s.title;document.getElementById('obDesc').textContent=s.desc;document.getElementById('obBtn').textContent=S.obStep<2?'Next':'Get Started';[0,1,2].forEach(i=>document.getElementById('obD'+i).className='ob-dot'+(i===S.obStep?' on':''))}
-function nextOnboard(){if(S.obStep<2){S.obStep++;renderOB()}else finishOnboard()}
-function finishOnboard(){document.getElementById('onboard').classList.add('gone');if(!S.isGuest){sb.from('profiles').update({onboarding_done:true}).eq('id',S.user.id);claimNewbieGift().finally(showGiftToastIfClaimed)}}
+// ═══ ONBOARDING (legacy — kept for old refs) ═══
 function showGiftToastIfClaimed(){if(S.isGuest||!S.profile?.newbie_gift_claimed)return;const key='gift_toast_shown_'+S.user.id;if(localStorage.getItem(key))return;showToast('gift');localStorage.setItem(key,'1')}
-async function claimNewbieGift(){if(S.profile?.newbie_gift_claimed)return;try{const{data}=await sb.rpc('claim_newbie_gift');if(data?.error)return;S.emblems.cafe_bean+=15;S.emblems.wild_essence+=15;S.emblems.focus_shard+=15;S.profile.newbie_gift_claimed=true;renderItemsTab();showGiftToastIfClaimed()}catch(e){}}
 
 // ═══ PROFESSOR MOWANG TUTORIAL ═══
 const PROF_STEPS=[
@@ -327,10 +317,8 @@ function showProfTutorial(){S.profStep=0;S.chosenStarter=null;renderProfStep();d
 function renderProfStep(){
   const step=PROF_STEPS[S.profStep],total=PROF_STEPS.length;
   document.getElementById('profText').innerHTML=step.text;
-  // Dots
   let dots='';for(let i=0;i<total;i++)dots+='<div class="prof-dot'+(i===S.profStep?' on':'')+'"></div>';
   document.getElementById('profDots').innerHTML=dots;
-  // Extra content (spirit picker or final)
   const extra=document.getElementById('profExtra');
   if(step.extra==='picker'){
     const types=['timi','bayo','mowang','florita','simi','basu_basu'];
@@ -340,13 +328,9 @@ function renderProfStep(){
     document.getElementById('profBtn').textContent=S.chosenStarter?'Choose '+SPIRIT_DATA[S.chosenStarter].name:'Pick a spirit';
     document.getElementById('profBtn').disabled=!S.chosenStarter;
   }else if(step.extra==='final'){
-    extra.innerHTML='';
-    document.getElementById('profBtn').textContent='Enter the Village';
-    document.getElementById('profBtn').disabled=false;
+    extra.innerHTML='';document.getElementById('profBtn').textContent='Enter the Village';document.getElementById('profBtn').disabled=false;
   }else{
-    extra.innerHTML='';
-    document.getElementById('profBtn').textContent=S.profStep<total-1?'Next':'Get Started';
-    document.getElementById('profBtn').disabled=false;
+    extra.innerHTML='';document.getElementById('profBtn').textContent='Next';document.getElementById('profBtn').disabled=false;
   }
 }
 function pickStarter(type){
@@ -355,7 +339,6 @@ function pickStarter(type){
   const el=document.getElementById('profPick_'+type);if(el)el.classList.add('selected');
   document.getElementById('profBtn').textContent='Choose '+SPIRIT_DATA[type].name;
   document.getElementById('profBtn').disabled=false;
-  // Update the text to mention the chosen spirit
   const d=SPIRIT_DATA[type];
   document.getElementById('profText').innerHTML='Now then — every new villager gets to choose their <b>first spirit companion</b>. Take your time. Each one is special.<br><br><b>'+d.name+'</b> — <i>'+d.bio+'</i>';
 }
@@ -371,63 +354,40 @@ async function finishProf(){
     const uid=S.user.id;
     // 1) Mark onboarding complete
     try{await sb.from('profiles').update({onboarding_done:true}).eq('id',uid)}catch(e){console.warn('finishProf: onboarding update failed',e)}
+    if(S.profile)S.profile.onboarding_done=true;
     // 2) Grant chosen starter spirit
-    await grantChosenStarter();
+    const pick=S.chosenStarter||['timi','bayo','mowang','florita','simi','basu_basu'][Math.floor(Math.random()*6)];
+    const d=SPIRIT_DATA[pick];
+    // Fresh check for existing spirits
+    const{data:existing}=await sb.from('spirits').select('id').eq('user_id',uid);
+    if(!existing||existing.length===0){
+      try{
+        await sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:d?.name||pick,evo_stage:0,xp:0});
+      }catch(e){console.warn('finishProf: spirit insert failed',e)}
+      try{await sb.from('profiles').update({starter_claimed:true}).eq('id',uid)}catch(e){}
+    }
     // 3) Grant starter emblems (15 each)
-    try{
-      const{data,error}=await sb.rpc('ensure_newbie_pack');
-      if(error)throw error;
-    }catch(e){
-      const types=['cafe_bean','wild_essence','focus_shard'];
-      for(const t of types){try{await sb.from('emblems').upsert({user_id:uid,emblem_type:t,quantity:15},{onConflict:'user_id,emblem_type'})}catch(e2){console.warn('finishProf: emblem upsert failed',e2)}}
+    try{const{error}=await sb.rpc('ensure_newbie_pack');if(error)throw error}catch(e){
+      for(const t of['cafe_bean','wild_essence','focus_shard']){try{await sb.from('emblems').upsert({user_id:uid,emblem_type:t,quantity:15},{onConflict:'user_id,emblem_type'})}catch(e2){}}
     }
     try{await sb.from('profiles').update({starter_claimed:true,newbie_gift_claimed:true}).eq('id',uid)}catch(e){}
     // 4) Grant starter egg + auto-place
-    try{
-      const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});
-      if(error)console.warn('finishProf: egg claim failed',error);
-    }catch(e){
+    try{await sb.rpc('claim_egg_drop',{p_playlist:'cafe'})}catch(e){
       try{await sb.from('eggs').insert({user_id:uid,rarity:'mundane',playlist:'cafe',status:'pending'})}catch(e2){}
     }
-    // 5) Reload everything, auto-place egg, mark starter pack done
+    // 5) Reload everything
     await loadUserData();
     await autoPlaceEggs();
     updateAllUI();
     localStorage.setItem('starter_pack_done_'+uid,'1');
-    showToast('new_user_gift');
-    // 6) Start all game tickers
-    checkOfflineHatches();startHatcheryTicker();startCultivationTicker();startSpiritJiggle();startVillageTicker();
+    // 6) Show spirit arrival screen
+    showSpiritArrival(pick);
+    // 7) Start all game tickers
+    startHatcheryTicker();startCultivationTicker();startSpiritJiggle();startVillageTicker();
   }
-}
-async function grantChosenStarter(){
-  if(!S.user||S.isGuest)return;
-  const uid=S.user.id;
-  // Fresh check — don't grant if they already have spirits
-  const{data:existing}=await sb.from('spirits').select('id').eq('user_id',uid);
-  if(existing&&existing.length>0)return;
-  const pick=S.chosenStarter||['timi','bayo','mowang','florita','simi','basu_basu'][Math.floor(Math.random()*6)];
-  const d=SPIRIT_DATA[pick];
-  try{
-    // Try RPC first — but pass the chosen type somehow
-    // Since claim_starter_spirit picks randomly, we do direct insert for chosen picks
-    if(S.chosenStarter){
-      await sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:d?.name||pick,evo_stage:0,xp:0});
-      try{await sb.from('profiles').update({starter_claimed:true}).eq('id',uid)}catch(e){}
-    }else{
-      const{data,error}=await sb.rpc('claim_starter_spirit');
-      if(error)throw error;
-    }
-  }catch(e){
-    console.warn('grantChosenStarter: RPC failed, trying direct insert',e);
-    try{await sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:d?.name||pick,evo_stage:0,xp:0})}catch(e2){console.warn('grantChosenStarter: direct insert also failed',e2)}
-    try{await sb.from('profiles').update({starter_claimed:true}).eq('id',uid)}catch(e){}
-  }
-  await loadUserData();
-  updateAllUI();
-  showSpiritArrival(pick);
 }
 
-// ═══ STARTER PACK — bulletproof fallback ═══
+// ═══ STARTER PACK — bulletproof fallback (returning users only) ═══
 async function ensureStarterPack(){
   if(!S.user||S.isGuest)return;
   const uid=S.user.id;
@@ -438,7 +398,6 @@ async function ensureStarterPack(){
     if(!S.profile||!S.profile.id){
       const uname=S.user.user_metadata?.username||'user_'+uid.slice(0,6);
       await sb.from('profiles').upsert({id:uid,username:uname,starter_claimed:false,newbie_gift_claimed:false,onboarding_done:false,total_eggs:0,total_listen_seconds:0,first_egg_claimed:false},{onConflict:'id'});
-      // Reload profile
       const{data:p}=await sb.from('profiles').select('*').eq('id',uid).maybeSingle();
       S.profile=p||S.profile;
     }
@@ -447,9 +406,8 @@ async function ensureStarterPack(){
     // 2) Reload spirits fresh to avoid duplicates
     const{data:freshSpirits}=await sb.from('spirits').select('*').eq('user_id',uid);
     S.spirits=freshSpirits||[];
-    // Only grant random starter if truly zero spirits AND onboarding is already done
-    // (new users go through Prof Mowang tutorial which handles spirit picking)
-    if(S.spirits.length===0&&S.profile?.onboarding_done){
+    // Only grant random starter if zero spirits AND onboarding already done (returning user edge case)
+    if(S.spirits.length===0&&S.profile?.onboarding_done===true){
       try{
         const{data,error}=await sb.rpc('claim_starter_spirit');
         if(error)throw error;
@@ -558,9 +516,8 @@ function showWelcomeBack(xpGained,hoursAway,spiritData){const wb=document.getEle
     const bonus=Math.min(Math.floor(hoursAway),8);
     S.emblems.cafe_bean+=bonus;S.emblems.wild_essence+=bonus;S.emblems.focus_shard+=bonus;
     gains+=' \u00b7 Village gift: +'+bonus+'\u00d7 each ingredient';
-    // Persist the bonus via direct upserts
     const types=['cafe_bean','wild_essence','focus_shard'];
-    types.forEach(t=>{sb.from('emblems').upsert({user_id:S.user.id,emblem_type:t,quantity:S.emblems[t]},{onConflict:'user_id,emblem_type'}).then(()=>{}).catch(e=>console.warn('village gift persist failed for '+t,e))});
+    types.forEach(t=>{sb.from('emblems').upsert({user_id:S.user.id,emblem_type:t,quantity:S.emblems[t]},{onConflict:'user_id,emblem_type'}).then(()=>{}).catch(e=>console.warn('village gift persist error:',e))});
     renderItemsTab();
   }
   document.getElementById('wbGains').textContent=gains||'Everything is as you left it.';
@@ -586,51 +543,55 @@ async function doAuth(){const email=document.getElementById('inEmail').value.tri
 async function doGoogleAuth(){try{const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin}});if(error)throw error}catch(e){document.getElementById('authError').textContent=e.message||'Google sign-in failed'}}
 function enterGuest(){document.getElementById('login').classList.add('gone');S.isGuest=true;S.user=null;updateTopBar();loadGuestDefaults()}
 function loadGuestDefaults(){S.spirits=[];S.traits={};S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0};S.profile={total_eggs:0,total_listen_seconds:0,username:'guest'};S.hatchery=[{id:'gs1',slot_number:1,unlocked:true,egg_id:null},{id:'gs2',slot_number:2,unlocked:true,egg_id:null},{id:'gs3',slot_number:3,unlocked:false},{id:'gs4',slot_number:4,unlocked:false},{id:'gs5',slot_number:5,unlocked:false}];S.pendingEggs=[];S.pillRecipes=[{id:'d1',pill_name:'Cultivation Pill',pill_type:'growth',description:'Grants 50 XP to a spirit.',effect_type:'xp_flat',effect_value:50,cost_cafe_bean:4,cost_wild_essence:2,cost_focus_shard:2},{id:'d2',pill_name:'Greater Cultivation Pill',pill_type:'clarity',description:'Grants 100 XP to a spirit.',effect_type:'xp_flat',effect_value:100,cost_cafe_bean:6,cost_wild_essence:6,cost_focus_shard:6},{id:'d3',pill_name:'Village Cultivation Pill',pill_type:'harmony',description:'Grants 25 XP to ALL spirits.',effect_type:'xp_all',effect_value:25,cost_cafe_bean:3,cost_wild_essence:3,cost_focus_shard:8}];updateAllUI();document.getElementById('guestBanner').classList.add('show')}
-async function doLogout(){toggleSettings();if(S.sessionId){// Persist listen time before logging out
-if(S.sessionStartedAt&&S.profile){const sessionSec=Math.floor((Date.now()-S.sessionStartedAt)/1000);const newTotal=(S.profile.total_listen_seconds||0)+sessionSec;try{await sb.from('profiles').update({total_listen_seconds:newTotal}).eq('id',S.user.id)}catch(e){console.warn('logout listen save error:',e)}}
-try{await sb.rpc('end_session',{p_session_id:S.sessionId})}catch(e){}S.sessionId=null}await sb.auth.signOut();S.user=null;S.playing=false;S.isGuest=true;S.spirits=[];S.hatchery=[];S.pendingEggs=[];S.allEggs=[];S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0};S.sessionStartedAt=null;S.eggAnchor=null;S.profStep=0;S.chosenStarter=null;[S.ticker,S.hatchTicker,S.cultTicker,S.jiggleTicker].forEach(t=>{if(t)clearInterval(t)});S.ticker=S.hatchTicker=S.cultTicker=S.jiggleTicker=null;const em=document.getElementById('videoEmbed'),ifr=em.querySelector('iframe');if(ifr)ifr.remove();em.classList.remove('loaded');document.getElementById('login').classList.remove('gone');updateTopBar()}
-async function checkSession(){const{data:{session}}=await sb.auth.getSession();if(session){S.user=session.user;S.isGuest=false;await loadUserData();enterApp()}}
+async function doLogout(){toggleSettings();
+// Persist listen time before logout
+if(S.sessionStartedAt&&S.profile&&S.user&&!S.isGuest){const sec=Math.floor((Date.now()-S.sessionStartedAt)/1000);const newTotal=(S.profile.total_listen_seconds||0)+sec;try{await sb.from('profiles').update({total_listen_seconds:newTotal}).eq('id',S.user.id)}catch(e){}}
+if(S.sessionId){try{await sb.rpc('end_session',{p_session_id:S.sessionId})}catch(e){}S.sessionId=null}
+await sb.auth.signOut();S.user=null;S.playing=false;S.isGuest=true;S.spirits=[];S.hatchery=[];S.pendingEggs=[];S.allEggs=[];S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0};S.profile=null;S.sessionStartedAt=null;S.eggAnchor=null;S.profStep=0;S.chosenStarter=null;
+[S.ticker,S.hatchTicker,S.cultTicker,S.jiggleTicker].forEach(t=>{if(t)clearInterval(t)});S.ticker=S.hatchTicker=S.cultTicker=S.jiggleTicker=null;
+const em=document.getElementById('videoEmbed'),ifr=em.querySelector('iframe');if(ifr)ifr.remove();em.classList.remove('loaded');
+document.getElementById('guestBanner').classList.remove('show');
+document.getElementById('login').classList.remove('gone');updateTopBar()}
+async function checkSession(){try{const{data:{session}}=await sb.auth.getSession();if(session?.user){S.user=session.user;S.isGuest=false;await loadUserData();enterApp();return true}}catch(e){console.warn('checkSession error:',e)}return false}
 async function loadUserData(){if(!S.user)return;const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:eggs},{data:pills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).maybeSingle(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).in('status',['pending','incubating']).limit(30),sb.from('pill_recipes').select('*')]);S.profile=prof||S.profile;if(S.profile&&S.profile.starter_claimed===undefined)S.profile.starter_claimed=false;S.spirits=spirits||[];S.hatchery=hatch||[];const allEggs=eggs||[];S.pendingEggs=allEggs.filter(e=>e.status==='pending');S.allEggs=allEggs;S.pillRecipes=pills||[];if(emb)emb.forEach(e=>{S.emblems[e.emblem_type]=e.quantity});S.traits={};if(traits)traits.forEach(t=>{if(!S.traits[t.spirit_id])S.traits[t.spirit_id]=[];S.traits[t.spirit_id].push(t)})}
 
 // ═══ ENTER APP ═══
-async function enterApp(){document.getElementById('login').classList.add('gone');document.getElementById('guestBanner').classList.remove('show');updateTopBar();updateAllUI();
-// For brand new users: show tutorial BEFORE ensureStarterPack touches anything
-// Check if this user needs the tutorial (onboarding_done is false, null, or undefined)
+async function enterApp(){
+document.getElementById('login').classList.add('gone');
+document.getElementById('guestBanner').classList.remove('show');
+updateTopBar();updateAllUI();
+// New user detection: onboarding not done AND no localStorage flag
 const needsTutorial=S.profile&&S.profile.onboarding_done!==true;
 const isNewUser=!localStorage.getItem('starter_pack_done_'+(S.user?.id||''));
 if(needsTutorial&&isNewUser){
-  // Ensure profile + hatchery exist but do NOT grant spirits/eggs/emblems yet
   await ensureBasicsOnly();
   showProfTutorial();return}
 // Returning user flow
 await ensureStarterPack();
-// Check for offline-hatched eggs
-checkOfflineHatches();startHatcheryTicker();startCultivationTicker();startSpiritJiggle();startVillageTicker();try{const{data}=await sb.rpc('claim_passive_cultivation');if(data&&data.xp_granted>0&&data.hours_away>=1){await loadUserData();updateAllUI();// Find the spirit that likely received XP for the welcome screen
+checkOfflineHatches();startHatcheryTicker();startCultivationTicker();startSpiritJiggle();startVillageTicker();
+try{const{data}=await sb.rpc('claim_passive_cultivation');if(data&&data.xp_granted>0&&data.hours_away>=1){await loadUserData();updateAllUI();
 const topSpirit=S.spirits.length?S.spirits.reduce((a,b)=>(b.xp||0)>(a.xp||0)?b:a):null;showWelcomeBack(data.xp_granted,data.hours_away,topSpirit)}else{showToast('welcome')}}catch(e){}}
 
-// Lightweight setup for new users — just profile + hatchery, no spirits/eggs/emblems
+// Lightweight setup for new users — profile + hatchery only, no spirits/eggs/emblems
 async function ensureBasicsOnly(){
-  if(!S.user||S.isGuest)return;
-  const uid=S.user.id;
+  if(!S.user||S.isGuest)return;const uid=S.user.id;
   try{
-    // Ensure profile exists
     if(!S.profile||!S.profile.id){
       const uname=S.user.user_metadata?.username||'user_'+uid.slice(0,6);
       await sb.from('profiles').upsert({id:uid,username:uname,starter_claimed:false,newbie_gift_claimed:false,onboarding_done:false,total_eggs:0,total_listen_seconds:0,first_egg_claimed:false},{onConflict:'id'});
-      const{data:p}=await sb.from('profiles').select('*').eq('id',uid).maybeSingle();
-      S.profile=p||S.profile;
+      const{data:p}=await sb.from('profiles').select('*').eq('id',uid).maybeSingle();S.profile=p||S.profile;
     }
-    // Ensure hatchery rows exist
     if(!S.hatchery.length){
       const{data:existingH}=await sb.from('hatchery').select('*').eq('user_id',uid).order('slot_number');
       if(!existingH||existingH.length===0){
         for(let sn=1;sn<=5;sn++){try{await sb.from('hatchery').insert({user_id:uid,slot_number:sn,unlocked:sn<=2,hatch_duration_minutes:5})}catch(e){}}
-        const{data:h}=await sb.from('hatchery').select('*').eq('user_id',uid).order('slot_number');
-        S.hatchery=h||[];
+        const{data:h}=await sb.from('hatchery').select('*').eq('user_id',uid).order('slot_number');S.hatchery=h||[];
       }else{S.hatchery=existingH}
     }
   }catch(e){console.warn('ensureBasicsOnly error:',e)}
 }
+// Village tab ticker for live listen time
+function startVillageTicker(){setInterval(()=>{if(!S.isGuest&&S.playing)renderVillageTab()},10000)}
 
 // ═══ TOPBAR ═══
 function updateTopBar(){const p=calcPrestige();const rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0];document.getElementById('tbRankName').textContent=rank.name;document.getElementById('tbRankName').style.color=rank.color||'';document.getElementById('tbRankPts').textContent=p+' prestige';const authArea=document.getElementById('tbAuth');if(S.isGuest){authArea.innerHTML='<button class="tb-signin" onclick="showLogin()">Sign In</button>'}else{const uname=S.profile?.username||S.user?.user_metadata?.username||S.user?.email?.split('@')[0]||'user';authArea.innerHTML='<span class="tb-user">'+uname+'</span>'}document.querySelectorAll('.sdLogoutDiv,.sdLogoutItem').forEach(el=>el.style.display=S.isGuest?'none':'')}
@@ -665,7 +626,7 @@ const pIcons={growth:'\uD83D\uDC8A',clarity:'\u2728',harmony:'\uD83C\uDFB5'};S.p
 h+='</div>';el.innerHTML=h}
 
 // ═══ VILLAGE TAB ═══
-function renderVillageTab(){const el=document.getElementById('tab-village'),p=calcPrestige(),rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0],next=VILLAGE_RANKS[VILLAGE_RANKS.indexOf(rank)+1],totalSec=(S.profile?.total_listen_seconds||0)+(S.profile?._sessionSeconds||0),mins=Math.floor(totalSec/60),hrs=Math.floor(totalSec/3600);const timeStr=hrs>0?hrs+'h '+Math.floor((totalSec%3600)/60)+'m':mins+'m';el.innerHTML='<div class="village-rank-card"><div class="village-rank-label">Village Rank</div><div class="village-rank-name">'+rank.name+'</div><div class="village-rank-desc">'+rank.desc+'</div>'+(next?'<div style="font-size:.5rem;color:var(--t4);margin-top:6px">Next: '+next.name+' ('+next.min+')</div>':'')+'</div><div class="village-stat-grid"><div class="village-stat"><div class="village-stat-num">'+p+'</div><div class="village-stat-label">Prestige</div></div><div class="village-stat"><div class="village-stat-num">'+(S.profile?.total_eggs||0)+'</div><div class="village-stat-label">Eggs</div></div><div class="village-stat"><div class="village-stat-num">'+S.spirits.length+'</div><div class="village-stat-label">Spirits</div></div><div class="village-stat"><div class="village-stat-num">'+timeStr+'</div><div class="village-stat-label">Listened</div></div></div>'}
+function renderVillageTab(){const el=document.getElementById('tab-village'),p=calcPrestige(),rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0],next=VILLAGE_RANKS[VILLAGE_RANKS.indexOf(rank)+1],totalSec=(S.profile?.total_listen_seconds||0)+(S.profile?._sessionSeconds||0),hrs=Math.floor(totalSec/3600),rmins=Math.floor((totalSec%3600)/60),timeStr=hrs>0?hrs+'h '+rmins+'m':rmins+'m';el.innerHTML='<div class="village-rank-card"><div class="village-rank-label">Village Rank</div><div class="village-rank-name">'+rank.name+'</div><div class="village-rank-desc">'+rank.desc+'</div>'+(next?'<div style="font-size:.5rem;color:var(--t4);margin-top:6px">Next: '+next.name+' ('+next.min+')</div>':'')+'</div><div class="village-stat-grid"><div class="village-stat"><div class="village-stat-num">'+p+'</div><div class="village-stat-label">Prestige</div></div><div class="village-stat"><div class="village-stat-num">'+(S.profile?.total_eggs||0)+'</div><div class="village-stat-label">Eggs</div></div><div class="village-stat"><div class="village-stat-num">'+S.spirits.length+'</div><div class="village-stat-label">Spirits</div></div><div class="village-stat"><div class="village-stat-num">'+timeStr+'</div><div class="village-stat-label">Listened</div></div></div>'}
 function calcPrestige(){let p=0;S.spirits.forEach(sp=>{p+=(sp.evo_stage+1)*10;p+=Math.floor((sp.xp||0)/100)*5});p+=(S.profile?.total_eggs||0)*2;p+=Math.floor((S.profile?.total_listen_seconds||0)/3600)*3;return p}
 
 // ═══ HATCH ═══
@@ -681,8 +642,6 @@ async function unlockSlot(num){if(S.isGuest)return;try{const{data}=await sb.rpc(
 function openPlaceEggModal(slotId){const pend=S.pendingEggs.filter(e=>e.status==='pending');if(!pend.length){showToast('no_eggs');return}const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Place an Egg</div><div class="modal-select-grid">'+pend.map(e=>'<div class="modal-select-row" onclick="placeEgg(\''+e.id+'\',\''+slotId+'\')"><span>\uD83E\uDD5A</span><span style="color:'+(RARITY_COLORS[e.rarity]||'#888')+'">'+e.rarity+'</span><span style="font-size:.5rem;color:var(--t4);margin-left:auto">'+(INCUB_MINS[e.rarity]||5)+'m</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
 async function placeEgg(eId,sId){if(S.isGuest)return;closeModal();try{await sb.rpc('place_egg_in_slot',{p_egg_id:eId,p_slot_id:sId});await loadUserData();updateAllUI()}catch(e){showToast('error')}}
 function startHatcheryTicker(){if(S.hatchTicker)return;S.hatchTicker=setInterval(()=>{if(!S.isGuest)renderItemsTab()},5000)}
-// Refresh village tab every 10s to show live listen time
-function startVillageTicker(){setInterval(()=>{if(!S.isGuest&&S.playing){renderVillageTab()}},10000)}
 
 // ═══ CRAFT PILLS ═══
 function openCraftModal(recipeId,pillName,effectType){if(S.isGuest)return;if(effectType==='xp_all'){doCraft(recipeId,null);return}const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Use '+pillName+'</div><div class="modal-desc">Choose a spirit:</div><div class="modal-select-grid">'+S.spirits.map(sp=>'<div class="modal-select-row" onclick="doCraft(\''+recipeId+'\',\''+sp.id+'\')"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'" style="width:28px;height:28px;border-radius:50%"><span style="font-size:.7rem">'+sp.name+'</span><span style="font-size:.5rem;color:var(--t4);margin-left:auto">Lv.'+(Math.floor((sp.xp||0)/100)+1)+'</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
@@ -704,18 +663,15 @@ function showEvoAnimation(){const ov=document.createElement('div');ov.style.cssT
 async function startStream(){if(S.playing)return;S.playing=true;S.sessionStartedAt=Date.now();S.eggAnchor=Date.now();const embed=document.getElementById('videoEmbed');const iframe=document.createElement('iframe');iframe.src='https://www.youtube.com/embed/'+STREAM_YT+'?autoplay=1&rel=0';iframe.allow='autoplay; encrypted-media';iframe.allowFullscreen=true;embed.insertBefore(iframe,embed.firstChild);embed.classList.add('loaded');document.getElementById('psPlay').textContent='\u23F8';if(!S.isGuest){try{const{data}=await sb.rpc('start_session',{p_playlist:'cafe'});S.sessionId=data;sb.rpc('log_event',{p_event:'stream_start'})}catch(e){console.warn('start_session error:',e)}}startTicker()}
 
 // ═══ GAME TICK ═══
-function startTicker(){if(S.ticker)return;S.eggAnchor=Date.now();const eggTime=()=>S.isGuest&&!S.guestEggGiven?S.GUEST_EGG_SEC:(!S.profile?.first_egg_claimed?S.FIRST_EGG_SEC:S.EGG_SEC);S.ticker=setInterval(async()=>{if(!S.playing)return;
-// Wall-clock elapsed since last egg drop anchor
+function startTicker(){if(S.ticker)return;if(!S.eggAnchor)S.eggAnchor=Date.now();const eggTime=()=>S.isGuest&&!S.guestEggGiven?S.GUEST_EGG_SEC:(!S.profile?.first_egg_claimed?S.FIRST_EGG_SEC:S.EGG_SEC);S.ticker=setInterval(async()=>{if(!S.playing)return;
 const now=Date.now();S.eggT=(now-S.eggAnchor)/1000;
 const total=eggTime();const pct=Math.min((S.eggT/total)*100,100);document.getElementById('eggFill').style.width=pct+'%';const rem=Math.max(0,Math.ceil(total-S.eggT));const mins=Math.floor(rem/60),secs=rem%60;document.getElementById('eggTimer').textContent=mins>0?mins+'m '+secs+'s':secs+'s';
-// Track listen seconds client-side for display
-if(S.sessionStartedAt&&S.profile){const listened=Math.floor((now-S.sessionStartedAt)/1000);S.profile._sessionSeconds=listened}
+if(S.sessionStartedAt&&S.profile){S.profile._sessionSeconds=Math.floor((now-S.sessionStartedAt)/1000)}
 // Ingredient drops — first drop guaranteed within ~60s, then ~1 per 8 min
 const ingChance=(!S.isGuest&&!S.firstIngredientGiven&&S.eggT>30)?0.03:0.0015;
 if(!S.isGuest&&Math.random()<ingChance){const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;S.firstIngredientGiven=true;renderItemsTab();showToast('ing_'+mat);checkCraftHint()}
 // Egg drop
-if(S.eggT>=total){S.eggAnchor=Date.now();S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane')}}else{try{const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;await loadUserData();updateAllUI();showToast(data.rarity);// Auto-place first egg
-autoPlaceEggs();try{sb.rpc('log_event',{p_event:'egg_drop',p_data:{rarity:data.rarity}})}catch(e){}}catch(e){console.warn('egg drop error:',e)}}}},500)}
+if(S.eggT>=total){S.eggAnchor=Date.now();S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane')}}else{try{const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;await loadUserData();updateAllUI();showToast(data.rarity);autoPlaceEggs();try{sb.rpc('log_event',{p_event:'egg_drop',p_data:{rarity:data.rarity}})}catch(e){}}catch(e){console.warn('egg drop error:',e)}}}},500)}
 
 // ═══ CRAFT HINT — pulse Items tab when user first has enough materials ═══
 function checkCraftHint(){if(S.craftHintShown||S.isGuest)return;const r=S.pillRecipes[0];if(!r)return;if(S.emblems.cafe_bean>=r.cost_cafe_bean&&S.emblems.wild_essence>=r.cost_wild_essence&&S.emblems.focus_shard>=r.cost_focus_shard){S.craftHintShown=true;const tab=document.querySelector('[data-tab="items"]');if(tab){tab.classList.add('hint');setTimeout(()=>tab.classList.remove('hint'),6000)}}}
@@ -727,13 +683,13 @@ if(type.startsWith('ing_')){const key=type.slice(4);const ing=ING_NAMES[key];doc
 const rr=RARITY_COLORS[type];if(rr){document.getElementById('toastI').textContent='\uD83E\uDD5A';document.getElementById('toastT').textContent=type.charAt(0).toUpperCase()+type.slice(1)+' Egg';document.getElementById('toastS').textContent=S.isGuest?'Sign up to keep!':''}else{const m=msgs[type]||msgs.welcome;document.getElementById('toastI').textContent=m.i;document.getElementById('toastT').textContent=m.t;document.getElementById('toastS').textContent=m.s||''}t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
 
 // ═══ PAGE CLOSE — persist session + listen time ═══
-window.addEventListener('beforeunload',()=>{if(S.sessionId&&S.user){const headers={'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+(sb.auth.session?.()?.access_token||'')};
-// Try fetch with keepalive first (supports headers), fall back to sendBeacon
-try{fetch(SUPABASE_URL+'/rest/v1/rpc/end_session',{method:'POST',headers,body:JSON.stringify({p_session_id:S.sessionId}),keepalive:true})}catch(e){navigator.sendBeacon(SUPABASE_URL+'/rest/v1/rpc/end_session',new Blob([JSON.stringify({p_session_id:S.sessionId})],{type:'application/json'}))}
-// Also persist listen time to profile
-if(S.sessionStartedAt&&S.profile){const sessionSec=Math.floor((Date.now()-S.sessionStartedAt)/1000);const newTotal=(S.profile.total_listen_seconds||0)+sessionSec;try{fetch(SUPABASE_URL+'/rest/v1/profiles?id=eq.'+S.user.id,{method:'PATCH',headers,body:JSON.stringify({total_listen_seconds:newTotal}),keepalive:true})}catch(e){}}}});
-// Also periodically save listen time every 2 minutes while streaming
-setInterval(()=>{if(S.playing&&!S.isGuest&&S.sessionStartedAt&&S.user&&S.profile){const sessionSec=Math.floor((Date.now()-S.sessionStartedAt)/1000);const newTotal=(S.profile.total_listen_seconds||0)+sessionSec;sb.from('profiles').update({total_listen_seconds:newTotal}).eq('id',S.user.id).then(()=>{}).catch(e=>console.warn('listen time save error:',e))}},120000);
+window.addEventListener('beforeunload',()=>{if(S.user&&!S.isGuest){
+const token=sb.auth?.session?.()?.access_token||sb.realtime?.accessToken||'';
+const headers={'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+token};
+if(S.sessionId){try{fetch(SUPABASE_URL+'/rest/v1/rpc/end_session',{method:'POST',headers,body:JSON.stringify({p_session_id:S.sessionId}),keepalive:true})}catch(e){}}
+if(S.sessionStartedAt&&S.profile){const sec=Math.floor((Date.now()-S.sessionStartedAt)/1000);const newTotal=(S.profile.total_listen_seconds||0)+sec;try{fetch(SUPABASE_URL+'/rest/v1/profiles?id=eq.'+S.user.id,{method:'PATCH',headers,body:JSON.stringify({total_listen_seconds:newTotal}),keepalive:true})}catch(e){}}}});
+// Periodic listen time save every 2 minutes
+setInterval(()=>{if(S.playing&&!S.isGuest&&S.sessionStartedAt&&S.user&&S.profile){const sec=Math.floor((Date.now()-S.sessionStartedAt)/1000);const newTotal=(S.profile.total_listen_seconds||0)+sec;sb.from('profiles').update({total_listen_seconds:newTotal}).eq('id',S.user.id).then(()=>{}).catch(e=>console.warn('listen save error:',e))}},120000);
 
 // ═══ SAFETY CHECK — auto-place eggs if slots available ═══
 async function autoPlaceEggs(){if(S.isGuest)return;const pend=S.pendingEggs.filter(e=>e.status==='pending');const empty=S.hatchery.filter(s=>s.unlocked&&!s.egg_id);if(pend.length&&empty.length){for(let i=0;i<Math.min(pend.length,empty.length);i++){try{await sb.rpc('place_egg_in_slot',{p_egg_id:pend[i].id,p_slot_id:empty[i].id})}catch(e){}}await loadUserData();updateAllUI()}}
@@ -748,9 +704,28 @@ async function checkOfflineHatches(){if(S.isGuest)return;
 function startSpiritJiggle(){if(S.jiggleTicker)return;S.jiggleTicker=setInterval(()=>{const cards=document.querySelectorAll('.spirit-card-img');if(!cards.length)return;const pick=cards[Math.floor(Math.random()*cards.length)];pick.classList.add('spirit-jiggle');setTimeout(()=>pick.classList.remove('spirit-jiggle'),500)},15000+Math.random()*5000)}
 
 // ═══ INIT ═══
-// Listen for Google OAuth redirect
-sb.auth.onAuthStateChange(async(event,session)=>{if(event==='SIGNED_IN'&&session?.user&&!S.user){S.user=session.user;S.isGuest=false;await loadUserData();updateTopBar();enterApp()}});
-checkSession().then(()=>{if(!S.user)loadGuestDefaults()});
+let _appEntered=false;
+// Listen for Google OAuth redirect or cross-tab session
+sb.auth.onAuthStateChange(async(event,session)=>{
+  if((event==='SIGNED_IN'||event==='TOKEN_REFRESHED')&&session?.user){
+    // If we're in guest/stuck state, recover by entering app
+    if(!S.user||S.isGuest||!_appEntered){
+      S.user=session.user;S.isGuest=false;
+      await loadUserData();updateTopBar();
+      if(!_appEntered){_appEntered=true;enterApp()}
+    }
+  }
+  if(event==='SIGNED_OUT'){
+    S.user=null;S.isGuest=true;_appEntered=false;
+    document.getElementById('login').classList.remove('gone');
+    loadGuestDefaults();
+  }
+});
+// Initial session check
+checkSession().then(ok=>{
+  if(ok){_appEntered=true}
+  else if(!S.user){loadGuestDefaults();document.getElementById('login').classList.remove('gone')}
+});
 
 </script>
 </body>
