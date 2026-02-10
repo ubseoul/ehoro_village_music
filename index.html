@@ -379,7 +379,13 @@ button.action-busy{opacity:.5;pointer-events:none}
 <script>
 const SUPABASE_URL='https://eyqddqtlgthgkiqjavyx.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_CsTLSJj1YwgiHMxUTa685Q_2TVvZa2Q';
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});
+// Utility: wrap any promise with a timeout to prevent hangs (especially on mobile with ad blockers)
+function withTimeout(promise,ms=8000){return Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error('Request timed out — check your connection or disable ad blockers for this site')),ms))])}
+// Detect if Supabase is being blocked
+let _supabaseBlocked=false;
+async function checkSupabaseConnectivity(){try{const r=await fetch(SUPABASE_URL+'/rest/v1/',{method:'HEAD',headers:{'apikey':SUPABASE_ANON_KEY}});_supabaseBlocked=!r.ok}catch(e){_supabaseBlocked=true}if(_supabaseBlocked)console.warn('⚠️ Supabase appears blocked (ad blocker?). Some features may not work.')}
+checkSupabaseConnectivity();
 const STREAM_YT='jfKfPfyJRdk';
 const STREAM_YT_FALLBACK='5qap5aO4i9A'; // Lofi Girl backup playlist
 const RARITY_COLORS={mundane:'#888',adept:'#8ab',refined:'#7a7',illustrious:'#ba8',sovereign:'#a8c',celestial:'#8cf',transcendent:'#fc8',mysterious:'#c8f',ancestral:'#f88',paradox:'#fff'};
@@ -491,26 +497,26 @@ async function finishProf(){
     if(!spiritCreated){
       // Attempt 1: direct insert
       try{
-        const{error:e1}=await sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:d?.name||pick,evo_stage:0,xp:0});
+        const{error:e1}=await withTimeout(sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:d?.name||pick,evo_stage:0,xp:0}),6000);
         if(!e1)spiritCreated=true;
         else console.warn('finishProf: insert attempt 1 failed',e1);
-      }catch(e){console.warn('finishProf: insert attempt 1 exception',e)}
-      // Attempt 2: small delay + retry insert (network may have recovered)
+      }catch(e){console.warn('finishProf: insert attempt 1 exception',e.message)}
+      // Attempt 2: delay + retry
       if(!spiritCreated){
         await new Promise(r=>setTimeout(r,1500));
         try{
-          const{error:e2}=await sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:d?.name||pick,evo_stage:0,xp:0});
+          const{error:e2}=await withTimeout(sb.from('spirits').insert({user_id:uid,spirit_type:pick,name:d?.name||pick,evo_stage:0,xp:0}),6000);
           if(!e2)spiritCreated=true;
           else console.warn('finishProf: insert attempt 2 failed',e2);
-        }catch(e){console.warn('finishProf: insert attempt 2 exception',e)}
+        }catch(e){console.warn('finishProf: insert attempt 2 exception',e.message)}
       }
-      // Attempt 3: RPC (picks random spirit, but at least user gets something)
+      // Attempt 3: RPC (no params — picks random spirit)
       if(!spiritCreated){
         try{
-          const{data:rpcData,error:rpcErr}=await sb.rpc('claim_starter_spirit');
+          const{data:rpcData,error:rpcErr}=await withTimeout(sb.rpc('claim_starter_spirit'),6000);
           if(!rpcErr&&rpcData&&!rpcData.error)spiritCreated=true;
           else console.warn('finishProf: RPC failed',rpcErr||rpcData?.error);
-        }catch(e){console.warn('finishProf: RPC exception',e)}
+        }catch(e){console.warn('finishProf: RPC exception',e.message)}
       }
       if(spiritCreated){try{await sb.from('profiles').update({starter_claimed:true}).eq('id',uid)}catch(e){}}
     }
@@ -534,6 +540,9 @@ async function finishProf(){
       showSpiritArrival(sp.spirit_type);
     }else{
       console.error('finishProf: Spirit creation failed after all attempts. User has 0 spirits');
+      // Show user-facing error with ad blocker hint
+      const errEl=document.getElementById('authError');
+      if(errEl){errEl.textContent='Spirit creation failed — if you have an ad blocker, please disable it for this site and refresh.';errEl.className='l-error'}
       showToast('new_user_gift');
     }
     // 7) Start all game tickers
@@ -693,7 +702,9 @@ function closePatchNotes(){document.getElementById('patchNotes').classList.remov
 // ═══ AUTH ═══
 function showLogin(){document.getElementById('login').classList.remove('gone');S.authMode='signup';document.getElementById('authBtn').textContent='Create Account';document.getElementById('authToggle').textContent='Already have an account? Sign in';document.getElementById('usernameField').style.display=''}
 function toggleAuthMode(){S.authMode=S.authMode==='login'?'signup':'login';const u=S.authMode==='signup';document.getElementById('authBtn').textContent=u?'Create Account':'Sign In';document.getElementById('authToggle').textContent=u?'Already have an account? Sign in':'Need an account? Sign up';document.getElementById('usernameField').style.display=u?'':'none';document.getElementById('authError').textContent=''}
-async function doAuth(){const email=document.getElementById('inEmail').value.trim(),pass=document.getElementById('inPass').value,btn=document.getElementById('authBtn'),err=document.getElementById('authError');err.textContent='';err.className='l-error';if(!email||!pass){err.textContent='Email and password required';return}if(pass.length<6){err.textContent='Password must be 6+ characters';return}btn.disabled=true;try{let r;if(S.authMode==='signup'){const un=document.getElementById('inUser').value.trim()||'user_'+Math.random().toString(36).slice(2,8);r=await sb.auth.signUp({email,password:pass,options:{data:{username:un}}});if(r.data?.user&&!r.data.session){err.className='l-error ok';err.textContent='Check email to confirm!';btn.disabled=false;return}}else{r=await sb.auth.signInWithPassword({email,password:pass})}if(r.error)throw r.error;S.user=r.data.user;S.isGuest=false;await loadUserData();updateTopBar();enterApp()}catch(e){err.textContent=e.message||'Auth failed'}finally{btn.disabled=false}}
+async function doAuth(){const email=document.getElementById('inEmail').value.trim(),pass=document.getElementById('inPass').value,btn=document.getElementById('authBtn'),err=document.getElementById('authError');err.textContent='';err.className='l-error';if(!email||!pass){err.textContent='Email and password required';return}if(pass.length<6){err.textContent='Password must be 6+ characters';return}
+if(_supabaseBlocked){err.textContent='Connection blocked — please disable your ad blocker for this site and refresh.';return}
+btn.disabled=true;btn.textContent='Loading...';try{let r;if(S.authMode==='signup'){const un=document.getElementById('inUser').value.trim()||'user_'+Math.random().toString(36).slice(2,8);r=await withTimeout(sb.auth.signUp({email,password:pass,options:{data:{username:un}}}),10000);if(r.data?.user&&!r.data.session){err.className='l-error ok';err.textContent='Check email to confirm!';btn.disabled=false;btn.textContent='Create Account';return}}else{r=await withTimeout(sb.auth.signInWithPassword({email,password:pass}),10000)}if(r.error)throw r.error;S.user=r.data.user;S.isGuest=false;await loadUserData();updateTopBar();enterApp()}catch(e){const msg=e.message||'Auth failed';err.textContent=msg.includes('abort')||msg.includes('timed out')?'Connection issue — try disabling ad blockers or check your internet':msg}finally{btn.disabled=false;btn.textContent=S.authMode==='signup'?'Create Account':'Sign In'}}
 async function doGoogleAuth(){try{const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin}});if(error)throw error}catch(e){document.getElementById('authError').textContent=e.message||'Google sign-in failed'}}
 function enterGuest(){document.getElementById('login').classList.add('gone');document.getElementById('shell').classList.add('on');S.isGuest=true;S.user=null;updateTopBar();loadGuestDefaults()}
 function loadGuestDefaults(){S.spirits=[];S.traits={};S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0};S.profile={total_eggs:0,total_listen_seconds:0,username:'guest'};S.hatchery=[{id:'gs1',slot_number:1,unlocked:true,egg_id:null},{id:'gs2',slot_number:2,unlocked:true,egg_id:null},{id:'gs3',slot_number:3,unlocked:false},{id:'gs4',slot_number:4,unlocked:false},{id:'gs5',slot_number:5,unlocked:false}];S.pendingEggs=[];S.expeditions=[];S.pillRecipes=[{id:'d1',pill_name:'Spirit Pill',pill_type:'growth',description:'Grants 50 XP to a spirit.',effect_type:'xp_flat',effect_value:50,cost_cafe_bean:4,cost_wild_essence:2,cost_focus_shard:2},{id:'d2',pill_name:'Greater Spirit Pill',pill_type:'clarity',description:'Grants 100 XP to a spirit.',effect_type:'xp_flat',effect_value:100,cost_cafe_bean:6,cost_wild_essence:6,cost_focus_shard:6},{id:'d3',pill_name:'Village Spirit Pill',pill_type:'harmony',description:'Grants 25 XP to ALL spirits.',effect_type:'xp_all',effect_value:25,cost_cafe_bean:3,cost_wild_essence:3,cost_focus_shard:8}];updateAllUI();document.getElementById('guestBanner').classList.add('show')}
@@ -708,14 +719,14 @@ const em=document.getElementById('videoEmbed'),ifr=em.querySelector('iframe');if
 document.getElementById('guestBanner').classList.remove('show');
 document.getElementById('login').classList.remove('gone');updateTopBar()}
 async function checkSession(){
-  for(let attempt=0;attempt<3;attempt++){
+  for(let attempt=0;attempt<2;attempt++){
     try{
-      const{data:{session}}=await sb.auth.getSession();
+      const{data:{session}}=await withTimeout(sb.auth.getSession(),5000);
       if(session?.user){S.user=session.user;S.isGuest=false;await loadUserData();enterApp();return true}
-      return false; // No session, not an error
+      return false;
     }catch(e){
       console.warn('checkSession attempt '+(attempt+1)+' error:',e.message);
-      if(attempt<2)await new Promise(r=>setTimeout(r,800*(attempt+1)));
+      if(attempt<1)await new Promise(r=>setTimeout(r,1000));
     }
   }
   return false;
@@ -1276,7 +1287,7 @@ sb.auth.onAuthStateChange(async(event,session)=>{
 let _sessionResolved=false;
 const _guestTimeout=setTimeout(()=>{
   if(!_sessionResolved&&!S.user){enterGuest()}
-},2000); // Show guest mode after 2s max if session hasn't loaded
+},1500); // Show guest mode after 1.5s max if session hasn't loaded
 checkSession().then(ok=>{
   _sessionResolved=true;clearTimeout(_guestTimeout);
   if(ok){_appEntered=true;_wasLoggedIn=true}
