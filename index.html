@@ -767,15 +767,16 @@ sb.auth.onAuthStateChange(async(event,session)=>{
 });
 // Initial session check
 checkSession().then(ok=>{
-  if(ok){_appEntered=true}
+  if(ok){
+    _appEntered=true;
+    document.getElementById('shell').classList.add('on');
+  }
   else if(!S.user){
     // No session - just show login screen
-    document.getElementById('shell').classList.remove('on');
     document.getElementById('login').classList.remove('gone');
   }
 });
 
 </script>
 </body>
-</html>
 </html>
