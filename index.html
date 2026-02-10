@@ -322,9 +322,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.spirit-card:focus
 .reconnect-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:500;margin-bottom:6px}
 .reconnect-sub{font-size:.7rem;color:var(--t3)}
 /* Hatch share button */
-.hatch-share-btn{display:inline-block;margin-top:12px;padding:8px 18px;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;color:var(--t2);font-family:inherit;font-size:.65rem;cursor:pointer;transition:all .2s}
-.hatch-share-btn:hover{border-color:var(--border-l);color:var(--t1)}
-.hatch-share-btn.copied{color:var(--positive);border-color:rgba(102,187,153,.3)}
+
 /* YouTube fallback */
 .yt-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:var(--bg)}
 .yt-fallback-msg{font-size:.75rem;color:var(--t3);text-align:center;line-height:1.5}
@@ -361,7 +359,7 @@ button.action-busy{opacity:.5;pointer-events:none}
 <div class="guest-banner" id="guestBanner"><span class="guest-banner-text"><b>Create an Account</b> for a free spirit and newbie pack!</span><button class="guest-banner-btn" onclick="showLogin()">Sign Up</button></div>
 <div class="toast" id="toast"><div class="toast-icon" id="toastI"></div><div><div class="toast-text" id="toastT"></div><div class="toast-sub" id="toastS"></div></div></div>
 <div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box" id="modalBox"></div></div>
-<div class="hatch-overlay" id="hatchOverlay" onclick="closeHatchAnim()"><div class="hatch-egg-anim" id="hatchEgg">&#x1F95A;</div><div class="hatch-reveal" id="hatchReveal"><img id="hatchImg" src=""><div class="hatch-reveal-name" id="hatchName"></div><div class="hatch-reveal-rarity" id="hatchRarity"></div><div class="hatch-share-btn" id="hatchShare" onclick="event.stopPropagation();shareHatch()">📋 Share</div><div class="hatch-reveal-tap">tap anywhere to continue</div></div></div>
+<div class="hatch-overlay" id="hatchOverlay" onclick="closeHatchAnim()"><div class="hatch-egg-anim" id="hatchEgg">&#x1F95A;</div><div class="hatch-reveal" id="hatchReveal"><img id="hatchImg" src=""><div class="hatch-reveal-name" id="hatchName"></div><div class="hatch-reveal-rarity" id="hatchRarity"></div><div class="hatch-reveal-tap">tap anywhere to continue</div></div></div>
 <div class="reconnect-overlay gone" id="reconnectOverlay"><div class="reconnect-inner"><div class="reconnect-icon">🔄</div><div class="reconnect-title">Reconnecting…</div><div class="reconnect-sub" id="reconnectMsg">Trying to reach Ehoro Village servers</div></div></div>
 <div class="spirit-arrival" id="spiritArrival"><div class="sa-inner"><div class="sa-portrait" id="saPortrait"></div><div class="sa-name" id="saName"></div><div class="sa-bio" id="saBio"></div><div class="sa-welcome" id="saWelcome">found their way to your village</div><button class="sa-btn" onclick="dismissSpiritArrival()">Welcome Home</button></div></div>
 <div class="prof-overlay" id="profOverlay"><div class="prof-inner"><div class="prof-portrait"><img src="sprites/mowang_3.png"></div><div class="prof-name">Professor Mowang</div><div class="prof-role">Village Elder</div><div class="prof-bubble"><div class="prof-bubble-text" id="profText"></div></div><div id="profExtra"></div><div class="prof-dots" id="profDots"></div><button class="prof-btn" id="profBtn" onclick="nextProfStep()">Next</button><button class="prof-skip" onclick="finishProf()">Skip tutorial</button></div></div>
@@ -1209,12 +1207,6 @@ function retryStream(){const fb=document.querySelector('.yt-fallback');if(fb)fb.
 function tryFallbackStream(){const fb=document.querySelector('.yt-fallback');if(fb)fb.remove();const embed=document.getElementById('videoEmbed');const iframe=document.createElement('iframe');iframe.src='https://www.youtube.com/embed/videoseries?list='+STREAM_YT_FALLBACK+'&autoplay=1';iframe.allow='autoplay; encrypted-media';iframe.allowFullscreen=true;embed.insertBefore(iframe,embed.firstChild);embed.classList.add('loaded')}
 
 // ═══ SHARE HATCH ═══
-function shareHatch(){
-  const name=document.getElementById('hatchName')?.textContent||'a spirit';
-  const rarity=document.getElementById('hatchRarity')?.textContent||'';
-  const msg='🥚✨ I just hatched '+name+(rarity?' ('+rarity+')':'')+' in Ehoro Village! Come listen to lo-fi and grow your own spirit companions → https://ubseoul.github.io/ehoro_village_music/';
-  if(navigator.clipboard){navigator.clipboard.writeText(msg).then(()=>{const btn=document.getElementById('hatchShare');if(btn){btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='📋 Share';btn.classList.remove('copied')},2000)}}).catch(()=>{})}
-}
 
 // ═══ VISIBILITY CHANGE — pause/resume timers on background ═══
 document.addEventListener('visibilitychange',()=>{
