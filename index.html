@@ -587,7 +587,7 @@ document.getElementById('guestBanner').classList.remove('show');
 document.getElementById('shell').classList.remove('on');
 document.getElementById('login').classList.remove('gone');updateTopBar()}
 async function checkSession(){try{const{data:{session}}=await sb.auth.getSession();if(session?.user){S.user=session.user;S.isGuest=false;await loadUserData();enterApp();return true}}catch(e){console.warn('checkSession error:',e)}return false}
-async function loadUserData(){if(!S.user)return;const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:eggs},{data:pills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).maybeSingle(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).in('status',['pending','incubating']).limit(30),sb.from('pill_recipes').select('*')]);S.profile=prof||S.profile;if(S.profile&&S.profile.starter_claimed===undefined)S.profile.starter_claimed=false;S.spirits=spirits||[];S.hatchery=hatch||[];const allEggs=eggs||[];S.pendingEggs=allEggs.filter(e=>e.status==='pending');S.allEggs=allEggs;S.pillRecipes=pills||[];if(emb)emb.forEach(e=>{S.emblems[e.emblem_type]=e.quantity});S.traits={};if(traits)traits.forEach(t=>{if(!S.traits[t.spirit_id])S.traits[t.spirit_id]=[];S.traits[t.spirit_id].push(t)})}
+async function loadUserData(){if(!S.user)return;const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:eggs},{data:pills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).maybeSingle(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).in('status',['pending','incubating']).limit(30),sb.from('pill_recipes').select('*')]);S.profile=prof||S.profile;console.log('loadUserData - profile:',S.profile);console.log('loadUserData - onboarding_done:',S.profile?.onboarding_done,'spirits:',spirits?.length||0);if(S.profile&&S.profile.starter_claimed===undefined)S.profile.starter_claimed=false;S.spirits=spirits||[];S.hatchery=hatch||[];const allEggs=eggs||[];S.pendingEggs=allEggs.filter(e=>e.status==='pending');S.allEggs=allEggs;S.pillRecipes=pills||[];if(emb)emb.forEach(e=>{S.emblems[e.emblem_type]=e.quantity});S.traits={};if(traits)traits.forEach(t=>{if(!S.traits[t.spirit_id])S.traits[t.spirit_id]=[];S.traits[t.spirit_id].push(t)})}
 
 // ═══ ENTER APP ═══
 async function enterApp(){
@@ -595,15 +595,22 @@ document.getElementById('login').classList.add('gone');
 document.getElementById('shell').classList.add('on');
 document.getElementById('guestBanner').classList.remove('show');
 updateTopBar();updateAllUI();
-// New user detection: onboarding not done AND no localStorage flag
-const needsTutorial=S.profile&&S.profile.onboarding_done!==true;
-const isNewUser=!localStorage.getItem('starter_pack_done_'+(S.user?.id||''));
-if(needsTutorial&&isNewUser){
+// New user detection: profile doesn't exist OR onboarding_done is false/null
+// AND user has no spirits yet
+const hasNoProfile=!S.profile||!S.profile.id;
+const onboardingNotDone=!S.profile||S.profile.onboarding_done===false||S.profile.onboarding_done===null;
+const hasNoSpirits=!S.spirits||S.spirits.length===0;
+const isNewUser=(hasNoProfile||onboardingNotDone)&&hasNoSpirits;
+console.log('enterApp - hasNoProfile:',hasNoProfile,'onboardingNotDone:',onboardingNotDone,'hasNoSpirits:',hasNoSpirits,'isNewUser:',isNewUser);
+if(isNewUser){
+  console.log('New user detected - showing tutorial');
   await ensureBasicsOnly();
   showProfTutorial();return}
 // Returning user flow
+console.log('Returning user flow - onboarding_done:',S.profile?.onboarding_done);
 await ensureStarterPack();
 checkOfflineHatches();startHatcheryTicker();startCultivationTicker();startSpiritJiggle();startVillageTicker();
+// Only show welcome back / passive cultivation for returning users
 try{const{data}=await sb.rpc('claim_passive_cultivation');if(data&&data.xp_granted>0&&data.hours_away>=1){await loadUserData();updateAllUI();
 const topSpirit=S.spirits.length?S.spirits.reduce((a,b)=>(b.xp||0)>(a.xp||0)?b:a):null;showWelcomeBack(data.xp_granted,data.hours_away,topSpirit)}else{showToast('welcome')}}catch(e){}}
 
@@ -772,8 +779,9 @@ checkSession().then(ok=>{
     document.getElementById('shell').classList.add('on');
   }
   else if(!S.user){
-    // No session - just show login screen
-    document.getElementById('login').classList.remove('gone');
+    // No session - enter guest mode by default
+    console.log('No session - entering guest mode');
+    enterGuest();
   }
 });
 
