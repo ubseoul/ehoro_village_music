@@ -24,6 +24,14 @@
 [data-theme="light"]{--bg:#f0ede8;--surface:rgba(235,232,226,.75);--border:rgba(0,0,0,.06);--border-l:rgba(0,0,0,.12);--t1:#1a1816;--t2:#5a5650;--t3:#8a857e;--t4:#b0aba4;--accent-dim:rgba(0,0,0,.03);--accent-soft:rgba(0,0,0,.06);--logo-color:#1a1816;--toast-bg:rgba(224,221,214,.9);--positive:#3a7;--negative:#b55;--special:#a6c;--card-bg:rgba(0,0,0,.03);--card-border:rgba(0,0,0,.06);--glass:rgba(240,237,232,.6);--glass-border:rgba(0,0,0,.06)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden}
 body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;transition:background .4s,color .4s}
+/* V1.3 POLISH: Better transition curves throughout */
+button,input,select,.spirit-card,.hatch-slot,.pill-row,.ing-row,.tab-btn,.modal-box,.toast{transition:all .25s cubic-bezier(.4,0,.2,1)}
+/* V1.3 POLISH: Tactile button feedback */
+button:active,.spirit-card:active,.hatch-slot:active,.pill-row:active{transform:scale(.98)}
+/* V1.3 POLISH: Focus states for accessibility */
+button:focus-visible,input:focus-visible,select:focus-visible,.spirit-card:focus-visible,.hatch-slot:focus-visible{outline:2px solid var(--t1);outline-offset:2px}
+/* V1.3 POLISH: Reduced motion support */
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:0.01ms !important;transition-duration:0.01ms !important}}
 /* ONBOARD */
 .onboard{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .4s}.onboard.gone{opacity:0;pointer-events:none}
 
@@ -39,7 +47,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);-webki
 .wb-gains{font-size:.75rem;color:var(--t2);margin-bottom:24px;line-height:1.6}
 .wb-btn{padding:13px 32px;background:var(--t1);color:var(--bg);border:none;border-radius:8px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer}
 /* GUEST BANNER */
-.guest-banner{position:fixed;bottom:0;left:0;right:0;z-index:60;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-top:1px solid var(--glass-border);padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:16px;transform:translateY(100%);transition:transform .4s}.guest-banner.show{transform:translateY(0)}
+.guest-banner{position:fixed;bottom:0;left:0;right:0;z-index:60;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-top:1px solid var(--glass-border);padding:14px 20px;padding-bottom:calc(14px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:center;gap:16px;transform:translateY(100%);transition:transform .4s}.guest-banner.show{transform:translateY(0)}
 .guest-banner-text{font-size:.8rem;color:var(--t2)}.guest-banner-text b{color:var(--t1)}.guest-banner-btn{padding:8px 20px;background:var(--t1);color:var(--bg);border:none;border-radius:8px;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer}
 /* LOGIN */
 .login{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .5s}.login.gone{opacity:0;pointer-events:none}
@@ -80,19 +88,22 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);-webki
 .ps-info{flex:1;min-width:0}.ps-title{font-size:.7rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ps-sub{font-size:.5rem;color:var(--positive);display:flex;align-items:center;gap:4px}
 .ps-live-dot{width:5px;height:5px;border-radius:50%;background:var(--positive);animation:livePulse 2s infinite}
 @keyframes livePulse{0%,100%{opacity:1}50%{opacity:.4}}
-/* EGG PROGRESS — replaces egg-mini */
-.egg-progress{padding:8px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.egg-progress-label{font-size:.55rem;color:var(--t3);flex-shrink:0}.egg-progress-bar{flex:1;height:2px;background:var(--border);border-radius:2px;overflow:hidden}.egg-progress-fill{height:100%;background:var(--t1);border-radius:2px;transition:width .5s linear;width:0%}.egg-progress-time{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--t3);min-width:40px;text-align:right}
+/* V1.3 POLISH: Egg progress with subtle glow at 90%+ */
+.egg-progress{padding:8px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;transition:box-shadow .5s ease}
+.egg-progress.near-ready{box-shadow:0 0 16px rgba(255,255,255,.08)}
+[data-theme="light"] .egg-progress.near-ready{box-shadow:0 0 16px rgba(0,0,0,.06)}
+.egg-progress-label{font-size:.55rem;color:var(--t3);flex-shrink:0}.egg-progress-bar{flex:1;height:2px;background:var(--border);border-radius:2px;overflow:hidden}.egg-progress-fill{height:100%;background:var(--t1);border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1);width:0%}.egg-progress-time{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--t3);min-width:40px;text-align:right}
 /* SIDEBAR */
-.sidebar{width:320px;min-width:320px;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-left:1px solid var(--glass-border);display:flex;flex-direction:column;overflow:hidden}
+.sidebar{width:320px;min-width:320px;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-left:1px solid var(--glass-border);display:flex;flex-direction:column;overflow:hidden;padding-bottom:env(safe-area-inset-bottom)}
 /* TABS */
 .tab-nav{display:flex;border-bottom:1px solid var(--border);padding:4px 10px;gap:2px}
-.tab-btn{flex:1;padding:7px 0;background:none;border:none;border-radius:8px;color:var(--t3);font-family:inherit;font-size:.6rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}.tab-btn:hover{color:var(--t2);background:var(--glass-hover)}.tab-btn.on{color:var(--t1);background:var(--accent-soft)}
+.tab-btn{flex:1;padding:7px 0;background:none;border:none;border-radius:8px;color:var(--t3);font-family:inherit;font-size:.55rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}.tab-btn:hover{color:var(--t2);background:var(--glass-hover)}.tab-btn.on{color:var(--t1);background:var(--accent-soft)}
 .tab-panels{flex:1;overflow:hidden;position:relative}.tab-panel{position:absolute;inset:0;overflow-y:auto;padding:10px;opacity:0;pointer-events:none;transition:opacity .2s}.tab-panel.on{opacity:1;pointer-events:all}.tab-panel::-webkit-scrollbar{width:3px}.tab-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 /* SPIRIT CARDS */
 .spirits-grid{display:flex;flex-direction:column;gap:5px}
 .spirits-count{font-size:.5rem;color:var(--t3);text-align:center;padding:8px 0;letter-spacing:.1em}
-.spirit-card{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s}.spirit-card:hover{background:var(--accent-soft);border-color:var(--border-l)}
+/* V1.3 POLISH: Spirit cards - better spacing and hierarchy */
+.spirit-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s}.spirit-card:hover{background:var(--accent-soft);border-color:var(--border-l);transform:translateY(-1px)}
 .spirit-card-img{width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;position:relative}
 .spirit-card-img img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
 .spirit-card-img::before{content:'';position:absolute;inset:-3px;border-radius:50%;z-index:0;opacity:0}
@@ -100,31 +111,37 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);-webki
 .spirit-card-img.evo-1::before{opacity:1;background:conic-gradient(from 0deg,transparent,rgba(140,180,255,.3),transparent,rgba(200,220,255,.2),transparent);animation:auraRotate 4s linear infinite}
 .spirit-card-img.evo-2::before{opacity:1;background:conic-gradient(from 0deg,transparent,rgba(255,215,140,.35),transparent,rgba(255,240,200,.25),transparent);animation:auraRotate 3s linear infinite}
 @keyframes auraRotate{to{transform:rotate(360deg)}}
-.spirit-card-info{flex:1;min-width:0}.spirit-card-name{font-size:.75rem;font-weight:600}
-.spirit-card-meta{font-size:.55rem;color:var(--t3);margin-top:1px}
+.spirit-card-info{flex:1;min-width:0}
+/* V1.3 POLISH: Spirit name gets stronger weight */
+.spirit-card-name{font-size:.75rem;font-weight:600;line-height:1.2}
+.spirit-card-meta{font-size:.55rem;color:var(--t3);margin-top:2px}
 /* Shimmer text for evolved labels */
 .evo-text-1{background:linear-gradient(90deg,#f5f5f5,#8ab4ff,#f5f5f5);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
 .evo-text-2{background:linear-gradient(90deg,#f5f5f5,#ffd480,#f5f5f5);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
 @keyframes shimText{0%{background-position:200% 0}100%{background-position:-200% 0}}
 [data-theme="light"] .evo-text-1{background:linear-gradient(90deg,#1a1816,#4477cc,#1a1816);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
 [data-theme="light"] .evo-text-2{background:linear-gradient(90deg,#1a1816,#cc8800,#1a1816);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
-.spirit-card-xp{width:100%;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:3px}.spirit-card-xp-fill{height:100%;background:var(--positive);border-radius:2px;transition:width 1s linear}
+.spirit-card-xp{width:100%;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:4px}.spirit-card-xp-fill{height:100%;background:var(--positive);border-radius:2px;transition:width 1s linear}
 .spirit-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
 .spirit-card-dots{display:flex;gap:3px}.spirit-card-dot{width:4px;height:4px;border-radius:50%;background:var(--t4)}.spirit-card-dot.on{background:var(--t1)}
 .spirit-card-lvl{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--t3)}
-.spirit-empty{text-align:center;padding:24px 16px}.spirit-empty-msg{font-size:.75rem;color:var(--t3);margin-bottom:4px}.spirit-empty-hint{font-size:.6rem;color:var(--t4)}
+/* V1.3 POLISH: Empty states with gentle guidance */
+.spirit-empty{text-align:center;padding:32px 16px}
+.spirit-empty-msg{font-size:.75rem;color:var(--t2);margin-bottom:6px;font-weight:500}
+.spirit-empty-hint{font-size:.6rem;color:var(--t3);line-height:1.5;margin-bottom:16px}
+.empty-action{padding:10px 20px;background:var(--t1);color:var(--bg);border:none;border-radius:8px;font-family:inherit;font-size:.7rem;font-weight:600;cursor:pointer;margin-top:8px}
 /* SPIRIT DETAIL */
 .spirit-detail{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:14px;margin-top:8px;display:none}.spirit-detail.open{display:block;animation:fadeIn .2s ease-out}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .sd-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}.sd-portrait{width:52px;height:52px;border-radius:12px;overflow:hidden;border:1px solid var(--card-border);flex-shrink:0}.sd-portrait img{width:100%;height:100%;object-fit:cover}
 .sd-info{flex:1}.sd-name{font-size:.9rem;font-weight:600}.sd-stage{font-size:.55rem;color:var(--t2)}.sd-bio{font-size:.5rem;color:var(--t3);margin-top:2px;font-style:italic;line-height:1.3}
 .sd-close{background:none;border:none;color:var(--t4);cursor:pointer;font-size:.8rem;padding:4px;align-self:flex-start}
-.sd-section{font-size:.5rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin:8px 0 4px;font-weight:500}
+.sd-section{font-size:.5rem;color:var(--t3);text-transform:uppercase;letter-spacing:.15em;margin:12px 0 6px;font-weight:500}
 .sd-bar-wrap{display:flex;align-items:center;gap:8px}.sd-bar{flex:1;height:3px;background:var(--border);border-radius:3px;overflow:hidden}.sd-bar-fill{height:100%;background:var(--positive);border-radius:3px;transition:width .3s}.sd-lvl{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3)}
 .trait-tags{display:flex;flex-wrap:wrap;gap:3px}.trait-tag{padding:2px 8px;border-radius:8px;font-size:.5rem;font-weight:500;background:var(--card-bg);color:var(--t2);border:1px solid var(--card-border)}.trait-tag.positive{color:var(--positive);border-color:rgba(102,187,153,.12)}.trait-tag.neutral{color:var(--t3)}
 .sd-evolve-btn{width:100%;margin-top:10px;padding:10px;border-radius:var(--radius-sm);border:none;background:var(--t1);color:var(--bg);font-family:inherit;font-size:.7rem;font-weight:600;cursor:pointer}.sd-evolve-btn:disabled{opacity:.15;cursor:not-allowed}.sd-evolve-cost{font-size:.55rem;color:var(--t3);text-align:center;margin-top:4px}
-/* ITEMS TAB */
-.section-label{font-size:.5rem;color:var(--t3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;margin-top:10px;font-weight:500}.section-label:first-child{margin-top:0}
+/* V1.3 POLISH: Typography hierarchy - section headers */
+.section-label{font-size:.5rem;color:var(--t3);text-transform:uppercase;letter-spacing:.15em;margin-bottom:8px;margin-top:16px;font-weight:500}.section-label:first-child{margin-top:0}
 .hatchery-grid{display:flex;gap:5px;flex-wrap:wrap}
 .hatch-slot{flex:1;min-width:50px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:8px 4px;text-align:center;cursor:pointer;transition:all .2s;min-height:65px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.hatch-slot:hover{border-color:var(--border-l)}.hatch-slot.locked{opacity:.25;cursor:default}.hatch-slot.unlockable{border-color:var(--special);border-style:dashed;opacity:.7;cursor:pointer}
 .hatch-slot.ready{border-color:var(--positive);animation:readyPulse 2s infinite}
@@ -350,19 +367,27 @@ button.action-busy{opacity:.5;pointer-events:none}
 <div class="prof-overlay" id="profOverlay"><div class="prof-inner"><div class="prof-portrait"><img src="sprites/mowang_3.png"></div><div class="prof-name">Professor Mowang</div><div class="prof-role">Village Elder</div><div class="prof-bubble"><div class="prof-bubble-text" id="profText"></div></div><div id="profExtra"></div><div class="prof-dots" id="profDots"></div><button class="prof-btn" id="profBtn" onclick="nextProfStep()">Next</button><button class="prof-skip" onclick="finishProf()">Skip tutorial</button></div></div>
 <div class="settings-drop" id="settingsDrop"><div class="sd-item" onclick="toggleTheme()"><span class="sd-item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> Theme</span><div class="sd-toggle" id="themeToggle"></div></div><div class="sd-divider"></div><div class="sd-item" onclick="showPrivacy()"><span class="sd-item-label">Privacy</span></div><div class="sd-divider"></div><div class="sd-item" onclick="showPatchNotes()"><span class="sd-item-label">Patch Notes</span></div><div class="sd-divider sdLogoutDiv"></div><div class="sd-item sdLogoutItem" onclick="doLogout()"><span class="sd-item-label">Logout</span></div></div>
 <div class="patch-overlay" id="patchNotes"><button class="patch-close" onclick="closePatchNotes()">✕ Close</button><div class="patch-inner">
-<div class="patch-banner"><div><div class="patch-banner-text">Ehoro Village<br>Patch V1.5</div><div class="patch-banner-sub">Launch Day</div></div></div>
-<div class="patch-author"><div class="patch-author-img"><img src="sprites/mowang_3.png"></div><div><div class="patch-author-name">Purple Prince</div><div class="patch-author-role">Lead Designer</div></div><span class="patch-date">February 2026</span></div>
+<div class="patch-banner"><div><div class="patch-banner-text">Ehoro Village<br>Patch V1.3</div><div class="patch-banner-sub">Polish & Refinement</div></div></div>
+<div class="patch-author"><div class="patch-author-img"><img src="sprites/mowang_3.png"></div><div><div class="patch-author-name">Purple Prince</div><div class="patch-author-role">Lead Designer</div></div><span class="patch-date">February 10, 2026</span></div>
 <div class="patch-body">
-<p>Hello villagers! We've been polishing every corner of Ehoro Village for this launch, and I'm thrilled to finally open the gates wide.</p>
-<div class="patch-heading">What's New in V1.5</div>
-<p><b>Expeditions</b> — Send your spirits on timed journeys to gather materials and earn bonus XP. Short, Medium, and Long expeditions offer different rewards, and longer ones have a rare chance to drop Àṣẹ Essence.</p>
-<p><b>Spirit Cultivation</b> — A brand new xianxia-inspired progression system. Spend Àṣẹ Essence to advance your spirits through cultivation stages from Unrefined all the way to Spirit Sovereign.</p>
-<p><b>Professor Mowang's Tutorial</b> — New villagers are now greeted by Professor Mowang, the village elder, who walks them through everything and lets them pick their very first companion spirit.</p>
-<div class="patch-heading">Launch Polish</div>
-<p>This patch is all about reliability. We've hardened network error handling, added a reconnecting overlay, made buttons feel snappier with optimistic UI, and ensured timers work properly even when you switch tabs or come back from the background.</p>
-<p>Traits now have gameplay effects — Focused spirits gain bonus XP from active cultivation, and Wild spirits bring back extra materials from expeditions. More trait effects are coming soon.</p>
+<p>Hello villagers! Today's update is all about polish — we've tightened up the interface to make Ehoro Village feel more refined and professional before our first major release.</p>
+<div class="patch-heading">Polish & UX Improvements</div>
+<p><b>Better Visual Hierarchy</b> — Spirit names now have stronger weight, section headers are clearer, and everything is easier to scan at a glance.</p>
+<p><b>Improved Spacing</b> — Spirit cards have more breathing room, and elements throughout the interface feel less cramped.</p>
+<p><b>Smoother Transitions</b> — Switched to Apple-style easing curves. Everything feels more fluid and natural.</p>
+<p><b>Tactile Feedback</b> — Buttons now subtly scale when pressed, giving you better confirmation of interactions.</p>
+<p><b>Egg Progress Glow</b> — The egg timer now glows softly when you're at 90%+ completion, drawing attention when you're close.</p>
+<p><b>Better Empty States</b> — When you don't have spirits yet, the interface guides you gently to the next action.</p>
+<p><b>Mobile Polish</b> — Full support for iPhone notches and safe areas. The interface adapts properly to all screen shapes.</p>
+<p><b>Accessibility</b> — Full keyboard navigation with visible focus states, and respects reduced motion preferences for users who need it.</p>
+<div class="patch-heading">Previous Updates (V1.0–1.2)</div>
+<p><b>Professor Mowang Tutorial</b> — New users are guided by the village elder through a 7-step tutorial and get to choose their starter spirit.</p>
+<p><b>Expeditions</b> — Send spirits on journeys to gather materials and Àṣẹ Essence for cultivation advancement.</p>
+<p><b>Spirit Cultivation</b> — A xianxia-inspired progression system with 5 stages from Dormant to Spirit Sovereign.</p>
+<p><b>Offline Progression</b> — Eggs incubate while you're away, and you're welcomed back with bonuses for long absences.</p>
+<p><b>Reliability</b> — Fixed ad blocker issues, phone freezes, and network timeouts that were blocking account creation.</p>
 <div class="patch-heading">What's Next</div>
-<p>We're working on our own lo-fi stream, more spirit types, deeper social features, and cosmetic customization. The village is just getting started.</p>
+<p>We're polishing the final details before our first major public release. Next up: our own lo-fi stream, more spirits, social features, and cosmetic customization.</p>
 <p>Thank you for being here from the beginning. Take care of your spirits!</p>
 <p style="color:var(--t3);font-style:italic">— Purple Prince</p>
 </div>
@@ -1055,7 +1080,7 @@ function updateTopBar(){const p=calcPrestige();const rank=VILLAGE_RANKS.slice().
 function updateAllUI(){updateTopBar();renderSpiritsTab();renderItemsTab();renderVillageTab()}
 
 // ═══ SPIRITS TAB ═══
-function renderSpiritsTab(){const el=document.getElementById('tab-spirits');if(!S.spirits.length){el.innerHTML='<div class="spirit-empty"><div class="spirit-empty-msg">No spirits yet</div><div class="spirit-empty-hint">Hatch eggs to discover spirits</div><button class="empty-action" onclick="switchTab(document.querySelector(\'[data-tab=items]\'))">Go to Hatchery →</button></div>';return}let h='<div class="spirits-grid">';S.spirits.forEach(sp=>{const lvl=Math.floor((sp.xp||0)/100)+1,xpP=(sp.xp||0)%100,evoClass=sp.evo_stage>0?'evo-'+sp.evo_stage:'',evoText=sp.evo_stage===1?'evo-text-1':sp.evo_stage===2?'evo-text-2':'',onExp=spiritUnavailable(sp.id);h+='<div class="spirit-card'+(onExp?' on-expedition':'')+'" onclick="selectSpirit(\''+sp.id+'\')"><div class="spirit-card-img '+evoClass+'"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div><div class="spirit-card-info"><div class="spirit-card-name">'+sp.name+'</div><div class="spirit-card-meta"><span class="'+evoText+'">'+EVO_LABELS[sp.evo_stage]+'</span> \u00b7 Lv.'+lvl+'</div><div class="spirit-card-xp"><div class="spirit-card-xp-fill" style="width:'+xpP+'%"></div></div></div><div class="spirit-card-right"><div class="spirit-card-dots">'+[0,1,2].map(i=>'<div class="spirit-card-dot'+(i<=sp.evo_stage?' on':'')+'"></div>').join('')+'</div><div class="spirit-card-lvl">'+xpP+'/100</div></div></div>'});h+='</div><div class="spirits-count">'+S.spirits.length+' of 30 discovered</div>';el.innerHTML=h+'<div id="spiritDetail" class="spirit-detail"></div>';if(S.selectedSpirit)showSpiritDetail(S.selectedSpirit)}
+function renderSpiritsTab(){const el=document.getElementById('tab-spirits');if(!S.spirits.length){el.innerHTML='<div class="spirit-empty"><div class="spirit-empty-msg">No spirits yet</div><div class="spirit-empty-hint">Hatch eggs to discover spirits<br>They\'ll grow as you listen</div><button class="empty-action" onclick="switchTab(document.querySelector(\'[data-tab=items]\'))">Go to Hatchery →</button></div>';return}let h='<div class="spirits-grid">';S.spirits.forEach(sp=>{const lvl=Math.floor((sp.xp||0)/100)+1,xpP=(sp.xp||0)%100,evoClass=sp.evo_stage>0?'evo-'+sp.evo_stage:'',evoText=sp.evo_stage===1?'evo-text-1':sp.evo_stage===2?'evo-text-2':'',onExp=spiritUnavailable(sp.id);h+='<div class="spirit-card'+(onExp?' on-expedition':'')+'" onclick="selectSpirit(\''+sp.id+'\')"><div class="spirit-card-img '+evoClass+'"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div><div class="spirit-card-info"><div class="spirit-card-name">'+sp.name+'</div><div class="spirit-card-meta"><span class="'+evoText+'">'+EVO_LABELS[sp.evo_stage]+'</span> \u00b7 Lv.'+lvl+'</div><div class="spirit-card-xp"><div class="spirit-card-xp-fill" style="width:'+xpP+'%"></div></div></div><div class="spirit-card-right"><div class="spirit-card-dots">'+[0,1,2].map(i=>'<div class="spirit-card-dot'+(i<=sp.evo_stage?' on':'')+'"></div>').join('')+'</div><div class="spirit-card-lvl">'+xpP+'/100</div></div></div>'});h+='</div><div class="spirits-count">'+S.spirits.length+' of 30 discovered</div>';el.innerHTML=h+'<div id="spiritDetail" class="spirit-detail"></div>';if(S.selectedSpirit)showSpiritDetail(S.selectedSpirit)}
 function selectSpirit(id){S.selectedSpirit=id;showSpiritDetail(id)}
 function showSpiritDetail(id){const sp=S.spirits.find(s=>s.id===id);if(!sp)return;const el=document.getElementById('spiritDetail'),lvl=Math.floor((sp.xp||0)/100)+1,xpP=(sp.xp||0)%100,tr=S.traits[sp.id]||[],cost=sp.evo_stage===0?5:12,reqLvl=sp.evo_stage===0?3:5,reqXp=(reqLvl-1)*100,meetsLvl=(sp.xp||0)>=reqXp,meetsMats=S.emblems.cafe_bean>=cost&&S.emblems.wild_essence>=cost&&S.emblems.focus_shard>=cost,can=sp.evo_stage<2&&!S.isGuest&&meetsLvl&&meetsMats,evoText=sp.evo_stage===1?'evo-text-1':sp.evo_stage===2?'evo-text-2':'';
 const onExped=spiritOnExpedition(sp.id)&&!S.expeditions.find(e=>e.completed&&Array.isArray(e.spirit_ids)&&e.spirit_ids.includes(sp.id)&&getExpedStatus(e)==='idle');
@@ -1212,15 +1237,10 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // ═══ GAME TICK ═══
-function startTicker(){if(S.ticker)return;if(!S.eggAnchor)S.eggAnchor=Date.now();const eggTime=()=>S.isGuest&&!S.guestEggGiven?S.GUEST_EGG_SEC:(!S.profile?.first_egg_claimed?S.FIRST_EGG_SEC:S.EGG_SEC);S.ticker=setInterval(async()=>{if(!S.playing)return;
-const now=Date.now();S.eggT=(now-S.eggAnchor)/1000;
-const total=eggTime();const pct=Math.min((S.eggT/total)*100,100);document.getElementById('eggFill').style.width=pct+'%';const rem=Math.max(0,Math.ceil(total-S.eggT));const mins=Math.floor(rem/60),secs=rem%60;document.getElementById('eggTimer').textContent=mins>0?mins+'m '+secs+'s':secs+'s';
-if(S.sessionStartedAt&&S.profile){S.profile._sessionSeconds=Math.floor((now-S.sessionStartedAt)/1000)}
-// Ingredient drops — first drop guaranteed within ~60s, then ~1 per 8 min
-const ingChance=(!S.isGuest&&!S.firstIngredientGiven&&S.eggT>30)?0.03:0.0015;
-if(!S.isGuest&&Math.random()<ingChance){const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;S.firstIngredientGiven=true;renderItemsTab();showToast('ing_'+mat);checkCraftHint()}
-// Egg drop
-if(S.eggT>=total){S.eggAnchor=Date.now();S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane')}}else{try{const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;await loadUserData();updateAllUI();showToast(data.rarity);autoPlaceEggs();try{sb.rpc('log_event',{p_event:'egg_drop',p_data:{rarity:data.rarity}})}catch(e){}}catch(e){console.warn('egg drop error:',e)}}}},500)}
+function startTicker(){if(S.ticker)return;if(!S.eggAnchor)S.eggAnchor=Date.now();const eggTime=()=>S.isGuest&&!S.guestEggGiven?S.GUEST_EGG_SEC:(!S.profile?.first_egg_claimed?S.FIRST_EGG_SEC:S.EGG_SEC);S.ticker=setInterval(async()=>{if(!S.playing)return;const now=Date.now();S.eggT=(now-S.eggAnchor)/1000;const total=eggTime();const pct=Math.min((S.eggT/total)*100,100);document.getElementById('eggFill').style.width=pct+'%';const rem=Math.max(0,Math.ceil(total-S.eggT));const mins=Math.floor(rem/60),secs=rem%60;document.getElementById('eggTimer').textContent=mins>0?mins+'m '+secs+'s':secs+'s';
+// V1.3 POLISH: Egg progress glow at 90%+
+const eggProg=document.getElementById('eggProgress');if(pct>=90){eggProg.classList.add('near-ready')}else{eggProg.classList.remove('near-ready')}
+if(S.sessionStartedAt&&S.profile){S.profile._sessionSeconds=Math.floor((now-S.sessionStartedAt)/1000)}const ingChance=(!S.isGuest&&!S.firstIngredientGiven&&S.eggT>30)?0.03:0.0015;if(!S.isGuest&&Math.random()<ingChance){const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;S.firstIngredientGiven=true;renderItemsTab();showToast('ing_'+mat);checkCraftHint()}if(S.eggT>=total){S.eggAnchor=Date.now();S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane')}}else{try{const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;await loadUserData();updateAllUI();showToast(data.rarity);autoPlaceEggs();try{sb.rpc('log_event',{p_event:'egg_drop',p_data:{rarity:data.rarity}})}catch(e){}}catch(e){console.warn('egg drop error:',e)}}}},500)}
 
 // ═══ CRAFT HINT — pulse Items tab when user first has enough materials ═══
 function checkCraftHint(){if(S.craftHintShown||S.isGuest)return;const r=S.pillRecipes[0];if(!r)return;if(S.emblems.cafe_bean>=r.cost_cafe_bean&&S.emblems.wild_essence>=r.cost_wild_essence&&S.emblems.focus_shard>=r.cost_focus_shard){S.craftHintShown=true;const tab=document.querySelector('[data-tab="items"]');if(tab){tab.classList.add('hint');setTimeout(()=>tab.classList.remove('hint'),6000)}}}
