@@ -479,7 +479,7 @@ const SUPABASE_URL='https://eyqddqtlgthgkiqjavyx.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_CsTLSJj1YwgiHMxUTa685Q_2TVvZa2Q';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});
 // V2.0: XSS sanitizer — use everywhere user data goes into innerHTML
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/\x3c/g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 // V2.0: Debounced UI update
 let _uiDebounce=null;
 function debouncedUpdateAllUI(){if(_uiDebounce)clearTimeout(_uiDebounce);_uiDebounce=setTimeout(()=>{updateAllUI()},100)}
@@ -606,10 +606,6 @@ let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_ess
 // ═══ V2.0: WICKED PILL INVENTORY (now DB-backed) ═══
 function getWickedPills(){return S._wickedPills||[]}
 // addWickedPill and removeWickedPill now handled by RPCs
-function removeWickedPill(index){
-  if(!S.user)return null;
-  const pills=getWickedPills();
-  if(index<0||index>=pills.length)return null;
 // ═══ V2.0: SPIRIT ALIGNMENT (now DB-backed on spirits.alignment column) ═══
 function getSpiritAlignment(spiritId){
   const sp=S.spirits.find(s=>s.id===spiritId);
@@ -1119,7 +1115,9 @@ async function checkSession(){
 }
 async function loadUserData(){if(!S.user)return;
   try{
-  const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:eggs},{data:pills},{data:expeds}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).maybeSingle(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).in('status',['pending','incubating']).limit(30),sb.from('pill_recipes').select('*'),sb.from('expeditions').select('*').eq('user_id',S.user.id)]);
+  const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];
+  const fetchPills=S.pillRecipes.length?Promise.resolve({data:null}):sb.from('pill_recipes').select('*');
+  const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:eggs},{data:pills},{data:expeds},{data:wpills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).maybeSingle(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).in('status',['pending','incubating']).limit(30),fetchPills,sb.from('expeditions').select('*').eq('user_id',S.user.id),sb.from('wicked_pills').select('*').eq('user_id',S.user.id).order('created_at')]);
   // Only overwrite S if we got valid data back (never overwrite with nulls from failed fetch)
   if(prof!==undefined)S.profile=prof||S.profile;
   if(S.profile&&S.profile.starter_claimed===undefined)S.profile.starter_claimed=false;
