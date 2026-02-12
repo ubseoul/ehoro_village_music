@@ -441,8 +441,8 @@ button.action-busy{opacity:.5;pointer-events:none}
 <div class="prof-overlay" id="profOverlay"><div class="prof-inner"><div class="prof-portrait"><img src="sprites/mowang_3.png"></div><div class="prof-name">Professor Mowang</div><div class="prof-role">Village Elder</div><div class="prof-bubble"><div class="prof-bubble-text" id="profText"></div></div><div id="profExtra"></div><div class="prof-dots" id="profDots"></div><button class="prof-btn" id="profBtn" onclick="nextProfStep()">Next</button><button class="prof-skip" onclick="finishProf()">Skip tutorial</button></div></div>
 <div class="settings-drop" id="settingsDrop"><div class="sd-item" onclick="toggleTheme()"><span class="sd-item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> Theme</span><div class="sd-toggle" id="themeToggle"></div></div><div class="sd-divider"></div><div class="sd-item" onclick="showPrivacy()"><span class="sd-item-label">Privacy</span></div><div class="sd-divider"></div><div class="sd-item" onclick="showPatchNotes()"><span class="sd-item-label">Patch Notes</span></div><div class="sd-divider sdLogoutDiv"></div><div class="sd-item sdLogoutItem" onclick="doLogout()"><span class="sd-item-label">Logout</span></div></div>
 <div class="patch-overlay" id="patchNotes"><button class="patch-close" onclick="closePatchNotes()">✕ Close</button><div class="patch-inner">
-<div class="patch-banner"><div><div class="patch-banner-text">Ehoro Village<br>Patch V2.0</div><div class="patch-banner-sub">The Fortress</div></div></div>
-<div class="patch-author"><div class="patch-author-img"><img src="sprites/mowang_3.png"></div><div><div class="patch-author-name">Purple Prince</div><div class="patch-author-role">Lead Designer</div></div><span class="patch-date">February 11, 2026</span></div>
+<div class="patch-banner"><div><div class="patch-banner-text">Ehoro Village<br>Patch V2.2</div><div class="patch-banner-sub">Village Radio</div></div></div>
+<div class="patch-author"><div class="patch-author-img"><img src="sprites/mowang_3.png"></div><div><div class="patch-author-name">Purple Prince</div><div class="patch-author-role">Lead Designer</div></div><span class="patch-date">February 12, 2026</span></div>
 <div class="patch-body">
 <p>Hello villagers! V2.0 is our biggest infrastructure update. Everything is more secure, faster, and ready for 1,000+ players.</p>
 <div class="patch-heading">Security Hardening 🛡️</div>
@@ -461,7 +461,9 @@ button.action-busy{opacity:.5;pointer-events:none}
 <p><b>V1.3:</b> Visual polish — typography, spacing, transitions, accessibility.</p>
 <p><b>V1.0–1.2:</b> Professor Mowang tutorial, expeditions, spirit cultivation, offline progression.</p>
 <div class="patch-heading">What's Next</div>
-<p>Our own lo-fi stream, more spirits, social features, and cosmetic customization. Thank you for being part of Ehoro Village.</p>
+<p>More spirits, social features, and cosmetic customization. Thank you for being part of Ehoro Village.</p>
+<div class="patch-heading">V2.2 — Ehoro Village Radio 📻</div>
+<p><b>Our own lo-fi music!</b> Ehoro Village Radio replaces the Lofi Girl livestream as the default audio. The video loops seamlessly for a clean, cozy listening experience. Lofi Girl is still available as a backup if the video can't load.</p>
 <p style="color:var(--t3);font-style:italic">— Purple Prince</p>
 </div>
 <div class="patch-social"><a href="https://www.instagram.com/ehorovillage?igsh=cTBuaGpoaWVpdXQy&utm_source=qr" target="_blank">Instagram</a><a href="https://x.com/purpleprinceev?s=21" target="_blank">X (Twitter)</a><a href="https://www.facebook.com/share/1DGDwJyMcN/?mibextid=wwXIfr" target="_blank">Facebook</a></div>
@@ -470,7 +472,7 @@ button.action-busy{opacity:.5;pointer-events:none}
 <div class="shell on" id="shell">
 <div class="topbar"><div class="tb-brand">Ehoro Village</div><div class="tb-right"><div class="tb-rank"><span class="tb-rank-name" id="tbRankName">Ember</span><span class="tb-rank-pts" id="tbRankPts">0 prestige</span></div><button class="tb-gear" onclick="toggleSettings()" title="Settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button><div id="tbAuth"><button class="tb-signin" onclick="showLogin()">Sign In</button></div></div></div>
 <div class="content">
-<div class="video-area"><div class="video-embed" id="videoEmbed"><div class="video-placeholder" id="videoPlaceholder" onclick="startStream()"><div class="vp-play">&#x25B6;</div><div class="vp-text">Start Lo-Fi Stream</div></div></div><div class="player-strip"><button class="ps-play" id="psPlay" onclick="startStream()">&#x25B6;</button><div class="ps-info"><div class="ps-title">Lofi Girl</div><div class="ps-sub"><span class="ps-live-dot"></span> live</div></div></div></div>
+<div class="video-area"><div class="video-embed" id="videoEmbed"><div class="video-placeholder" id="videoPlaceholder" onclick="startStream()"><div class="vp-play">&#x25B6;</div><div class="vp-text">Start Ehoro Radio</div></div></div><div class="player-strip"><button class="ps-play" id="psPlay" onclick="startStream()">&#x25B6;</button><div class="ps-info"><div class="ps-title">Ehoro Village Radio</div><div class="ps-sub"><span class="ps-live-dot"></span> 1 hr mix</div></div></div></div>
 <div class="sidebar"><div class="egg-progress" id="eggProgress"><span class="egg-progress-label">Next egg</span><div class="egg-progress-bar"><div class="egg-progress-fill" id="eggFill"></div></div><span class="egg-progress-time" id="eggTimer">&mdash;</span></div><div class="tab-nav"><button class="tab-btn on" data-tab="spirits" onclick="switchTab(this)">Spirits</button><button class="tab-btn" data-tab="items" onclick="switchTab(this)">Items</button><button class="tab-btn" data-tab="pills" onclick="switchTab(this)">Pills</button><button class="tab-btn" data-tab="village" onclick="switchTab(this)">Village</button></div><div class="tab-panels"><div class="tab-panel on" id="tab-spirits"></div><div class="tab-panel" id="tab-items"></div><div class="tab-panel" id="tab-pills"></div><div class="tab-panel" id="tab-village"></div></div></div>
 </div></div>
 
@@ -494,8 +496,8 @@ function withTimeout(promise,ms=8000){return Promise.race([promise,new Promise((
 // Basic connectivity check (non-blocking)
 async function checkSupabaseConnectivity(){try{await fetch(SUPABASE_URL+'/rest/v1/',{method:'HEAD',headers:{'apikey':SUPABASE_ANON_KEY}})}catch(e){console.warn('Network connectivity issue detected. Some features may not work properly.')}}
 checkSupabaseConnectivity();
-const STREAM_YT='jfKfPfyJRdk';
-const STREAM_YT_FALLBACK='5qap5aO4i9A'; // Lofi Girl backup playlist
+const STREAM_YT='ojyT8dK0ZiA'; // Ehoro Village Radio — own 1hr lofi video
+const STREAM_YT_FALLBACK='jfKfPfyJRdk'; // Lofi Girl livestream (hidden fallback)
 const RARITY_COLORS={mundane:'#888',adept:'#8ab',refined:'#7a7',illustrious:'#ba8',sovereign:'#a8c',celestial:'#8cf',transcendent:'#fc8',mysterious:'#c8f',ancestral:'#f88',paradox:'#fff'};
 const INCUB_MINS={mundane:3,adept:7,refined:14,illustrious:20,sovereign:30,celestial:45,transcendent:60,mysterious:90,ancestral:90,paradox:90};
 const VILLAGE_RANKS=[{name:'Ember',min:0,desc:'Your village is a spark.',color:'#a08070'},{name:'Stone',min:50,desc:'Solid foundation.',color:'#909090'},{name:'Bronze',min:150,desc:'A real village.',color:'#cd8c52'},{name:'Silver',min:400,desc:'Respected.',color:'#b8c0cc'},{name:'Gold',min:800,desc:'Prosperous.',color:'#d4a843'},{name:'Emerald',min:1500,desc:'A beacon.',color:'#4cba8a'},{name:'Celestial',min:3000,desc:'Transcendent.',color:'#7cb8f0'}];
@@ -1677,24 +1679,24 @@ function showEvoAnimation(){const ov=document.createElement('div');ov.style.cssT
 
 // ═══ STREAM — single stream with fallback ═══
 let _lastHatchData=null;
-async function startStream(){if(S.playing)return;S.playing=true;S.sessionStartedAt=Date.now();S.eggAnchor=Date.now();const embed=document.getElementById('videoEmbed');const iframe=document.createElement('iframe');iframe.src='https://www.youtube.com/embed/'+STREAM_YT+'?autoplay=1&rel=0';iframe.allow='autoplay; encrypted-media';iframe.allowFullscreen=true;
+async function startStream(){if(S.playing)return;S.playing=true;S.sessionStartedAt=Date.now();S.eggAnchor=Date.now();const embed=document.getElementById('videoEmbed');const iframe=document.createElement('iframe');iframe.src='https://www.youtube.com/embed/'+STREAM_YT+'?autoplay=1&rel=0&loop=1&playlist='+STREAM_YT;iframe.allow='autoplay; encrypted-media';iframe.allowFullscreen=true;
 // YouTube fallback — if iframe fails to load
 iframe.onerror=function(){showYTFallback()};
 // Also set a timeout in case iframe silently fails
 const ytTimeout=setTimeout(()=>{if(!embed.classList.contains('loaded')){showYTFallback()}},12000);
 iframe.onload=function(){clearTimeout(ytTimeout)};
-embed.insertBefore(iframe,embed.firstChild);embed.classList.add('loaded');document.getElementById('psPlay').textContent='\u23F8';if(!S.isGuest){try{const{data}=await sb.rpc('start_session',{p_playlist:'cafe'});S.sessionId=data}catch(e){console.warn('start_session error:',e)}}startTicker()}
+embed.insertBefore(iframe,embed.firstChild);embed.classList.add('loaded');document.getElementById('psPlay').textContent='\u23F8';if(!S.isGuest){try{const{data}=await sb.rpc('start_session',{p_playlist:'ehoro_radio'});S.sessionId=data}catch(e){console.warn('start_session error:',e)}}startTicker()}
 function showYTFallback(){
   const embed=document.getElementById('videoEmbed');
   const existing=embed.querySelector('.yt-fallback');if(existing)return;
   const ifr=embed.querySelector('iframe');if(ifr)ifr.remove();
   embed.classList.remove('loaded');
   const fb=document.createElement('div');fb.className='yt-fallback';
-  fb.innerHTML='<div class="yt-fallback-msg">Stream couldn\'t load.<br>Try another source?</div><button class="yt-fallback-btn" onclick="retryStream()">Retry Stream</button><button class="yt-fallback-btn" style="background:transparent;border:1px solid var(--glass-border);color:var(--t2);margin-top:6px" onclick="tryFallbackStream()">Try Backup Stream</button>';
+  fb.innerHTML='<div class="yt-fallback-msg">Video couldn\'t load.<br>Try again or switch to backup?</div><button class="yt-fallback-btn" onclick="retryStream()">Retry</button><button class="yt-fallback-btn" style="background:transparent;border:1px solid var(--glass-border);color:var(--t2);margin-top:6px" onclick="tryFallbackStream()">Play Lofi Girl Instead</button>';
   embed.appendChild(fb);
 }
-function retryStream(){const fb=document.querySelector('.yt-fallback');if(fb)fb.remove();S.playing=false;startStream()}
-function tryFallbackStream(){const fb=document.querySelector('.yt-fallback');if(fb)fb.remove();const embed=document.getElementById('videoEmbed');const iframe=document.createElement('iframe');iframe.src='https://www.youtube.com/embed/videoseries?list='+STREAM_YT_FALLBACK+'&autoplay=1';iframe.allow='autoplay; encrypted-media';iframe.allowFullscreen=true;embed.insertBefore(iframe,embed.firstChild);embed.classList.add('loaded')}
+function retryStream(){const fb=document.querySelector('.yt-fallback');if(fb)fb.remove();S.playing=false;document.querySelector('.ps-title').textContent='Ehoro Village Radio';document.querySelector('.ps-sub').innerHTML='<span class="ps-live-dot"></span> 1 hr mix';startStream()}
+function tryFallbackStream(){const fb=document.querySelector('.yt-fallback');if(fb)fb.remove();const embed=document.getElementById('videoEmbed');const iframe=document.createElement('iframe');iframe.src='https://www.youtube.com/embed/'+STREAM_YT_FALLBACK+'?autoplay=1&rel=0';iframe.allow='autoplay; encrypted-media';iframe.allowFullscreen=true;embed.insertBefore(iframe,embed.firstChild);embed.classList.add('loaded');document.querySelector('.ps-title').textContent='Lofi Girl';document.querySelector('.ps-sub').innerHTML='<span class="ps-live-dot"></span> live'}
 
 // ═══ SHARE HATCH ═══
 
