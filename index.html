@@ -463,7 +463,7 @@ button.action-busy{opacity:.5;pointer-events:none}
 <div class="patch-heading">What's Next</div>
 <p>More spirits, social features, and cosmetic customization. Thank you for being part of Ehoro Village.</p>
 <div class="patch-heading">V2.2 — Ehoro Village Radio 📻</div>
-<p><b>Our own lo-fi music!</b> Ehoro Village Radio replaces the Lofi Girl livestream as the default audio. The video loops seamlessly for a clean, cozy listening experience. Lofi Girl is still available as a backup if the video can't load.</p>
+<p><b>Our own lo-fi music is here.</b> Ehoro Village Radio is now the sole audio source — no more embedding someone else's stream. The video loops seamlessly for a clean, cozy listening experience. This is our sound now.</p>
 <p style="color:var(--t3);font-style:italic">— Purple Prince</p>
 </div>
 <div class="patch-social"><a href="https://www.instagram.com/ehorovillage?igsh=cTBuaGpoaWVpdXQy&utm_source=qr" target="_blank">Instagram</a><a href="https://x.com/purpleprinceev?s=21" target="_blank">X (Twitter)</a><a href="https://www.facebook.com/share/1DGDwJyMcN/?mibextid=wwXIfr" target="_blank">Facebook</a></div>
@@ -497,7 +497,6 @@ function withTimeout(promise,ms=8000){return Promise.race([promise,new Promise((
 async function checkSupabaseConnectivity(){try{await fetch(SUPABASE_URL+'/rest/v1/',{method:'HEAD',headers:{'apikey':SUPABASE_ANON_KEY}})}catch(e){console.warn('Network connectivity issue detected. Some features may not work properly.')}}
 checkSupabaseConnectivity();
 const STREAM_YT='ojyT8dK0ZiA'; // Ehoro Village Radio — own 1hr lofi video
-const STREAM_YT_FALLBACK='jfKfPfyJRdk'; // Lofi Girl livestream (hidden fallback)
 const RARITY_COLORS={mundane:'#888',adept:'#8ab',refined:'#7a7',illustrious:'#ba8',sovereign:'#a8c',celestial:'#8cf',transcendent:'#fc8',mysterious:'#c8f',ancestral:'#f88',paradox:'#fff'};
 const INCUB_MINS={mundane:3,adept:7,refined:14,illustrious:20,sovereign:30,celestial:45,transcendent:60,mysterious:90,ancestral:90,paradox:90};
 const VILLAGE_RANKS=[{name:'Ember',min:0,desc:'Your village is a spark.',color:'#a08070'},{name:'Stone',min:50,desc:'Solid foundation.',color:'#909090'},{name:'Bronze',min:150,desc:'A real village.',color:'#cd8c52'},{name:'Silver',min:400,desc:'Respected.',color:'#b8c0cc'},{name:'Gold',min:800,desc:'Prosperous.',color:'#d4a843'},{name:'Emerald',min:1500,desc:'A beacon.',color:'#4cba8a'},{name:'Celestial',min:3000,desc:'Transcendent.',color:'#7cb8f0'}];
@@ -1692,11 +1691,10 @@ function showYTFallback(){
   const ifr=embed.querySelector('iframe');if(ifr)ifr.remove();
   embed.classList.remove('loaded');
   const fb=document.createElement('div');fb.className='yt-fallback';
-  fb.innerHTML='<div class="yt-fallback-msg">Video couldn\'t load.<br>Try again or switch to backup?</div><button class="yt-fallback-btn" onclick="retryStream()">Retry</button><button class="yt-fallback-btn" style="background:transparent;border:1px solid var(--glass-border);color:var(--t2);margin-top:6px" onclick="tryFallbackStream()">Play Lofi Girl Instead</button>';
+  fb.innerHTML='<div class="yt-fallback-msg">Video couldn\'t load.<br>Check your connection and try again.</div><button class="yt-fallback-btn" onclick="retryStream()">Retry</button>';
   embed.appendChild(fb);
 }
-function retryStream(){const fb=document.querySelector('.yt-fallback');if(fb)fb.remove();S.playing=false;document.querySelector('.ps-title').textContent='Ehoro Village Radio';document.querySelector('.ps-sub').innerHTML='<span class="ps-live-dot"></span> 1 hr mix';startStream()}
-function tryFallbackStream(){const fb=document.querySelector('.yt-fallback');if(fb)fb.remove();const embed=document.getElementById('videoEmbed');const iframe=document.createElement('iframe');iframe.src='https://www.youtube.com/embed/'+STREAM_YT_FALLBACK+'?autoplay=1&rel=0';iframe.allow='autoplay; encrypted-media';iframe.allowFullscreen=true;embed.insertBefore(iframe,embed.firstChild);embed.classList.add('loaded');document.querySelector('.ps-title').textContent='Lofi Girl';document.querySelector('.ps-sub').innerHTML='<span class="ps-live-dot"></span> live'}
+function retryStream(){const fb=document.querySelector('.yt-fallback');if(fb)fb.remove();S.playing=false;startStream()}
 
 // ═══ SHARE HATCH ═══
 
