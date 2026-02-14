@@ -1214,8 +1214,8 @@ async function ensureBasicsOnly(){
 function mapPillName(n){const m={'Cultivation Pill':'Spirit Pill','Greater Cultivation Pill':'Greater Spirit Pill','Village Cultivation Pill':'Village Spirit Pill'};return m[n]||n}
 
 // ═══ EXPEDITION HELPERS ═══
-function spiritOnExpedition(spiritId){return S.expeditions.some(e=>{if(!e.spirit_ids)return false;const ids=Array.isArray(e.spirit_ids)?e.spirit_ids:[];return ids.includes(spiritId)})}
-function spiritResting(spiritId){return S.expeditions.some(e=>{if(!e.rest_until||!e.spirit_ids)return false;const ids=Array.isArray(e.spirit_ids)?e.spirit_ids:[];return ids.includes(spiritId)&&new Date(e.rest_until).getTime()>Date.now()&&e.completed})}
+function spiritOnExpedition(spiritId){return S.expeditions.some(e=>{if(!e.spirit_ids)return false;const st=getExpedStatus(e);if(st==='idle')return false;const ids=Array.isArray(e.spirit_ids)?e.spirit_ids:[];return ids.includes(spiritId)})}
+function spiritResting(spiritId){return S.expeditions.some(e=>{if(!e.spirit_ids)return false;if(getExpedStatus(e)!=='resting')return false;const ids=Array.isArray(e.spirit_ids)?e.spirit_ids:[];return ids.includes(spiritId)})}
 function spiritUnavailable(spiritId){return spiritOnExpedition(spiritId)||spiritResting(spiritId)}
 
 function getExpedStatus(exp){
@@ -1449,7 +1449,7 @@ function spiritCardTap(event,id){
 }
 function selectSpirit(id){S.selectedSpirit=id;showSpiritDetail(id)}
 function showSpiritDetail(id){const sp=S.spirits.find(s=>s.id===id);if(!sp)return;const el=document.getElementById('spiritDetail'),lvl=Math.floor((sp.xp||0)/100)+1,xpP=(sp.xp||0)%100,tr=S.traits[sp.id]||[],cost=sp.evo_stage===0?5:12,reqLvl=sp.evo_stage===0?3:5,reqXp=(reqLvl-1)*100,meetsLvl=(sp.xp||0)>=reqXp,meetsMats=S.emblems.cafe_bean>=cost&&S.emblems.wild_essence>=cost&&S.emblems.focus_shard>=cost,can=sp.evo_stage<2&&!S.isGuest&&meetsLvl&&meetsMats,evoText=sp.evo_stage===1?'evo-text-1':sp.evo_stage===2?'evo-text-2':'';
-const onExped=spiritOnExpedition(sp.id)&&!S.expeditions.find(e=>e.completed&&Array.isArray(e.spirit_ids)&&e.spirit_ids.includes(sp.id)&&getExpedStatus(e)==='idle');
+const onExped=spiritOnExpedition(sp.id);
 const isResting=spiritResting(sp.id);
 let statusLine='';
 if(onExped)statusLine='<div style="font-size:.5rem;color:var(--positive);margin:4px 0">🧭 On expedition</div>';
