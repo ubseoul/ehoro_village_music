@@ -383,7 +383,14 @@ button.action-busy{opacity:.5;pointer-events:none}
   .tab-btn{min-height:36px}
 }
 /* Trait effect indicator */
-.trait-tag.has-effect{position:relative}.trait-tag.has-effect::after{content:'✦';margin-left:3px;font-size:.4rem;opacity:.6}
+.trait-tag.has-effect{position:relative;cursor:pointer}.trait-tag.has-effect::after{content:'✦';margin-left:3px;font-size:.4rem;opacity:.6}
+/* V2.3: Trait tap-to-reveal tooltips */
+.trait-tag-wrap{display:inline-flex;flex-direction:column;align-items:flex-start}
+.trait-desc{font-size:.42rem;color:var(--t3);padding:3px 0 1px;line-height:1.3;max-height:0;overflow:hidden;opacity:0;transition:max-height .25s ease,opacity .2s ease}
+.trait-desc.show{max-height:40px;opacity:1}
+.trait-tags{display:flex;flex-wrap:wrap;gap:4px}
+/* Expedition spirit trait hints */
+.exped-spirit-traits{font-size:.4rem;color:var(--positive);margin-top:1px;opacity:.7}
 /* ═══ V1.4: SPIRIT MOOD INDICATORS ═══ */
 .spirit-card-mood{font-size:.5rem;color:var(--t3);display:flex;align-items:center;gap:3px;margin-top:1px}
 .spirit-card-img.mood-happy::after{content:'';position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:var(--positive);z-index:2;animation:moodPulse 2.5s ease-in-out infinite}
@@ -1276,7 +1283,10 @@ function renderExpedModalContent(box){
     const lvl=Math.floor((sp.xp||0)/100)+1;
     h+='<div class="exped-spirit-opt'+(sel?' selected':'')+(unavail?' unavailable':'')+'" onclick="toggleExpedSpirit(\''+sp.id+'\')">';
     h+='<img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'">';
-    h+='<div class="exped-spirit-opt-info"><div class="exped-spirit-opt-name">'+sp.name+'</div><div class="exped-spirit-opt-lvl">Lv.'+lvl+(unavail?' · On expedition':'')+'</div></div>';
+    h+='<div class="exped-spirit-opt-info"><div class="exped-spirit-opt-name">'+sp.name+'</div><div class="exped-spirit-opt-lvl">Lv.'+lvl+(unavail?' · On expedition':'')+'</div>';
+    const spTraits=S.traits[sp.id]||[];const expedHints=spTraits.map(t=>{const eff=TRAIT_EFFECTS[t.trait_name];if(!eff)return'';if(eff.type==='exped_bonus_mats')return t.trait_name+' +'+Math.round(eff.value*100)+'% mats';if(eff.type==='rest_reduction')return t.trait_name+' -'+Math.round(eff.value*100)+'% rest';return''}).filter(Boolean);
+    if(expedHints.length)h+='<div class="exped-spirit-traits">'+expedHints.join(' · ')+'</div>';
+    h+='</div>';
     h+='<div class="exped-spirit-opt-check">'+(sel?'✓':'')+'</div></div>';
   });
   h+='</div>';
@@ -1482,8 +1492,9 @@ const align=getSpiritAlignment(sp.id);
 let alignBadge='';
 if(align==='wicked')alignBadge='<div class="sd-alignment wicked">🩸 Wicked</div>';
 else if(align==='heavenly')alignBadge='<div class="sd-alignment heavenly">✦ Heavenly</div>';
-el.innerHTML='<div class="sd-header"><div class="sd-interact-area" onclick="triggerQuip(\''+sp.id+'\',true)"><div class="sd-portrait"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div></div><div class="sd-info"><div class="sd-name">'+sp.name+'</div><div class="sd-stage"><span class="'+evoText+'">'+EVO_LABELS[sp.evo_stage]+'</span> \u00b7 '+spiritName(sp.spirit_type)+'</div>'+alignBadge+'<div class="sd-bio">'+spiritBio(sp.spirit_type)+'</div></div><button class="sd-close" onclick="closeSpiritDetail()">\u2715</button></div><div class="sd-interact-text" id="sdInteractText"></div>'+statusLine+'<div class="sd-section">Level</div><div class="sd-bar-wrap"><div class="sd-bar"><div class="sd-bar-fill" style="width:'+xpP+'%"></div></div><span class="sd-lvl">Lv.'+lvl+' ('+xpP+'/100)</span></div><div class="sd-section">Traits</div><div class="trait-tags">'+(tr.length?tr.map(t=>{const eff=TRAIT_EFFECTS[t.trait_name];return'<span class="trait-tag '+t.trait_type+(eff?' has-effect':'')+'" title="'+(eff?eff.desc:'')+'">'+t.trait_name+'</span>'}).join(''):'<span style="font-size:.5rem;color:var(--t4)">Evolve to gain traits</span>')+'</div>'+cultHtml+evoReqs+(!S.isGuest&&S.spirits.length>1&&!spiritUnavailable(sp.id)?'<div class="sd-section" style="margin-top:16px;color:var(--t4)">Release</div><div style="text-align:center;padding:8px;background:rgba(204,119,119,.04);border:1px solid rgba(204,119,119,.08);border-radius:var(--radius-sm)"><div style="font-size:.45rem;color:var(--t4);margin-bottom:6px">Release this spirit to earn Spirit Essence for Heavenly Pills</div><button class="dismiss-btn" onclick="openDismissModal(\''+sp.id+'\')">Release '+sp.name+' (+'+calcDismissEssence(sp)+' 💠 Spirit Essence)</button></div>':'')}
+el.innerHTML='<div class="sd-header"><div class="sd-interact-area" onclick="triggerQuip(\''+sp.id+'\',true)"><div class="sd-portrait"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div></div><div class="sd-info"><div class="sd-name">'+sp.name+'</div><div class="sd-stage"><span class="'+evoText+'">'+EVO_LABELS[sp.evo_stage]+'</span> \u00b7 '+spiritName(sp.spirit_type)+'</div>'+alignBadge+'<div class="sd-bio">'+spiritBio(sp.spirit_type)+'</div></div><button class="sd-close" onclick="closeSpiritDetail()">\u2715</button></div><div class="sd-interact-text" id="sdInteractText"></div>'+statusLine+'<div class="sd-section">Level</div><div class="sd-bar-wrap"><div class="sd-bar"><div class="sd-bar-fill" style="width:'+xpP+'%"></div></div><span class="sd-lvl">Lv.'+lvl+' ('+xpP+'/100)</span></div><div class="sd-section">Traits</div><div class="trait-tags">'+(tr.length?tr.map(t=>{const eff=TRAIT_EFFECTS[t.trait_name];const did='td-'+t.trait_name.toLowerCase().replace(/\s/g,'');return'<div class="trait-tag-wrap"><span class="trait-tag '+t.trait_type+(eff?' has-effect':'')+'" onclick="toggleTraitDesc(\''+did+'\')">'+t.trait_name+'</span>'+(eff?'<span class="trait-desc" id="'+did+'">'+eff.desc+'</span>':'')+'</div>'}).join(''):'<span style="font-size:.5rem;color:var(--t4)">Evolve to unlock traits \u2014 they boost XP, expeditions, and more</span>')+'</div>'+cultHtml+evoReqs+(!S.isGuest&&S.spirits.length>1&&!spiritUnavailable(sp.id)?'<div class="sd-section" style="margin-top:16px;color:var(--t4)">Release</div><div style="text-align:center;padding:8px;background:rgba(204,119,119,.04);border:1px solid rgba(204,119,119,.08);border-radius:var(--radius-sm)"><div style="font-size:.45rem;color:var(--t4);margin-bottom:6px">Release this spirit to earn Spirit Essence for Heavenly Pills</div><button class="dismiss-btn" onclick="openDismissModal(\''+sp.id+'\')">Release '+sp.name+' (+'+calcDismissEssence(sp)+' 💠 Spirit Essence)</button></div>':'')}
 function closeSpiritDetail(){S.selectedSpirit=null;document.getElementById('spiritDetail').className='spirit-detail'}
+function toggleTraitDesc(id){const el=document.getElementById(id);if(!el)return;const wasOpen=el.classList.contains('show');document.querySelectorAll('.trait-desc.show').forEach(d=>d.classList.remove('show'));if(!wasOpen)el.classList.add('show')}
 
 // ═══ ITEMS TAB — simplified: hatchery, ingredients, pills ═══
 function renderItemsTab(){const el=document.getElementById('tab-items'),prest=calcPrestige(),pendCount=S.pendingEggs.filter(e=>e.status==='pending').length;let h='<div class="section-label">Hatchery</div><div class="hatchery-grid">';
