@@ -453,6 +453,128 @@ button.action-busy{opacity:.5;pointer-events:none}
 /* Rarity bonus XP indicator on hatch reveal */
 .hatch-reveal-bonus{font-size:.55rem;color:var(--positive);margin-top:6px;opacity:0;animation:bonusFadeIn .8s ease .3s forwards}
 @keyframes bonusFadeIn{to{opacity:1}}
+/* ═══════════════════════════════════════════════
+   V2.5 CSS — EXPEDITION LOCATIONS, BUILDINGS, INVENTORY
+   ═══════════════════════════════════════════════ */
+
+/* ─── EXPEDITION MODAL: LOCATION PICKER ─── */
+.exped-section-label{font-size:.5rem;color:var(--t3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;font-weight:500}
+.exped-loc-grid{display:flex;flex-direction:column;gap:4px}
+.exped-loc-opt{padding:8px 10px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s}
+.exped-loc-opt:hover{border-color:var(--border-l);background:var(--accent-soft)}
+.exped-loc-opt.selected{border-color:var(--positive);background:rgba(102,187,153,.06)}
+.exped-loc-opt.locked{opacity:.4;cursor:default;pointer-events:none}
+.exped-loc-header{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.exped-loc-emoji{font-size:.9rem;flex-shrink:0}
+.exped-loc-name{font-size:.65rem;font-weight:600;flex:1}
+.exped-loc-req{font-size:.45rem;color:var(--negative);padding:1px 5px;border:1px solid rgba(204,100,100,.2);border-radius:4px}
+.exped-loc-desc{font-size:.48rem;color:var(--t3);line-height:1.4;padding-left:2px}
+
+/* ─── EXPEDITION MODAL: LOOT PREVIEW ─── */
+.exped-loot-preview{margin:8px 0;padding:8px 10px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:var(--radius-sm)}
+.exped-loot-title{font-size:.48rem;color:var(--t3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.1em}
+.exped-loot-items{display:flex;flex-wrap:wrap;gap:4px}
+.exped-loot-item{font-size:.5rem;padding:2px 7px;border-radius:10px;background:var(--card-bg);border:1px solid var(--card-border)}
+.exped-loot-item.rarity-common{color:var(--t2)}
+.exped-loot-item.rarity-uncommon{color:var(--positive);border-color:rgba(102,187,153,.2)}
+.exped-loot-item.rarity-rare{color:var(--special);border-color:rgba(200,136,255,.2)}
+
+/* ─── EXPEDITION SLOT: LOCATION BADGE ─── */
+.exped-slot-location{font-size:.45rem;color:var(--t3);margin-top:2px}
+
+/* ─── LOOT REVEAL SCREEN ─── */
+.loot-reveal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0;opacity:0;pointer-events:none;transition:opacity .3s}
+.loot-reveal-overlay.show{opacity:1;pointer-events:all}
+.loot-reveal-inner{width:min(320px,90vw);display:flex;flex-direction:column;gap:10px}
+.loot-reveal-header{text-align:center}
+.loot-reveal-title{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:500;margin-bottom:3px}
+.loot-reveal-flavor{font-size:.58rem;color:var(--t3);font-style:italic;line-height:1.5}
+.loot-reveal-spirits{display:flex;justify-content:center;gap:8px;margin:8px 0}
+.loot-reveal-spirit{display:flex;flex-direction:column;align-items:center;gap:3px}
+.loot-reveal-spirit img{width:40px;height:40px;border-radius:50%;border:1px solid var(--card-border)}
+.loot-reveal-spirit-name{font-size:.42rem;color:var(--t3)}
+.loot-reveal-items{display:flex;flex-direction:column;gap:4px}
+.loot-reveal-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);opacity:0;transform:translateY(6px);transition:all .3s}
+.loot-reveal-item.visible{opacity:1;transform:translateY(0)}
+.loot-reveal-item-icon{font-size:1.1rem;flex-shrink:0}
+.loot-reveal-item-name{flex:1;font-size:.65rem;font-weight:500}
+.loot-reveal-item-qty{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--positive)}
+.loot-reveal-item.is-rare{border-color:rgba(200,136,255,.25);background:rgba(200,136,255,.04)}
+.loot-reveal-item.is-rare .loot-reveal-item-qty{color:var(--special)}
+.loot-reveal-tap{font-size:.5rem;color:var(--t4);text-transform:uppercase;letter-spacing:.15em;text-align:center;margin-top:8px;animation:evoBlink 1.5s ease-in-out infinite 1s}
+
+/* ─── INVENTORY TAB ─── */
+.inv-section-label{font-size:.5rem;color:var(--t3);text-transform:uppercase;letter-spacing:.12em;margin:14px 0 6px;font-weight:500}
+.inv-section-label:first-child{margin-top:0}
+.inv-empty{font-size:.55rem;color:var(--t4);text-align:center;padding:10px 0;font-style:italic}
+
+/* Drinks */
+.inv-drinks-grid{display:flex;flex-direction:column;gap:4px}
+.inv-drink-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s}
+.inv-drink-row:hover{border-color:var(--border-l);background:var(--accent-soft)}
+.inv-drink-icon{font-size:1rem;flex-shrink:0}
+.inv-drink-info{flex:1;min-width:0}
+.inv-drink-name{font-size:.65rem;font-weight:500}
+.inv-drink-desc{font-size:.48rem;color:var(--t3);margin-top:1px}
+.inv-drink-expiry{font-size:.42rem;color:var(--t4)}
+.inv-drink-use{font-size:.5rem;color:var(--positive);font-weight:500;flex-shrink:0}
+
+/* Materials */
+.inv-materials-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.inv-mat-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm)}
+.inv-mat-icon{font-size:.85rem;flex-shrink:0}
+.inv-mat-info{flex:1;min-width:0}
+.inv-mat-name{font-size:.55rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inv-mat-qty{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t2)}
+
+/* Ingredients (moved from items tab) */
+.ing-grid{display:flex;flex-direction:column;gap:4px}
+.ing-row{display:flex;align-items:center;gap:8px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:8px 10px}
+.ing-icon{font-size:.8rem;flex-shrink:0}.ing-name{font-size:.6rem;color:var(--t2);flex:1}
+.ing-count{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:500}
+.ing-swap{background:none;border:none;color:var(--t4);cursor:pointer;font-size:.65rem;padding:2px 6px;border-radius:4px}.ing-swap:hover{color:var(--t2);background:var(--glass-hover)}
+
+/* ─── BUILDINGS SECTION (Village tab) ─── */
+.buildings-grid{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.building-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:12px 14px;transition:all .2s}
+.building-card.unlocked{border-color:var(--border-l)}
+.building-card.locked{opacity:.7}
+.building-card-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.building-card-emoji{font-size:1.2rem;flex-shrink:0}
+.building-card-info{flex:1;min-width:0}
+.building-card-name{font-size:.72rem;font-weight:600;line-height:1.2}
+.building-card-desc{font-size:.5rem;color:var(--t3);margin-top:1px;font-style:italic}
+.building-card-badge{font-size:.42rem;padding:2px 7px;border-radius:8px;font-weight:500}
+.building-card-badge.active{background:rgba(102,187,153,.1);color:var(--positive);border:1px solid rgba(102,187,153,.2)}
+.building-card-badge.locked{background:var(--card-bg);color:var(--t4);border:1px solid var(--border)}
+.building-buff{font-size:.48rem;color:var(--t2);margin-bottom:6px;padding:5px 8px;background:rgba(255,255,255,.03);border-radius:4px;border-left:2px solid var(--border-l)}
+/* Staff slots */
+.building-staff-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--border)}
+.building-staff-row:first-child{border-top:none}
+.building-staff-label{font-size:.48rem;color:var(--t3);width:70px;flex-shrink:0}
+.building-staff-slot{display:flex;align-items:center;gap:6px;flex:1}
+.building-staff-spirit{display:flex;align-items:center;gap:5px;padding:3px 7px;background:var(--accent-soft);border:1px solid var(--border-l);border-radius:20px;cursor:pointer;transition:all .15s}
+.building-staff-spirit:hover{background:var(--glass-hover)}
+.building-staff-spirit img{width:18px;height:18px;border-radius:50%;object-fit:cover}
+.building-staff-spirit-name{font-size:.5rem;font-weight:500;white-space:nowrap}
+.building-staff-empty{font-size:.5rem;color:var(--t4);padding:3px 7px;background:var(--card-bg);border:1px dashed var(--border);border-radius:20px;cursor:pointer;transition:all .15s}
+.building-staff-empty:hover{border-color:var(--border-l);color:var(--t2)}
+/* Unlock section */
+.building-unlock{margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.building-unlock-cost{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.building-unlock-mat{font-size:.48rem;padding:2px 7px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;gap:3px}
+.building-unlock-mat.has{color:var(--positive);border-color:rgba(102,187,153,.2)}
+.building-unlock-mat.missing{color:var(--t4)}
+.building-unlock-btn{width:100%;padding:7px;border:none;border-radius:var(--radius-sm);background:var(--t1);color:var(--bg);font-family:inherit;font-size:.6rem;font-weight:600;cursor:pointer}
+.building-unlock-btn:disabled{opacity:.25;cursor:not-allowed}
+
+/* ─── STAFF ASSIGN MODAL ─── */
+.staff-modal-role{font-size:.5rem;color:var(--special);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.staff-modal-current{display:flex;align-items:center;gap:8px;padding:8px;background:rgba(200,136,255,.06);border:1px solid rgba(200,136,255,.15);border-radius:var(--radius-sm);margin-bottom:10px}
+.staff-modal-current img{width:28px;height:28px;border-radius:50%;object-fit:cover}
+.staff-modal-unassign{font-size:.5rem;color:var(--negative);cursor:pointer;margin-left:auto;padding:3px 8px;border:1px solid rgba(204,100,100,.2);border-radius:4px}
+
+
 
 /* ═══ V2.4: EVOLUTION CEREMONY ═══ */
 .evo-ceremony{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;flex-direction:column;background:rgba(0,0,0,.92);opacity:0;pointer-events:none;transition:opacity .3s}
@@ -521,6 +643,7 @@ body.music-playing .sd-bar-fill::after{opacity:1;animation:xpCrawl 3s linear inf
 <div class="toast" id="toast"><div class="toast-icon" id="toastI"></div><div><div class="toast-text" id="toastT"></div><div class="toast-sub" id="toastS"></div></div></div>
 <div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box" id="modalBox"></div></div>
 <div class="hatch-overlay" id="hatchOverlay" onclick="closeHatchAnim()"><div class="hatch-egg-anim" id="hatchEgg">&#x1F95A;</div><div class="hatch-reveal" id="hatchReveal"><img id="hatchImg" src=""><div class="hatch-reveal-name" id="hatchName"></div><div class="hatch-reveal-rarity" id="hatchRarity"></div><div class="hatch-reveal-bonus" id="hatchBonusXp"></div><div class="hatch-reveal-tap">tap anywhere to continue</div></div></div>
+<div class="loot-reveal-overlay" id="lootRevealOverlay" onclick="closeLootReveal()"></div>
 <div class="reconnect-overlay gone" id="reconnectOverlay"><div class="reconnect-inner"><div class="reconnect-icon">🔄</div><div class="reconnect-title">Reconnecting…</div><div class="reconnect-sub" id="reconnectMsg">Trying to reach Ehoro Village servers</div></div></div>
 <div class="spirit-arrival" id="spiritArrival"><div class="sa-inner"><div class="sa-portrait" id="saPortrait"></div><div class="sa-name" id="saName"></div><div class="sa-bio" id="saBio"></div><div class="sa-welcome" id="saWelcome">found their way to your village</div><button class="sa-btn" onclick="dismissSpiritArrival()">Welcome Home</button></div></div>
 <div class="prof-overlay" id="profOverlay"><div class="prof-inner"><div class="prof-portrait"><img src="sprites/mowang_3.png"></div><div class="prof-name">Professor Mowang</div><div class="prof-role">Village Elder</div><div class="prof-bubble"><div class="prof-bubble-text" id="profText"></div></div><div id="profExtra"></div><div class="prof-dots" id="profDots"></div><button class="prof-btn" id="profBtn" onclick="nextProfStep()">Next</button><button class="prof-skip" onclick="finishProf()">Skip tutorial</button></div></div>
@@ -578,6 +701,63 @@ async function reloadEmblems(){if(!S.user)return;const{data:emb}=await sb.from('
 async function reloadHatchery(){if(!S.user)return;const[{data:hatch},{data:eggs}]=await Promise.all([sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('eggs').select('*').eq('user_id',S.user.id).in('status',['pending','incubating']).limit(30)]);if(hatch)S.hatchery=hatch;const allEggs=eggs||[];S.pendingEggs=allEggs.filter(e=>e.status==='pending');S.allEggs=allEggs}
 async function reloadExpeditions(){if(!S.user)return;const{data:expeds}=await sb.from('expeditions').select('*').eq('user_id',S.user.id);if(expeds!==undefined)S.expeditions=expeds||[]}
 async function reloadWickedPills(){if(!S.user||S.isGuest)return;const{data}=await sb.from('wicked_pills').select('*').eq('user_id',S.user.id).order('created_at');S._wickedPills=data||[]}
+
+// ═══ V2.5: BUILDINGS RELOAD ═══
+async function reloadBuildings(){
+  if(!S.user||S.isGuest)return;
+  const[{data:blds},{data:staff},{data:inv}]=await Promise.all([
+    sb.from('buildings').select('*').eq('user_id',S.user.id),
+    sb.from('building_staff').select('*').eq('user_id',S.user.id),
+    sb.from('building_inventory').select('*').eq('user_id',S.user.id).order('created_at',{ascending:false})
+  ]);
+  S.buildings=blds||[];
+  S.buildingStaff=staff||[];
+  S.buildingInventory=inv||[];
+}
+
+// ═══ V2.5: MATERIAL HELPERS ═══
+function getMaterials(){return S.materials||{}}
+function getMaterialCount(id){return(S.materials||{})[id]||0}
+function hasMaterial(id,qty=1){return getMaterialCount(id)>=qty}
+// Materials are stored in building_inventory with type='material'
+function syncMaterialsFromInventory(){
+  const mats={};
+  (S.buildingInventory||[]).filter(i=>i.item_type==='material').forEach(i=>{
+    mats[i.item_name]=(mats[i.item_name]||0)+1;
+  });
+  S.materials=mats;
+}
+
+// ═══ V2.5: BUILDING HELPERS ═══
+function getBuildingData(type){return S.buildings.find(b=>b.building_type===type)||null}
+function buildingUnlocked(type){return !!getBuildingData(type)}
+function getBuildingStaff(type){return S.buildingStaff.filter(s=>s.building_type===type)}
+function getManagerFor(type){return S.buildingStaff.find(s=>s.building_type===type&&s.role==='manager')||null}
+function getWorkersFor(type){return S.buildingStaff.filter(s=>s.building_type===type&&s.role==='worker')}
+function spiritAssigned(spiritId){return S.buildingStaff.some(s=>s.spirit_id===spiritId)}
+function spiritAssignedTo(spiritId){return S.buildingStaff.find(s=>s.spirit_id===spiritId)||null}
+// Manager craft level = spirit level (simplified for now, trait trees deepen this in 2.6)
+function getCraftLevel(spiritId){
+  const sp=S.spirits.find(s=>s.id===spiritId);
+  if(!sp)return 0;
+  return Math.min(5,Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1);
+}
+function getCafeDrinkForLevel(level){
+  const cfg=BUILDING_CONFIGS.cafe;
+  const drinks=cfg.craftItems.filter(d=>d.minCraftLevel<=level);
+  return drinks.length?drinks[drinks.length-1]:cfg.craftItems[0];
+}
+// Check if building can be unlocked (all materials present)
+function canUnlockBuilding(type){
+  if(buildingUnlocked(type))return false;
+  const cfg=BUILDING_CONFIGS[type];if(!cfg)return false;
+  return Object.entries(cfg.unlockMaterials).every(([mat,qty])=>{
+    if(['cafe_bean','wild_essence','focus_shard','ashe_essence','spirit_essence'].includes(mat)){
+      return(S.emblems[mat]||0)>=qty;
+    }
+    return hasMaterial(mat,qty);
+  });
+}
 // Utility: wrap any promise with a timeout to prevent hangs
 function withTimeout(promise,ms=8000){return Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error('Request timed out — check your connection')),ms))])}
 // Basic connectivity check (non-blocking)
@@ -688,10 +868,131 @@ const CULT_STAGES=['Unrefined','Qi Condensation','Foundation','Core Formation','
 const CULT_COSTS=[3,8,15,25,40]; // Àṣẹ Essence cost per advancement
 const CULT_LVL_REQ=[3,6,10,15,20]; // Min spirit level per advancement
 const EXPED_CONFIG={short:{label:'Short',minutes:10,restMinutes:8,baseMats:[2,4],bonusXp:5,asheChance:0},medium:{label:'Medium',minutes:20,restMinutes:15,baseMats:[4,8],bonusXp:10,asheChance:0.02},long:{label:'Long',minutes:45,restMinutes:25,baseMats:[8,14],bonusXp:20,asheChance:0.05}};
-const EXPED_SLOT_UNLOCK={2:400}; // Slot 2 unlocks at Silver (400 prestige)
+const EXPED_SLOT_UNLOCK={2:400};
+
+// ═══ V2.5: EXPEDITION LOCATIONS ═══
+const EXPED_LOCATIONS={
+  night_market:{
+    id:'night_market',label:'Night Market',emoji:'🏮',
+    desc:'Busy, loud, full of deals if you know where to look.',
+    minLevel:1,minCultStage:0,
+    durations:{short:true,medium:true,long:false},
+    lootTable:[
+      {id:'cafe_bean',label:'Café Bean',emoji:'☕',type:'emblem',rarity:'common',weight:30},
+      {id:'wild_essence',label:'Wild Essence',emoji:'🌿',type:'emblem',rarity:'common',weight:28},
+      {id:'focus_shard',label:'Focus Shard',emoji:'⚡',type:'emblem',rarity:'common',weight:25},
+      {id:'canvas_roll',label:'Canvas Roll',emoji:'🎨',type:'material',rarity:'uncommon',weight:10},
+      {id:'mystery_egg',label:'Mystery Egg',emoji:'🥚',type:'egg',rarity:'rare',weight:5},
+      {id:'ashe_essence',label:'Àṣẹ Essence',emoji:'🔮',type:'emblem',rarity:'uncommon',weight:12},
+    ],
+    bonusTraits:['Market Sharp'],
+    flavorLines:["Your spirits return smelling of spices and street food.","They navigated the crowds with ease.","Something glints in their satchel..."]
+  },
+  bamboo_highlands:{
+    id:'bamboo_highlands',label:'Bamboo Highlands',emoji:'🎋',
+    desc:'Quiet slopes, old trees, things that take time to find.',
+    minLevel:2,minCultStage:1,
+    durations:{short:false,medium:true,long:true},
+    lootTable:[
+      {id:'wild_essence',label:'Wild Essence',emoji:'🌿',type:'emblem',rarity:'common',weight:35},
+      {id:'focus_shard',label:'Focus Shard',emoji:'⚡',type:'emblem',rarity:'common',weight:20},
+      {id:'grinder_stone',label:'Grinder Stone',emoji:'🪨',type:'material',rarity:'uncommon',weight:12},
+      {id:'ancient_tome',label:'Ancient Tome',emoji:'📖',type:'material',rarity:'uncommon',weight:10},
+      {id:'training_scroll',label:'Training Scroll',emoji:'📜',type:'material',rarity:'uncommon',weight:10},
+      {id:'highland_orchid',label:'Highland Orchid',emoji:'🌸',type:'material',rarity:'rare',weight:6},
+      {id:'ashe_essence',label:'Àṣẹ Essence',emoji:'🔮',type:'emblem',rarity:'uncommon',weight:7},
+    ],
+    bonusTraits:['Highlands Reader','Patient'],
+    flavorLines:["The highlands were quiet. Your spirits found things the untrained eye would miss.","Bamboo rustled as they passed. They listened.","The old trees remember. So do your spirits."]
+  },
+  frozen_ruins:{
+    id:'frozen_ruins',label:'Frozen Ruins',emoji:'🧊',
+    desc:"Nobody knows what stood here. Something did.",
+    minLevel:4,minCultStage:2,
+    durations:{short:false,medium:false,long:true},
+    lootTable:[
+      {id:'focus_shard',label:'Focus Shard',emoji:'⚡',type:'emblem',rarity:'common',weight:25},
+      {id:'ashe_essence',label:'Àṣẹ Essence',emoji:'🔮',type:'emblem',rarity:'uncommon',weight:20},
+      {id:'training_scroll',label:'Training Scroll',emoji:'📜',type:'material',rarity:'uncommon',weight:18},
+      {id:'ruin_fragment',label:'Ruin Fragment',emoji:'🏚️',type:'material',rarity:'uncommon',weight:15},
+      {id:'wardens_crest',label:"Warden's Crest",emoji:'👁️',type:'material',rarity:'rare',weight:8},
+      {id:'rare_egg',label:'Illustrious Egg',emoji:'🥚',type:'egg',rarity:'rare',weight:6},
+      {id:'ashe_essence',label:'Àṣẹ Essence',emoji:'🔮',type:'emblem',rarity:'rare',weight:8},
+    ],
+    bonusTraits:['Frost-Hardened','Disciplined'],
+    flavorLines:["The cold didn't break them. They brought something back.","Ruins have a way of teaching what comfort cannot.","Whatever stood here once — your spirits felt it."]
+  }
+};
+
+// ═══ V2.5: BUILDING CONFIGS ═══
+const BUILDING_CONFIGS={
+  cafe:{
+    id:'cafe',label:'The Café',emoji:'☕',
+    desc:'Where the village starts its day.',
+    unlockMaterials:{grinder_stone:1,cafe_bean:30},
+    roles:{manager:{label:'Head Barista',slots:1},worker:{label:'Barista',slots:2}},
+    passiveBuff:{desc:'5% XP to all spirits',type:'village_xp',value:0.05},
+    staffedBuff:{desc:'Daily drink production',type:'daily_craft'},
+    craftItems:[
+      {tier:1,name:'House Brew',emoji:'☕',desc:'+20 XP to one spirit',xpBonus:20,durationHrs:48,minCraftLevel:1},
+      {tier:2,name:'Village Blend',emoji:'☕',desc:'+40 XP, +10% XP rate 2hrs',xpBonus:40,durationHrs:48,minCraftLevel:2},
+      {tier:3,name:'Reserve Roast',emoji:'☕',desc:'+75 XP, +15% XP rate 4hrs',xpBonus:75,durationHrs:48,minCraftLevel:3},
+      {tier:4,name:'Grand Cru',emoji:'☕',desc:'+150 XP, +25% XP rate 6hrs',xpBonus:150,durationHrs:48,minCraftLevel:4},
+      {tier:5,name:'Signature Reserve',emoji:'☕',desc:'+300 XP, +30% everything 12hrs',xpBonus:300,durationHrs:48,minCraftLevel:5},
+    ]
+  },
+  dojo:{
+    id:'dojo',label:'The Dojo',emoji:'⚔️',
+    desc:'Discipline sharpens what talent starts.',
+    unlockMaterials:{training_scroll:1,ashe_essence:50},
+    roles:{manager:{label:'Sensei',slots:1},worker:{label:'Trainee',slots:2}},
+    passiveBuff:{desc:'Expedition rest time -10%',type:'rest_reduction',value:0.10},
+    staffedBuff:{desc:'Trainees gain Discipline XP daily',type:'daily_train'},
+    craftItems:[]
+  },
+  library:{
+    id:'library',label:'Village Library',emoji:'📚',
+    desc:'Every secret the village has ever learned lives here.',
+    unlockMaterials:{ancient_tome:1,ashe_essence:75},
+    roles:{manager:{label:'Head Archivist',slots:1},worker:{label:'Researcher',slots:2}},
+    passiveBuff:{desc:'Passive XP rate +10%',type:'passive_xp',value:0.10},
+    staffedBuff:{desc:'Research reveals expedition loot tables',type:'research'},
+    craftItems:[]
+  },
+  garden:{
+    id:'garden',label:'The Garden',emoji:'🌿',
+    desc:'Patient hands grow the best things.',
+    unlockMaterials:{highland_orchid:1,wild_essence:25},
+    roles:{manager:{label:'Head Gardener',slots:1},worker:{label:'Farmer',slots:2}},
+    passiveBuff:{desc:'Ingredient drops +15%',type:'ingredient_boost',value:0.15},
+    staffedBuff:{desc:'Daily rare ingredient harvest',type:'daily_harvest'},
+    craftItems:[]
+  },
+  studio:{
+    id:'studio',label:'The Studio',emoji:'🎨',
+    desc:'Where spirits make something that lasts.',
+    unlockMaterials:{canvas_roll:1,spirit_essence:40},
+    roles:{manager:{label:'Lead Artist',slots:1},worker:{label:'Artist',slots:2}},
+    passiveBuff:{desc:'XP from listening +10%',type:'listen_xp',value:0.10},
+    staffedBuff:{desc:'Daily Village Record production',type:'daily_record'},
+    craftItems:[]
+  }
+};
+
+// ═══ V2.5: BUILDING MATERIAL DISPLAY ═══
+const MATERIAL_INFO={
+  grinder_stone:{label:'Grinder Stone',emoji:'🪨',desc:'Forged in expeditions'},
+  ancient_tome:{label:'Ancient Tome',emoji:'📖',desc:'Knowledge from the Highlands'},
+  training_scroll:{label:'Training Scroll',emoji:'📜',desc:'Discipline made legible'},
+  highland_orchid:{label:'Highland Orchid',emoji:'🌸',desc:'Rare bloom from the Highlands'},
+  canvas_roll:{label:'Canvas Roll',emoji:'🎨',desc:'Found at the Night Market'},
+  ruin_fragment:{label:'Ruin Fragment',emoji:'🏚️',desc:'A piece of what was'},
+  wardens_crest:{label:"Warden's Crest",emoji:'👁️',desc:'From the depths of the Frozen Ruins'},
+  village_record:{label:'Village Record',emoji:'🎵',desc:'Created in the Studio'},
+};
 const WB_MESSAGES=['The village rested while you were away...','Your spirits kept watch in the quiet hours...','The lo-fi played on while you were gone...','A gentle hum welcomes you home...','The spirits sensed your return...'];
 
-let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essence:0},hatchery:[],pendingEggs:[],allEggs:[],pillRecipes:[],expeditions:[],_wickedPills:[],playing:false,currentStream:'sakura',eggT:0,eggAnchor:null,EGG_SEC:3600,FIRST_EGG_SEC:240,GUEST_EGG_SEC:30,XP_PER_LEVEL:150,XP_ACTIVE_INTERVAL:300,sessionId:null,sessionStartedAt:null,ticker:null,hatchTicker:null,cultTicker:null,jiggleTicker:null,expedTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null,firstIngredientGiven:false,craftHintShown:false,wbTimer:null,profStep:0,chosenStarter:null};
+let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essence:0},hatchery:[],pendingEggs:[],allEggs:[],pillRecipes:[],expeditions:[],_wickedPills:[],buildings:[],buildingStaff:[],buildingInventory:[],materials:{},playing:false,currentStream:'sakura',eggT:0,eggAnchor:null,EGG_SEC:3600,FIRST_EGG_SEC:240,GUEST_EGG_SEC:30,XP_PER_LEVEL:150,XP_ACTIVE_INTERVAL:300,sessionId:null,sessionStartedAt:null,ticker:null,hatchTicker:null,cultTicker:null,jiggleTicker:null,expedTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null,firstIngredientGiven:false,craftHintShown:false,wbTimer:null,profStep:0,chosenStarter:null,asheListenAccum:0,asheListenTimer:0};
 
 // ═══ V2.0: WICKED PILL INVENTORY (now DB-backed) ═══
 function getWickedPills(){return S._wickedPills||[]}
@@ -1228,6 +1529,8 @@ async function loadUserData(){if(!S.user)return;
   S.traits={};if(traits)traits.forEach(t=>{if(!S.traits[t.spirit_id])S.traits[t.spirit_id]=[];S.traits[t.spirit_id].push(t)});
   // V2.0: Wicked pills from DB
   S._wickedPills=wpills||[];
+  // V2.5: Load buildings in parallel (non-blocking, doesn't block main data)
+  if(!S.isGuest)reloadBuildings().then(()=>{syncMaterialsFromInventory()}).catch(e=>console.warn('buildings reload err:',e));
   // Dismiss reconnect overlay on success
   hideReconnectOverlay();
   }catch(e){
@@ -1335,7 +1638,8 @@ function renderExpedSlot(exp,slotNum,locked){
   let spiritImgs=ids.map(sid=>{const sp=S.spirits.find(s=>s.id===sid);return sp?'<div class="exped-spirit-img"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div>':''}).join('');
   if(status==='active'){
     const durMs=exp.duration_minutes*60*1000;const elapsed=Date.now()-new Date(exp.started_at).getTime();const pct=Math.min(100,(elapsed/durMs)*100);const remain=Math.max(0,durMs-elapsed);const rm=Math.floor(remain/60000),rs=Math.floor((remain%60000)/1000);
-    return'<div class="exped-slot"><div class="exped-slot-header"><span class="exped-slot-title">Expedition Slot '+slotNum+'</span><span class="exped-slot-status">Exploring...</span></div><div class="exped-spirits">'+spiritImgs+'</div><div class="exped-bar"><div class="exped-bar-fill active" style="width:'+pct+'%"></div></div><div class="exped-timer">'+rm+'m '+rs+'s remaining</div></div>';
+    const locId=exp.location||'night_market';const locLabel=(EXPED_LOCATIONS[locId]?.emoji||'🧭')+' '+(EXPED_LOCATIONS[locId]?.label||'Expedition');
+    return'<div class="exped-slot"><div class="exped-slot-header"><span class="exped-slot-title">Expedition Slot '+slotNum+'</span><span class="exped-slot-status">Exploring...</span></div><div class="exped-slot-location">'+locLabel+'</div><div class="exped-spirits">'+spiritImgs+'</div><div class="exped-bar"><div class="exped-bar-fill active" style="width:'+pct+'%"></div></div><div class="exped-timer">'+rm+'m '+rs+'s remaining</div></div>';
   }
   if(status==='ready'){
     return'<div class="exped-slot"><div class="exped-slot-header"><span class="exped-slot-title">Expedition Slot '+slotNum+'</span><span class="exped-slot-status" style="color:var(--positive)">Complete!</span></div><div class="exped-spirits">'+spiritImgs+'</div><button class="exped-btn claim" onclick="claimExpedition(\''+exp.id+'\')">Claim Rewards</button></div>';
@@ -1347,54 +1651,84 @@ function renderExpedSlot(exp,slotNum,locked){
   return'<div class="exped-slot"><div class="exped-slot-header"><span class="exped-slot-title">Expedition Slot '+slotNum+'</span></div><button class="exped-btn" onclick="openExpedModal('+slotNum+')">Send Expedition</button></div>';
 }
 
-// ═══ EXPEDITION MODAL ═══
-let _expedModal={slot:null,duration:null,selectedSpirits:[]};
+// ═══ V2.5: EXPEDITION MODAL — Location + Duration + Spirits ═══
+let _expedModal={slot:null,location:'night_market',duration:'medium',selectedSpirits:[]};
+
 function openExpedModal(slotNum){
   if(S.isGuest||!S.spirits.length)return;
-  _expedModal={slot:slotNum,duration:'medium',selectedSpirits:[]};
+  const maxLvl=Math.max(...S.spirits.map(sp=>Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1));
+  let defaultLoc='night_market';
+  if(maxLvl>=4)defaultLoc='frozen_ruins';
+  else if(maxLvl>=2)defaultLoc='bamboo_highlands';
+  _expedModal={slot:slotNum,location:defaultLoc,duration:'medium',selectedSpirits:[]};
+  const loc=EXPED_LOCATIONS[defaultLoc];
+  if(!loc.durations.medium){_expedModal.duration=loc.durations.long?'long':'short';}
   const box=document.getElementById('modalBox');
   renderExpedModalContent(box);
   document.getElementById('modal').classList.add('open');
 }
+
 function renderExpedModalContent(box){
-  const avail=S.spirits.filter(sp=>!spiritUnavailable(sp.id));
+  const loc=EXPED_LOCATIONS[_expedModal.location];
+  const maxLvl=Math.max(1,...S.spirits.map(sp=>Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1));
   let h='<div class="modal-title">Send Expedition</div>';
-  h+='<div class="modal-desc">Choose duration:</div>';
-  h+='<div class="exped-dur-grid">';
-  for(const[key,cfg] of Object.entries(EXPED_CONFIG)){
-    h+='<div class="exped-dur-opt'+(_expedModal.duration===key?' selected':'')+'" onclick="selectExpedDur(\''+key+'\')"><div class="exped-dur-label">'+cfg.label+'</div><div class="exped-dur-time">'+cfg.minutes+'m (+'+cfg.restMinutes+'m rest)</div></div>';
-  }
+  h+='<div class="exped-section-label">Location</div>';
+  h+='<div class="exped-loc-grid">';
+  Object.values(EXPED_LOCATIONS).forEach(l=>{
+    const meetsReq=maxLvl>=l.minLevel;
+    const isSelected=_expedModal.location===l.id;
+    h+='<div class="exped-loc-opt'+(isSelected?' selected':'')+(meetsReq?'':' locked')+'" onclick="'+(meetsReq?"selectExpedLoc('"+l.id+"')":'showToast(\'no_eggs\')')+'">';
+    h+='<div class="exped-loc-header"><span class="exped-loc-emoji">'+l.emoji+'</span><span class="exped-loc-name">'+l.label+'</span>'+(meetsReq?'':'<span class="exped-loc-req">Lv.'+l.minLevel+'</span>')+'</div>';
+    h+='<div class="exped-loc-desc">'+l.desc+'</div>';
+    h+='</div>';
+  });
   h+='</div>';
-  h+='<div class="modal-desc" style="margin-top:8px">Choose up to 3 spirits:</div>';
+  h+='<div class="exped-section-label" style="margin-top:10px">Duration</div>';
+  h+='<div class="exped-dur-grid">';
+  Object.entries(EXPED_CONFIG).forEach(([key,cfg])=>{
+    if(!loc.durations[key])return;
+    const sel=_expedModal.duration===key;
+    h+='<div class="exped-dur-opt'+(sel?' selected':'')+'" onclick="selectExpedDur(\''+key+'\')">';
+    h+='<div class="exped-dur-label">'+cfg.label+'</div>';
+    h+='<div class="exped-dur-time">'+cfg.minutes+'m · '+cfg.restMinutes+'m rest</div>';
+    h+='</div>';
+  });
+  h+='</div>';
+  h+='<div class="exped-section-label" style="margin-top:10px">Spirits <span style="color:var(--t4);font-size:.45rem">(up to 3)</span></div>';
   h+='<div class="exped-spirit-select">';
   S.spirits.forEach(sp=>{
     const unavail=spiritUnavailable(sp.id);
     const sel=_expedModal.selectedSpirits.includes(sp.id);
-    const lvl=Math.floor((sp.xp||0)/100)+1;
+    const lvl=Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1;
+    const spTraits=S.traits[sp.id]||[];
+    const expedHints=spTraits.map(t=>{const eff=TRAIT_EFFECTS[t.trait_name];if(!eff)return'';if(eff.type==='exped_bonus_mats')return t.trait_name+' +'+Math.round(eff.value*100)+'% mats';if(eff.type==='rest_reduction')return t.trait_name+' -'+Math.round(eff.value*100)+'% rest';return''}).filter(Boolean);
     h+='<div class="exped-spirit-opt'+(sel?' selected':'')+(unavail?' unavailable':'')+'" onclick="toggleExpedSpirit(\''+sp.id+'\')">';
     h+='<img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'">';
-    h+='<div class="exped-spirit-opt-info"><div class="exped-spirit-opt-name">'+sp.name+'</div><div class="exped-spirit-opt-lvl">Lv.'+lvl+(unavail?' · On expedition':'')+'</div>';
-    const spTraits=S.traits[sp.id]||[];const expedHints=spTraits.map(t=>{const eff=TRAIT_EFFECTS[t.trait_name];if(!eff)return'';if(eff.type==='exped_bonus_mats')return t.trait_name+' +'+Math.round(eff.value*100)+'% mats';if(eff.type==='rest_reduction')return t.trait_name+' -'+Math.round(eff.value*100)+'% rest';return''}).filter(Boolean);
+    h+='<div class="exped-spirit-opt-info"><div class="exped-spirit-opt-name">'+sp.name+'</div>';
+    h+='<div class="exped-spirit-opt-lvl">Lv.'+lvl+(unavail?' · Busy':'')+'</div>';
     if(expedHints.length)h+='<div class="exped-spirit-traits">'+expedHints.join(' · ')+'</div>';
-    h+='</div>';
-    h+='<div class="exped-spirit-opt-check">'+(sel?'✓':'')+'</div></div>';
+    h+='</div><div class="exped-spirit-opt-check">'+(sel?'✓':'')+'</div></div>';
   });
   h+='</div>';
   const cfg=EXPED_CONFIG[_expedModal.duration];
   const selCount=_expedModal.selectedSpirits.length;
-  // Preview rewards
-  if(selCount>0&&cfg){
-    let totalMats=0;_expedModal.selectedSpirits.forEach(sid=>{
-      const sp=S.spirits.find(s=>s.id===sid);const lvl=sp?Math.floor((sp.xp||0)/100)+1:1;
-      const bonus=_expedModal.duration==='short'?Math.floor(lvl/3):_expedModal.duration==='medium'?Math.floor(lvl/2):lvl;
-      totalMats+=bonus;
-    });
-    const baseLow=cfg.baseMats[0],baseHigh=cfg.baseMats[1];
-    h+='<div style="font-size:.5rem;color:var(--t3);margin:6px 0;line-height:1.5">Est. rewards: '+(baseLow+totalMats)+'–'+(baseHigh+totalMats)+' materials · +'+cfg.bonusXp+' XP each'+(cfg.asheChance>0?' · '+Math.round(cfg.asheChance*100)+'% Àṣẹ Essence':'')+'</div>';
+  if(selCount>0){
+    h+='<div class="exped-loot-preview"><div class="exped-loot-title">'+loc.emoji+' Possible loot</div><div class="exped-loot-items">';
+    const deduped=loc.lootTable.filter((v,i,a)=>a.findIndex(x=>x.id===v.id)===i).slice(0,6);
+    deduped.forEach(item=>{ h+='<div class="exped-loot-item rarity-'+item.rarity+'">'+item.emoji+' '+item.label+'</div>'; });
+    h+='</div></div>';
   }
-  h+='<button class="modal-btn" '+(selCount===0?'disabled':'')+' onclick="sendExpedition()" style="margin-top:8px">Send '+selCount+' spirit'+(selCount!==1?'s':'')+'</button>';
+  const sendOk=selCount>0&&selCount<=3;
+  h+='<button class="modal-btn" '+(sendOk?'':'disabled')+' onclick="sendExpedition()" style="margin-top:10px">Send '+selCount+' spirit'+(selCount!==1?'s':'')+' → '+loc.label+'</button>';
   h+='<button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';
   box.innerHTML=h;
+}
+
+function selectExpedLoc(locId){
+  _expedModal.location=locId;
+  const loc=EXPED_LOCATIONS[locId];
+  if(!loc.durations[_expedModal.duration]){_expedModal.duration=loc.durations.medium?'medium':loc.durations.long?'long':'short';}
+  renderExpedModalContent(document.getElementById('modalBox'));
 }
 function selectExpedDur(key){_expedModal.duration=key;renderExpedModalContent(document.getElementById('modalBox'))}
 function toggleExpedSpirit(sid){
@@ -1403,44 +1737,125 @@ function toggleExpedSpirit(sid){
   else if(_expedModal.selectedSpirits.length<3)_expedModal.selectedSpirits.push(sid);
   renderExpedModalContent(document.getElementById('modalBox'));
 }
-
 // ═══ SEND EXPEDITION ═══
 async function sendExpedition(){
   if(S.isGuest||!_expedModal.selectedSpirits.length||isBusy('send_exped'))return;
   setBusy('send_exped',4000);
   closeModal();
   try{
-    const{data,error}=await sb.rpc('send_expedition',{p_slot:_expedModal.slot,p_spirit_ids:_expedModal.selectedSpirits,p_duration:_expedModal.duration});
+    const{data,error}=await sb.rpc('send_expedition',{p_slot:_expedModal.slot,p_spirit_ids:_expedModal.selectedSpirits,p_duration:_expedModal.duration,p_location:_expedModal.location});
     if(error)throw error;
     if(data?.error){console.warn('send exped rpc error:',data.error);showToast('error');return}
     await reloadExpeditions();debouncedUpdateAllUI();
-    showToast('expedition_sent');
+    const locLabel=EXPED_LOCATIONS[_expedModal.location]?.label||'the wilderness';
+    showToastMsg('🧭','Expedition sent!','Your spirits set off for '+locLabel+'…');
   }catch(e){console.warn('send expedition error:',e);showToast('error')}
 }
 
-// ═══ CLAIM EXPEDITION ═══
+// ═══ V2.5: CLAIM EXPEDITION — loot reveal screen ═══
 async function claimExpedition(expedId){
   if(S.isGuest||isBusy('claim_'+expedId))return;
   setBusy('claim_'+expedId,5000);
   try{
+    const exp=S.expeditions.find(e=>e.id===expedId);
     const{data,error}=await sb.rpc('claim_expedition',{p_expedition_id:expedId});
     if(error)throw error;
     if(data?.error){console.warn('claim exped rpc error:',data.error);showToast('error');return}
-    await Promise.all([reloadSpiritsAndTraits(),reloadEmblems(),reloadExpeditions()]);
+    await Promise.all([reloadSpiritsAndTraits(),reloadEmblems(),reloadExpeditions(),reloadBuildings().then(()=>syncMaterialsFromInventory())]);
     debouncedUpdateAllUI();
-    const matTotal=data.total_mats||0;
-    let summary='+'+matTotal+' materials · +'+data.bonus_xp+' XP each';
-    if(data.got_ashe)summary+=' · +1 Àṣẹ Essence!';
-    showExpedRewardToast(summary,data.got_ashe);
+    // Show loot reveal ceremony
+    showExpedLootReveal(data,exp);
   }catch(e){console.warn('claim expedition error:',e);showToast('error')}
 }
 
-function showExpedRewardToast(summary,gotAshe){
-  const t=document.getElementById('toast');
-  document.getElementById('toastI').textContent=gotAshe?'🔮':'🧭';
-  document.getElementById('toastT').textContent='Expedition Complete!';
-  document.getElementById('toastS').textContent=summary;
-  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),4000);
+// ═══ V2.5: EXPEDITION LOOT REVEAL ═══
+function showExpedLootReveal(data,exp){
+  const ov=document.getElementById('lootRevealOverlay');
+  if(!ov)return;
+  const locId=exp?.location||'night_market';
+  const loc=EXPED_LOCATIONS[locId]||EXPED_LOCATIONS.night_market;
+  const spiritIds=Array.isArray(exp?.spirit_ids)?exp.spirit_ids:[];
+  const spirits=spiritIds.map(id=>S.spirits.find(s=>s.id===id)).filter(Boolean);
+  // Build loot items list
+  const lootItems=[];
+  if(data.bonus_xp>0)lootItems.push({emoji:'⬆️',name:'+'+data.bonus_xp+' XP each',qty:'',isRare:false});
+  if(data.got_ashe)lootItems.push({emoji:'🔮',name:'Àṣẹ Essence',qty:'+1',isRare:true});
+  if(data.total_mats>0){
+    // Parse actual materials if returned, otherwise show generic
+    if(data.loot_items&&data.loot_items.length){
+      data.loot_items.forEach(item=>{
+        const info=MATERIAL_INFO[item.id]||{emoji:'📦',label:item.id};
+        lootItems.push({emoji:info.emoji,name:info.label,qty:item.qty>1?'×'+item.qty:'',isRare:item.rarity==='rare'});
+      });
+    } else {
+      // Fallback: pick items from location loot table visually
+      const rolled=rollLootDisplay(loc,data.total_mats);
+      rolled.forEach(r=>lootItems.push(r));
+    }
+  }
+  // Pick flavor line
+  const flavor=loc.flavorLines[Math.floor(Math.random()*loc.flavorLines.length)];
+  // Render
+  let h='<div class="loot-reveal-inner">';
+  h+='<div class="loot-reveal-header">';
+  h+='<div class="loot-reveal-title">'+loc.emoji+' '+loc.label+'</div>';
+  h+='<div class="loot-reveal-flavor">'+flavor+'</div>';
+  h+='</div>';
+  if(spirits.length){
+    h+='<div class="loot-reveal-spirits">';
+    spirits.forEach(sp=>{
+      h+='<div class="loot-reveal-spirit"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"><div class="loot-reveal-spirit-name">'+sp.name+'</div></div>';
+    });
+    h+='</div>';
+  }
+  h+='<div class="loot-reveal-items" id="lootRevealItems">';
+  lootItems.forEach((item,i)=>{
+    h+='<div class="loot-reveal-item'+(item.isRare?' is-rare':'')+'" id="lootItem'+i+'">';
+    h+='<span class="loot-reveal-item-icon">'+item.emoji+'</span>';
+    h+='<span class="loot-reveal-item-name">'+item.name+'</span>';
+    if(item.qty)h+='<span class="loot-reveal-item-qty">'+item.qty+'</span>';
+    h+='</div>';
+  });
+  h+='</div>';
+  h+='<div class="loot-reveal-tap">tap anywhere to continue</div>';
+  h+='</div>';
+  const inner=ov.querySelector('.loot-reveal-inner-wrap')||ov;
+  ov.innerHTML=h;
+  ov.classList.add('show');
+  // Stagger item reveals
+  lootItems.forEach((_,i)=>{
+    setTimeout(()=>{
+      const el=document.getElementById('lootItem'+i);
+      if(el)el.classList.add('visible');
+    },200+i*120);
+  });
+}
+
+// Roll a visual display of loot based on the table (client-side approximation)
+function rollLootDisplay(loc,totalMats){
+  const results=[];
+  const emblemItems=loc.lootTable.filter(l=>l.type==='emblem'&&l.id!=='ashe_essence');
+  if(emblemItems.length&&totalMats>0){
+    // Show 2-3 representative items
+    const picks=emblemItems.sort(()=>Math.random()-.5).slice(0,Math.min(3,totalMats));
+    picks.forEach(p=>{
+      const EMBLEM_INFO={cafe_bean:{emoji:'☕',label:'Café Bean'},wild_essence:{emoji:'🌿',label:'Wild Essence'},focus_shard:{emoji:'⚡',label:'Focus Shard'}};
+      const info=EMBLEM_INFO[p.id]||{emoji:p.emoji,label:p.label};
+      results.push({emoji:info.emoji,name:info.label,qty:'',isRare:p.rarity==='rare'});
+    });
+  }
+  const matItems=loc.lootTable.filter(l=>l.type==='material');
+  if(matItems.length&&Math.random()<0.4){
+    const pick=matItems[Math.floor(Math.random()*matItems.length)];
+    const info=MATERIAL_INFO[pick.id]||{emoji:pick.emoji,label:pick.label};
+    results.push({emoji:info.emoji,name:info.label,qty:'',isRare:pick.rarity==='rare'});
+  }
+  return results;
+}
+
+function closeLootReveal(){
+  const ov=document.getElementById('lootRevealOverlay');
+  if(ov)ov.classList.remove('show');
 }
 
 // ═══ EXPEDITION TICKER ═══
@@ -1756,58 +2171,125 @@ h+='<div class="section-label">Craft Spirit Pills</div><div class="pill-grid">';
 const pIcons={growth:'\uD83D\uDC8A',clarity:'\u2728',harmony:'\uD83C\uDFB5'};S.pillRecipes.forEach(p=>{const ok=S.emblems.cafe_bean>=p.cost_cafe_bean&&S.emblems.wild_essence>=p.cost_wild_essence&&S.emblems.focus_shard>=p.cost_focus_shard;h+='<div class="pill-row'+(ok?'':' disabled')+'" onclick="openCraftModal(\''+p.id+'\',\''+p.pill_name+'\',\''+p.effect_type+'\')">'+'<span class="pill-icon">'+(pIcons[p.pill_type]||'\uD83D\uDC8A')+'</span><div class="pill-info"><div class="pill-name">'+p.pill_name+'</div><div class="pill-desc">'+p.description+'</div></div><div class="pill-cost">\u2615'+p.cost_cafe_bean+' \uD83C\uDF3F'+p.cost_wild_essence+' \u26A1'+p.cost_focus_shard+'</div></div>'});
 h+='</div>';el.innerHTML=h}
 
-// ═══ V1.5: PILLS TAB — Cultivation Jar, Wicked Inventory, Heavenly Presser ═══
+// ═══ V2.5: INVENTORY TAB ═══
 function renderPillsTab(){
   const el=document.getElementById('tab-pills');if(!el)return;
   let h='';
-  
-  // Cultivation Jar section
-  h+='<div class="jar-section"><div class="jar-title">🏺 Cultivation Jar</div>';
-  h+='<div class="jar-desc">Sacrifice a spirit to forge a <span style="color:#c77">Wicked Spirit Pill</span>. Power scales with the spirit\'s level and evolution.</div>';
-  h+='<button class="jar-btn" '+(S.isGuest||S.spirits.length<=1?'disabled':'')+' onclick="openJarModal()">Open the Jar</button>';
-  if(S.spirits.length<=1&&!S.isGuest)h+='<div style="font-size:.4rem;color:var(--t4);margin-top:4px">Need more than 1 spirit</div>';
-  h+='</div>';
-  
-  // Wicked Pill Inventory
-  const wickedPills=S.isGuest?[]:getWickedPills();
-  h+='<div class="section-label">Wicked Spirit Pills <span style="color:#c77">🩸</span></div>';
-  if(wickedPills.length){
-    h+='<div class="wicked-inv">';
-    wickedPills.forEach((p,i)=>{
-      h+='<div class="wicked-pill-row" onclick="openUseWickedModal('+i+')"><span class="wpill-icon">🩸</span><div class="wpill-info"><div class="wpill-name" style="color:#c77">'+esc(p.pill_name)+'</div><div class="wpill-desc">Grants '+p.xp_value+' XP · Sets alignment to Wicked</div></div><div style="font-size:.45rem;color:var(--t3)">Use →</div></div>';
+
+  // ── Drinks from Café ──
+  h+='<div class="inv-section-label">Drinks ☕</div>';
+  const drinks=(S.buildingInventory||[]).filter(i=>i.item_type==='drink');
+  if(drinks.length){
+    h+='<div class="inv-drinks-grid">';
+    drinks.forEach(d=>{
+      const expires=d.expires_at?new Date(d.expires_at):null;
+      const expiresIn=expires?Math.max(0,Math.floor((expires.getTime()-Date.now())/3600000)):null;
+      const expStr=expiresIn!==null?(expiresIn>1?expiresIn+'h left':expiresIn===1?'<1h left':'Expired!'):'';
+      h+='<div class="inv-drink-row" onclick="useDrink(\''+d.id+'\')">';
+      h+='<span class="inv-drink-icon">☕</span>';
+      h+='<div class="inv-drink-info"><div class="inv-drink-name">'+esc(d.item_name)+'</div>';
+      h+='<div class="inv-drink-desc">'+getDrinkDesc(d.item_name)+'</div>';
+      if(expStr)h+='<div class="inv-drink-expiry">'+expStr+'</div>';
+      h+='</div><span class="inv-drink-use">Use →</span></div>';
     });
     h+='</div>';
   }else{
-    h+='<div style="font-size:.5rem;color:var(--t4);text-align:center;padding:8px 0">No wicked pills. Use the Cultivation Jar to create them.</div>';
+    h+='<div class="inv-empty">';
+    if(buildingUnlocked('cafe')){
+      const mgr=getManagerFor('cafe');
+      h+=mgr?'Your barista is brewing... check back soon.':'Assign a Head Barista to start brewing.';
+    }else{
+      h+='Build the Café to produce drinks.';
+    }
+    h+='</div>';
   }
-  
-  // Heavenly Pill Presser
-  h+='<div class="presser-section" style="margin-top:10px"><div class="presser-title">✦ Heavenly Pill Presser</div>';
-  h+='<div class="presser-desc">Combine <span style="color:var(--special)">Spirit Essence 💠</span> with crafting materials to forge <span style="color:#daa520">Heavenly Spirit Pills</span>.</div>';
-  h+='<div class="essence-display"><span class="essence-icon">💠</span><span class="essence-label">Spirit Essence:</span><span class="essence-count">'+(S.emblems.spirit_essence||0)+'</span></div>';
-  if(!S.isGuest&&S.spirits.length>1){
-    h+='<div style="font-size:.45rem;color:var(--t4);text-align:center;margin-bottom:6px">Release spirits from the Spirits tab to earn Spirit Essence</div>';
-  }
+
+  // ── Ingredients ──
+  h+='<div class="inv-section-label">Ingredients</div>';
+  h+='<div class="ing-grid">';
+  h+='<div class="ing-row"><span class="ing-icon">☕</span><span class="ing-name">Café Bean</span><span class="ing-count">'+S.emblems.cafe_bean+'</span><button class="ing-swap" onclick="openConvertModal(\'cafe_bean\')" title="Convert">⇌</button></div>';
+  h+='<div class="ing-row"><span class="ing-icon">🌿</span><span class="ing-name">Wild Essence</span><span class="ing-count">'+S.emblems.wild_essence+'</span><button class="ing-swap" onclick="openConvertModal(\'wild_essence\')" title="Convert">⇌</button></div>';
+  h+='<div class="ing-row"><span class="ing-icon">⚡</span><span class="ing-name">Focus Shard</span><span class="ing-count">'+S.emblems.focus_shard+'</span><button class="ing-swap" onclick="openConvertModal(\'focus_shard\')" title="Convert">⇌</button></div>';
+  h+='<div class="ing-row" style="border-color:rgba(200,136,255,.15)"><span class="ing-icon">🔮</span><span class="ing-name">Àṣẹ Essence</span><span class="ing-count">'+(S.emblems.ashe_essence||0)+'</span><span style="font-size:.42rem;color:var(--special);padding:0 4px">Expeditions</span></div>';
+  h+='<div class="ing-row" style="border-color:rgba(140,180,255,.15)"><span class="ing-icon">💠</span><span class="ing-name">Spirit Essence</span><span class="ing-count">'+(S.emblems.spirit_essence||0)+'</span><span style="font-size:.42rem;color:var(--t4);padding:0 4px">Release spirits</span></div>';
   h+='</div>';
-  
-  h+='<div class="section-label">Heavenly Recipes <span style="color:#daa520">✦</span></div>';
+
+  // ── Building Materials ──
+  const mats=Object.entries(MATERIAL_INFO).filter(([id])=>getMaterialCount(id)>0);
+  if(mats.length){
+    h+='<div class="inv-section-label">Materials 🏗️</div>';
+    h+='<div class="inv-materials-grid">';
+    mats.forEach(([id,info])=>{
+      const qty=getMaterialCount(id);
+      h+='<div class="inv-mat-row"><span class="inv-mat-icon">'+info.emoji+'</span><div class="inv-mat-info"><div class="inv-mat-name">'+info.label+'</div></div><span class="inv-mat-qty">×'+qty+'</span></div>';
+    });
+    h+='</div>';
+  }
+
+  // ── Wicked Pills (legacy — keep functional) ──
+  const wickedPills=S.isGuest?[]:getWickedPills();
+  if(wickedPills.length){
+    h+='<div class="inv-section-label">Wicked Pills <span style="color:#c77">🩸</span></div>';
+    h+='<div class="pill-grid">';
+    wickedPills.forEach((p,i)=>{
+      h+='<div class="pill-row" onclick="openUseWickedModal('+i+')"><span class="pill-icon">🩸</span><div class="pill-info"><div class="pill-name" style="color:#c77">'+esc(p.pill_name)+'</div><div class="pill-desc">'+p.xp_value+' XP · Wicked alignment</div></div><div style="font-size:.45rem;color:var(--t3)">Use →</div></div>';
+    });
+    h+='</div>';
+  }
+
+  // ── Cultivation Jar + Heavenly Presser (condensed, still accessible) ──
+  h+='<div class="inv-section-label">Alchemy</div>';
   h+='<div class="pill-grid">';
-  HEAVENLY_RECIPES.forEach((r,i)=>{
-    const ok=!S.isGuest&&(S.emblems.spirit_essence||0)>=r.cost_essence&&S.emblems.cafe_bean>=r.cost_cafe&&S.emblems.wild_essence>=r.cost_wild&&S.emblems.focus_shard>=r.cost_focus&&S.spirits.length>0;
-    h+='<div class="heavenly-pill-row'+(ok?'':' disabled')+'" onclick="openCraftHeavenlyModal('+i+')"><span class="wpill-icon" style="color:#daa520">✦</span><div class="wpill-info"><div class="wpill-name" style="color:#daa520">'+r.name+'</div><div class="wpill-desc">'+r.xp+' XP · Sets alignment to Heavenly</div></div><div class="wpill-cost">💠'+r.cost_essence+' ☕'+r.cost_cafe+' 🌿'+r.cost_wild+' ⚡'+r.cost_focus+'</div></div>';
+  h+='<div class="pill-row'+(S.isGuest||S.spirits.length<=1?' disabled':'')+'" onclick="openJarModal()"><span class="pill-icon">🏺</span><div class="pill-info"><div class="pill-name">Cultivation Jar</div><div class="pill-desc">Sacrifice a spirit → Wicked Pill</div></div></div>';
+  S.pillRecipes.forEach(p=>{
+    const ok=S.emblems.cafe_bean>=p.cost_cafe_bean&&S.emblems.wild_essence>=p.cost_wild_essence&&S.emblems.focus_shard>=p.cost_focus_shard;
+    const pIcons={growth:'💊',clarity:'✨',harmony:'🎵'};
+    h+='<div class="pill-row'+(ok?'':' disabled')+'" onclick="openCraftModal(\''+p.id+'\',\''+p.pill_name+'\',\''+p.effect_type+'\')"><span class="pill-icon">'+(pIcons[p.pill_type]||'💊')+'</span><div class="pill-info"><div class="pill-name">'+p.pill_name+'</div><div class="pill-desc">'+p.description+'</div></div><div class="pill-cost">☕'+p.cost_cafe_bean+' 🌿'+p.cost_wild_essence+' ⚡'+p.cost_focus_shard+'</div></div>';
   });
   h+='</div>';
-  
+
   el.innerHTML=h;
 }
 
+function getDrinkDesc(name){
+  const descs={'House Brew':'+20 XP to one spirit','Village Blend':'+40 XP · +10% XP rate 2hrs','Reserve Roast':'+75 XP · +15% XP rate 4hrs','Grand Cru':'+150 XP · +25% XP rate 6hrs','Signature Reserve':'+300 XP · +30% everything 12hrs'};
+  return descs[name]||'A village special';
+}
+
+async function useDrink(invId){
+  if(S.isGuest||!S.spirits.length)return;
+  // Pick a spirit to receive the drink
+  const item=S.buildingInventory.find(i=>i.id===invId);if(!item)return;
+  const box=document.getElementById('modalBox');
+  let h='<div class="modal-title">Use '+esc(item.item_name)+'</div>';
+  h+='<div class="modal-desc">'+getDrinkDesc(item.item_name)+'</div>';
+  h+='<div class="modal-desc" style="margin-top:4px">Choose a spirit:</div>';
+  h+='<div class="modal-select-grid">';
+  S.spirits.forEach(sp=>{
+    const lvl=Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1;
+    h+='<div class="modal-select-row" onclick="confirmUseDrink(\''+invId+'\',\''+sp.id+'\')"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'" style="width:28px;height:28px;border-radius:50%"><span style="font-size:.7rem">'+esc(sp.name)+'</span><span style="font-size:.5rem;color:var(--t4);margin-left:auto">Lv.'+lvl+'</span></div>';
+  });
+  h+='</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';
+  box.innerHTML=h;document.getElementById('modal').classList.add('open');
+}
+
+async function confirmUseDrink(invId,spiritId){
+  if(isBusy('drink'))return;setBusy('drink',3000);closeModal();
+  try{
+    const{data,error}=await sb.rpc('use_drink',{p_inv_id:invId,p_spirit_id:spiritId});
+    if(error)throw error;
+    if(data?.error){showToast('error');return}
+    await Promise.all([reloadSpiritsAndTraits(),reloadBuildings().then(()=>syncMaterialsFromInventory())]);
+    debouncedUpdateAllUI();
+    showToastMsg('☕','Drink consumed!','Your spirit feels refreshed.');
+  }catch(e){console.warn('use drink error:',e);showToast('error')}
+}
 // ═══ VILLAGE TAB ═══
 function renderVillageTab(){
   const el=document.getElementById('tab-village');
   const p=calcPrestige();
   const rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0];
   const next=VILLAGE_RANKS[VILLAGE_RANKS.indexOf(rank)+1];
-  // Rank progress bar
   const fromPts=rank.min;
   const toPts=next?next.min:rank.min;
   const pct=next?Math.min(100,Math.round(((p-fromPts)/(toPts-fromPts))*100)):100;
@@ -1816,16 +2298,17 @@ function renderVillageTab(){
   h+='<div class="village-rank-name" style="color:'+(rank.color||'var(--t1)')+'">'+rank.name+'</div>';
   h+='<div class="village-rank-desc">'+rank.desc+'</div>';
   if(next){
-    h+='<div class="village-rank-progress">';
-    h+='<div class="village-rank-bar"><div class="village-rank-bar-fill" style="width:'+pct+'%;background:'+(rank.color||'var(--t2)')+'"></div></div>';
-    h+='<div class="village-rank-next">'+p+' / '+next.min+' pts · Next: <span style="color:'+(next.color||'var(--t2)')+'">'+next.name+'</span></div>';
-    h+='</div>';
+    h+='<div class="village-rank-progress"><div class="village-rank-bar"><div class="village-rank-bar-fill" style="width:'+pct+'%;background:'+(rank.color||'var(--t2)')+'"></div></div>';
+    h+='<div class="village-rank-next">'+p+' / '+next.min+' pts · Next: <span style="color:'+(next.color||'var(--t2)')+'">'+next.name+'</span></div></div>';
   }else{
     h+='<div style="font-size:.5rem;color:var(--special);margin-top:8px">✦ Maximum rank achieved</div>';
   }
   h+='</div>';
+  // Buildings section
+  h+='<div class="section-label">Village Buildings</div>';
+  h+=renderBuildingsSection();
   // Expeditions section
-  h+='<div class="section-label">Expeditions</div><div class="exped-section">';
+  h+='<div class="section-label" style="margin-top:14px">Expeditions</div><div class="exped-section">';
   const slot1Exp=S.expeditions.find(e=>e.slot_number===1&&(getExpedStatus(e)!=='idle'));
   h+=renderExpedSlot(slot1Exp,1,false);
   const slot2Unlocked=p>=400;
@@ -1833,6 +2316,80 @@ function renderVillageTab(){
   h+=renderExpedSlot(slot2Exp,2,!slot2Unlocked);
   h+='</div>';
   el.innerHTML=h;
+}
+
+// ═══ V2.5: BUILDINGS SECTION ═══
+function renderBuildingsSection(){
+  let h='<div class="buildings-grid">';
+  Object.values(BUILDING_CONFIGS).forEach(cfg=>{
+    const unlocked=buildingUnlocked(cfg.id);
+    const canUnlock=canUnlockBuilding(cfg.id);
+    h+='<div class="building-card '+(unlocked?'unlocked':'locked')+'">';
+    h+='<div class="building-card-header">';
+    h+='<span class="building-card-emoji">'+cfg.emoji+'</span>';
+    h+='<div class="building-card-info"><div class="building-card-name">'+cfg.label+'</div><div class="building-card-desc">'+cfg.desc+'</div></div>';
+    h+='<span class="building-card-badge '+(unlocked?'active':'locked')+'">'+(unlocked?'Open':'Locked')+'</span>';
+    h+='</div>';
+    if(unlocked){
+      // Passive buff always shown
+      h+='<div class="building-buff">✦ '+cfg.passiveBuff.desc+'</div>';
+      // Staff slots
+      h+='<div class="building-staff-slots">';
+      // Manager slot
+      const mgr=getManagerFor(cfg.id);
+      const mgrSp=mgr?S.spirits.find(s=>s.id===mgr.spirit_id):null;
+      h+='<div class="building-staff-row">';
+      h+='<span class="building-staff-label">'+cfg.roles.manager.label+'</span>';
+      h+='<div class="building-staff-slot">';
+      if(mgrSp){
+        h+='<div class="building-staff-spirit" onclick="openAssignStaffModal(\''+cfg.id+'\',\'manager\')"><img src="'+spiritImg(mgrSp.spirit_type,mgrSp.evo_stage)+'"><span class="building-staff-spirit-name">'+mgrSp.name+'</span></div>';
+        if(cfg.id==='cafe'){const cl=getCraftLevel(mgrSp.id);const drink=getCafeDrinkForLevel(cl);h+='<span style="font-size:.42rem;color:var(--t3);margin-left:4px">crafts '+drink.name+'</span>';}
+      }else{
+        h+='<div class="building-staff-empty" onclick="openAssignStaffModal(\''+cfg.id+'\',\'manager\')">+ Assign '+cfg.roles.manager.label+'</div>';
+      }
+      h+='</div></div>';
+      // Worker slots
+      const workers=getWorkersFor(cfg.id);
+      for(let i=0;i<cfg.roles.worker.slots;i++){
+        const wrkStaff=workers[i]||null;
+        const wrkSp=wrkStaff?S.spirits.find(s=>s.id===wrkStaff.spirit_id):null;
+        h+='<div class="building-staff-row">';
+        h+='<span class="building-staff-label">'+cfg.roles.worker.label+'</span>';
+        h+='<div class="building-staff-slot">';
+        if(wrkSp){
+          h+='<div class="building-staff-spirit" onclick="openAssignStaffModal(\''+cfg.id+'\',\'worker\',\''+wrkStaff.id+'\')"><img src="'+spiritImg(wrkSp.spirit_type,wrkSp.evo_stage)+'"><span class="building-staff-spirit-name">'+wrkSp.name+'</span></div>';
+        }else{
+          h+='<div class="building-staff-empty" onclick="openAssignStaffModal(\''+cfg.id+'\',\'worker\')">+ Assign</div>';
+        }
+        h+='</div></div>';
+      }
+      h+='</div>';
+    }else{
+      // Unlock requirements
+      h+='<div class="building-unlock">';
+      h+='<div style="font-size:.5rem;color:var(--t3);margin-bottom:5px">Required to unlock:</div>';
+      h+='<div class="building-unlock-cost">';
+      Object.entries(cfg.unlockMaterials).forEach(([mat,qty])=>{
+        let has,label,emoji;
+        if(['cafe_bean','wild_essence','focus_shard','ashe_essence','spirit_essence'].includes(mat)){
+          has=(S.emblems[mat]||0)>=qty;
+          const EMBL={cafe_bean:['☕','Café Bean'],wild_essence:['🌿','Wild Essence'],focus_shard:['⚡','Focus Shard'],ashe_essence:['🔮','Àṣẹ Essence'],spirit_essence:['💠','Spirit Essence']};
+          [emoji,label]=EMBL[mat];
+        }else{
+          has=hasMaterial(mat,qty);
+          const info=MATERIAL_INFO[mat]||{emoji:'📦',label:mat};
+          emoji=info.emoji;label=info.label;
+        }
+        h+='<div class="building-unlock-mat '+(has?'has':'missing')+'">'+emoji+' '+qty+'× '+label+'</div>';
+      });
+      h+='</div>';
+      h+='<button class="building-unlock-btn" '+(canUnlock?'':'disabled')+' onclick="openUnlockBuildingModal(\''+cfg.id+'\')">'+(canUnlock?'Unlock '+cfg.label:'Need materials (find on expeditions)')+'</button>';
+      h+='</div>';
+    }
+    h+='</div>';
+  });
+  h+='</div>';
+  return h;
 }
 function calcPrestige(){const xpl=S.XP_PER_LEVEL||150;let p=0;S.spirits.forEach(sp=>{p+=(sp.evo_stage+1)*10;p+=Math.floor((sp.xp||0)/xpl)*5;p+=(sp.cultivation_stage||0)*20});p+=Math.floor((S.profile?.total_listen_seconds||0)/3600)*3;return p}
 
@@ -1931,7 +2488,19 @@ async function doConvert(from,to){closeModal();try{const{data}=await sb.rpc('con
 function closeModal(){document.getElementById('modal').classList.remove('open')}
 
 // ═══ ACTIVE CULTIVATION TICKER ═══
-function startCultivationTicker(){if(S.cultTicker||S.isGuest)return;S.cultTicker=setInterval(async()=>{if(!S.playing||S.isGuest)return;try{const{data}=await sb.rpc('tick_active_cultivation');if(data?.success){
+function startCultivationTicker(){if(S.cultTicker||S.isGuest)return;S.cultTicker=setInterval(async()=>{if(!S.playing||S.isGuest)return;
+  // V2.5: Àṣẹ from listening — 2 àṣẹ per 30 min continuous listening
+  S.asheListenTimer=(S.asheListenTimer||0)+300; // 5 min per tick
+  if(S.asheListenTimer>=1800){ // 30 min
+    S.asheListenTimer=0;
+    try{
+      await sb.from('emblems').upsert({user_id:S.user.id,emblem_type:'ashe_essence',quantity:(S.emblems.ashe_essence||0)+2},{onConflict:'user_id,emblem_type'});
+      S.emblems.ashe_essence=(S.emblems.ashe_essence||0)+2;
+      showToastMsg('🔮','Àṣẹ flows…','+2 Àṣẹ Essence from listening');
+      debouncedUpdateAllUI();
+    }catch(e){console.warn('ashe listen tick error:',e)}
+  }
+  try{const{data}=await sb.rpc('tick_active_cultivation');if(data?.success){
 // Trait effect: Focused spirits get bonus active cultivation XP (10% chance of +1)
 for(const sp of S.spirits){const bonus=spiritTraitBonus(sp.id,'xp_bonus');if(bonus>0&&Math.random()<bonus){const newXp=(sp.xp||0)+1;sb.from('spirits').update({xp:newXp}).eq('id',sp.id).then(()=>{}).catch(e=>console.warn('focused bonus err',e))}}
 await loadUserData();updateAllUI()}}catch(e){console.warn('cultivation tick error:',e)}},300000)}
@@ -2027,7 +2596,7 @@ function switchStream(key){
   const vpText=document.getElementById('vpText');if(vpText)vpText.textContent=(key==='sakura'?'🌸 ':'📼 ')+meta.label;
   // If already playing, tear down iframe and restart with new stream
   if(wasPlaying){
-    S.playing=false;document.body.classList.remove('music-playing');
+    S.playing=false;document.body.classList.remove('music-playing');S.asheListenTimer=0;
     const embed=document.getElementById('videoEmbed');
     const ifr=embed.querySelector('iframe');if(ifr)ifr.remove();
     embed.classList.remove('loaded');
@@ -2108,6 +2677,123 @@ function showToast(type){const t=document.getElementById('toast');const ING_NAME
 // Named ingredient toasts
 if(type.startsWith('ing_')){const key=type.slice(4);const ing=ING_NAMES[key];document.getElementById('toastI').textContent=ing?.i||'\u2728';document.getElementById('toastT').textContent='Found '+(ing?.n||'ingredient')+'!';document.getElementById('toastS').textContent='';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);return}
 const rr=RARITY_COLORS[type];if(rr){document.getElementById('toastI').textContent='\uD83E\uDD5A';document.getElementById('toastT').textContent=type.charAt(0).toUpperCase()+type.slice(1)+' Egg';document.getElementById('toastS').textContent=S.isGuest?'Sign up to keep!':''}else{const m=msgs[type]||msgs.welcome;document.getElementById('toastI').textContent=m.i;document.getElementById('toastT').textContent=m.t;document.getElementById('toastS').textContent=m.s||''}t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+
+// ═══ V2.5: BUILDING UNLOCK MODAL ═══
+function openUnlockBuildingModal(buildingType){
+  if(S.isGuest)return;
+  const cfg=BUILDING_CONFIGS[buildingType];if(!cfg)return;
+  if(!canUnlockBuilding(buildingType))return;
+  const box=document.getElementById('modalBox');
+  let h='<div class="modal-title">'+cfg.emoji+' Unlock '+cfg.label+'</div>';
+  h+='<div class="modal-desc"><i>'+cfg.desc+'</i></div>';
+  h+='<div class="modal-desc" style="margin-top:8px"><b>This will consume:</b></div>';
+  h+='<div class="building-unlock-cost" style="margin:8px 0">';
+  Object.entries(cfg.unlockMaterials).forEach(([mat,qty])=>{
+    const EMBL={cafe_bean:['☕','Café Bean'],wild_essence:['🌿','Wild Essence'],focus_shard:['⚡','Focus Shard'],ashe_essence:['🔮','Àṣẹ Essence'],spirit_essence:['💠','Spirit Essence']};
+    const info=EMBL[mat]||(MATERIAL_INFO[mat]?[MATERIAL_INFO[mat].emoji,MATERIAL_INFO[mat].label]:['📦',mat]);
+    h+='<div class="building-unlock-mat has">'+info[0]+' '+qty+'× '+info[1]+'</div>';
+  });
+  h+='</div>';
+  h+='<div style="font-size:.55rem;color:var(--t2);line-height:1.6;margin:8px 0">';
+  h+='✦ '+cfg.passiveBuff.desc+'<br>';
+  h+='✦ '+cfg.staffedBuff.desc+' when staffed';
+  h+='</div>';
+  h+='<button class="modal-btn" onclick="executeUnlockBuilding(''+buildingType+'')">Unlock '+cfg.label+'</button>';
+  h+='<button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';
+  box.innerHTML=h;document.getElementById('modal').classList.add('open');
+}
+
+async function executeUnlockBuilding(buildingType){
+  if(isBusy('unlock_bld'))return;setBusy('unlock_bld',4000);closeModal();
+  const cfg=BUILDING_CONFIGS[buildingType];
+  try{
+    const{data,error}=await sb.rpc('unlock_building',{p_building_type:buildingType});
+    if(error)throw error;
+    if(data?.error){console.warn('unlock building rpc error:',data.error);showToast('error');return}
+    await Promise.all([reloadBuildings().then(()=>syncMaterialsFromInventory()),reloadEmblems()]);
+    debouncedUpdateAllUI();
+    showToastMsg(cfg.emoji,cfg.label+' unlocked!','Your village grows.');
+  }catch(e){console.warn('unlock building error:',e);showToast('error')}
+}
+
+// ═══ V2.5: STAFF ASSIGN MODAL ═══
+function openAssignStaffModal(buildingType,role,currentStaffId=null){
+  if(S.isGuest)return;
+  const cfg=BUILDING_CONFIGS[buildingType];if(!cfg)return;
+  const roleLabel=role==='manager'?cfg.roles.manager.label:cfg.roles.worker.label;
+  const box=document.getElementById('modalBox');
+  // Available spirits: not on expedition, not already assigned to another building
+  const avail=S.spirits.filter(sp=>{
+    if(spiritUnavailable(sp.id))return false;
+    const assignment=spiritAssignedTo(sp.id);
+    if(!assignment)return true;
+    // Allow reassigning within the same building
+    if(assignment.building_type===buildingType)return false;
+    return false; // Spirits can only work one building at a time
+  });
+  let h='<div class="modal-title">Assign '+roleLabel+'</div>';
+  h+='<div class="staff-modal-role">'+cfg.emoji+' '+cfg.label+' · '+roleLabel+'</div>';
+  // Current staff — show unassign option
+  if(currentStaffId){
+    const cur=S.buildingStaff.find(s=>s.id===currentStaffId);
+    const curSp=cur?S.spirits.find(s=>s.id===cur.spirit_id):null;
+    if(curSp){
+      h+='<div class="staff-modal-current"><img src="'+spiritImg(curSp.spirit_type,curSp.evo_stage)+'"><span style="font-size:.65rem;font-weight:500">'+curSp.name+' currently assigned</span><span class="staff-modal-unassign" onclick="unassignStaff(''+currentStaffId+'')">Remove</span></div>';
+    }
+  }
+  if(avail.length){
+    h+='<div class="modal-select-grid">';
+    avail.forEach(sp=>{
+      const lvl=Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1;
+      let extra='';
+      if(buildingType==='cafe'&&role==='manager'){const cl=getCraftLevel(sp.id);const drink=getCafeDrinkForLevel(cl);extra=' → '+drink.name;}
+      h+='<div class="modal-select-row" onclick="assignStaff(''+buildingType+'',''+role+'',''+sp.id+'')">';
+      h+='<img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'" style="width:28px;height:28px;border-radius:50%">';
+      h+='<div style="flex:1"><div style="font-size:.65rem;font-weight:500">'+sp.name+'</div>';
+      h+='<div style="font-size:.45rem;color:var(--t3)">Lv.'+lvl+extra+'</div></div>';
+      h+='</div>';
+    });
+    h+='</div>';
+  }else{
+    h+='<div style="font-size:.55rem;color:var(--t3);text-align:center;padding:12px 0">All available spirits are busy.<br>Return spirits from expeditions first.</div>';
+  }
+  h+='<button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';
+  box.innerHTML=h;document.getElementById('modal').classList.add('open');
+}
+
+async function assignStaff(buildingType,role,spiritId){
+  if(isBusy('assign_staff'))return;setBusy('assign_staff',3000);closeModal();
+  try{
+    const{data,error}=await sb.rpc('assign_building_staff',{p_building_type:buildingType,p_spirit_id:spiritId,p_role:role});
+    if(error)throw error;
+    if(data?.error){console.warn('assign staff rpc error:',data.error);showToast('error');return}
+    await reloadBuildings();
+    debouncedUpdateAllUI();
+    const sp=S.spirits.find(s=>s.id===spiritId);
+    const cfg=BUILDING_CONFIGS[buildingType];
+    showToastMsg(cfg.emoji,sp?.name+' assigned!','Reporting for duty.');
+  }catch(e){console.warn('assign staff error:',e);showToast('error')}
+}
+
+async function unassignStaff(staffId){
+  if(isBusy('unassign_staff'))return;setBusy('unassign_staff',2000);closeModal();
+  try{
+    const{data,error}=await sb.rpc('unassign_building_staff',{p_staff_id:staffId});
+    if(error)throw error;
+    await reloadBuildings();
+    debouncedUpdateAllUI();
+    showToastMsg('👋','Spirit unassigned','They're free again.');
+  }catch(e){console.warn('unassign staff error:',e);showToast('error')}
+}
+
+// ═══ V2.5: TOAST HELPER (named args) ═══
+function showToastMsg(icon,title,sub=''){
+  const t=document.getElementById('toast');
+  document.getElementById('toastI').textContent=icon;
+  document.getElementById('toastT').textContent=title;
+  document.getElementById('toastS').textContent=sub;
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);
+}
 
 // ═══ PAGE CLOSE — persist session + listen time ═══
 window.addEventListener('beforeunload',()=>{if(S.user&&!S.isGuest){
