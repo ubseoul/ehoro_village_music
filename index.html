@@ -2946,7 +2946,7 @@ function openUnlockBuildingModal(buildingType){
   h+='✦ '+cfg.passiveBuff.desc+'<br>';
   h+='✦ '+cfg.staffedBuff.desc+' when staffed';
   h+='</div>';
-  h+='<button class="modal-btn" onclick="executeUnlockBuilding(''+buildingType+'')">Unlock '+cfg.label+'</button>';
+  h+='<button class="modal-btn" onclick="executeUnlockBuilding(&apos;'+buildingType+'&apos;)">Unlock '+cfg.label+'</button>';
   h+='<button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';
   box.innerHTML=h;document.getElementById('modal').classList.add('open');
 }
@@ -2986,7 +2986,7 @@ function openAssignStaffModal(buildingType,role,currentStaffId=null){
     const cur=S.buildingStaff.find(s=>s.id===currentStaffId);
     const curSp=cur?S.spirits.find(s=>s.id===cur.spirit_id):null;
     if(curSp){
-      h+='<div class="staff-modal-current"><img src="'+spiritImg(curSp.spirit_type,curSp.evo_stage)+'"><span style="font-size:.65rem;font-weight:500">'+curSp.name+' currently assigned</span><span class="staff-modal-unassign" onclick="unassignStaff(''+currentStaffId+'')">Remove</span></div>';
+      h+='<div class="staff-modal-current"><img src="'+spiritImg(curSp.spirit_type,curSp.evo_stage)+'"><span style="font-size:.65rem;font-weight:500">'+curSp.name+' currently assigned</span><span class="staff-modal-unassign" onclick="unassignStaff(&apos;'+currentStaffId+'&apos;)">Remove</span></div>';
     }
   }
   if(avail.length){
@@ -2995,7 +2995,7 @@ function openAssignStaffModal(buildingType,role,currentStaffId=null){
       const lvl=Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1;
       let extra='';
       if(buildingType==='cafe'&&role==='manager'){const cl=getCraftLevel(sp.id);const drink=getCafeDrinkForLevel(cl);extra=' → '+drink.name;}
-      h+='<div class="modal-select-row" onclick="assignStaff(''+buildingType+'',''+role+'',''+sp.id+'')">';
+      h+='<div class="modal-select-row" onclick="assignStaff(&apos;'+buildingType+'&apos;,&apos;'+role+'&apos;,&apos;'+sp.id+'&apos;)">';
       h+='<img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'" style="width:28px;height:28px;border-radius:50%">';
       h+='<div style="flex:1"><div style="font-size:.65rem;font-weight:500">'+sp.name+'</div>';
       h+='<div style="font-size:.45rem;color:var(--t3)">Lv.'+lvl+extra+'</div></div>';
@@ -3030,7 +3030,7 @@ async function unassignStaff(staffId){
     if(error)throw error;
     await reloadBuildings();
     debouncedUpdateAllUI();
-    showToastMsg('👋','Spirit unassigned','They're free again.');
+    showToastMsg('👋','Spirit unassigned','They\'re free again.');
   }catch(e){console.warn('unassign staff error:',e);showToast('error')}
 }
 
