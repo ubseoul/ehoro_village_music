@@ -683,6 +683,11 @@ body.music-playing .sd-bar-fill::after{opacity:1;animation:xpCrawl 3s linear inf
   .evo-ceremony-tap{bottom:60px}
 }
 
+/* ═══ SPIRIT DETAIL OVERLAY ═══ */
+.spirit-overlay{position:fixed;inset:0;z-index:190;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:1;transition:opacity .3s;padding:16px;box-sizing:border-box}
+.spirit-overlay.gone{opacity:0;pointer-events:none}
+.spirit-overlay-inner{width:100%;max-width:420px;max-height:90dvh;overflow-y:auto;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);border-radius:var(--radius);padding:16px;animation:sdOverlayIn .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes sdOverlayIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
 </style>
 </head>
 <body>
@@ -730,12 +735,15 @@ body.music-playing .sd-bar-fill::after{opacity:1;animation:xpCrawl 3s linear inf
 </div>
 <div class="patch-social"><a href="https://www.instagram.com/ehorovillage?igsh=cTBuaGpoaWVpdXQy&utm_source=qr" target="_blank">Instagram</a><a href="https://x.com/purpleprinceev?s=21" target="_blank">X (Twitter)</a><a href="https://www.facebook.com/share/1DGDwJyMcN/?mibextid=wwXIfr" target="_blank">Facebook</a></div>
 </div></div>
+<div class="spirit-overlay gone" id="spiritOverlay" onclick="if(event.target===this)closeSpiritDetail()">
+<div class="spirit-overlay-inner" id="spiritOverlayInner"></div>
+</div>
 <div class="login gone" id="login"><div class="login-inner"><div class="login-brand"><h1>Ehoro Village</h1><p class="sub">lo-fi &middot; spirits &middot; cultivate</p></div><div class="login-field" id="usernameField" style="display:none"><label>Username</label><input type="text" id="inUser" placeholder="pick a username"></div><div class="login-field"><label>Email</label><input type="email" id="inEmail" placeholder="you@email.com"></div><div class="login-field"><label>Password</label><input type="password" id="inPass" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" minlength="6"></div><button class="l-btn" id="authBtn" onclick="doAuth()">Sign In</button><div class="l-error" id="authError"></div><div class="l-div">or</div><button class="l-secondary" onclick="doGoogleAuth()" style="display:flex;align-items:center;justify-content:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A11.96 11.96 0 0 0 0 12c0 1.94.46 3.77 1.28 5.4l3.56-2.77.01-.54z" fill="#FBBC05"/><path d="M12 4.75c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 1.09 14.97 0 12 0 7.7 0 3.99 2.47 2.18 6.07l3.66 2.84c.87-2.6 3.3-4.16 6.16-4.16z" fill="#EA4335"/></svg> Continue with Google</button><button class="l-secondary" onclick="enterGuest()" style="margin-top:8px">Watch as Guest</button><button class="l-toggle" id="authToggle" onclick="toggleAuthMode()">Need an account? Sign up</button></div></div>
 <div class="shell on" id="shell">
 <div class="topbar"><div class="tb-brand">Ehoro Village</div><div class="tb-right"><div class="tb-rank" id="tbRank" onmouseenter="showRankTooltip()" onmouseleave="hideRankTooltip()" onclick="toggleRankTooltip()"><span class="tb-rank-name" id="tbRankName">Ember</span><span class="tb-rank-pts" id="tbRankPts">0 pts</span><div class="rank-tooltip" id="rankTooltip"></div></div><button class="tb-gear" onclick="toggleSettings()" title="Settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button><div id="tbAuth"><button class="tb-signin" onclick="showLogin()">Sign In</button></div></div></div>
 <div class="content">
 <div class="video-area"><div class="video-embed" id="videoEmbed"><div class="video-placeholder" id="videoPlaceholder" onclick="startStream()"><div class="vp-play">&#x25B6;</div><div class="vp-text" id="vpText">🌸 Sakura Jazz</div></div></div><div class="player-strip"><button class="ps-play" id="psPlay" onclick="startStream()">&#x25B6;</button><div class="ps-info"><div class="ps-title" id="psTitle">Sakura Jazz</div><div class="ps-sub"><span class="ps-live-dot"></span> <span id="psSub">lo-fi jazz mix</span></div></div></div><div class="stream-switcher"><button class="stream-pill active" id="pillSakura" onclick="switchStream('sakura')">🌸 Sakura Jazz</button><button class="stream-pill" id="pillLofi" onclick="switchStream('lofi')">📼 Lo-Fi Tape V1</button></div></div>
-<div class="sidebar"><div class="egg-progress" id="eggProgress"><span class="egg-progress-label">Next egg</span><div class="egg-progress-bar"><div class="egg-progress-fill" id="eggFill"></div></div><span class="egg-progress-time" id="eggTimer">&mdash;</span></div><div class="tab-nav"><button class="tab-btn on" data-tab="spirits" onclick="switchTab(this)">Spirits</button><button class="tab-btn" data-tab="items" onclick="switchTab(this)">Items</button><button class="tab-btn" data-tab="pills" onclick="switchTab(this)">Inventory</button><button class="tab-btn" data-tab="village" onclick="switchTab(this)">Village</button></div><div class="tab-panels"><div class="tab-panel on" id="tab-spirits"></div><div class="tab-panel" id="tab-items"></div><div class="tab-panel" id="tab-pills"></div><div class="tab-panel" id="tab-village"></div></div></div>
+<div class="sidebar"><div class="egg-progress" id="eggProgress"><span class="egg-progress-label">Next egg</span><div class="egg-progress-bar"><div class="egg-progress-fill" id="eggFill"></div></div><span class="egg-progress-time" id="eggTimer">&mdash;</span></div><div class="tab-nav"><button class="tab-btn on" data-tab="spirits" onclick="switchTab(this)">Spirits</button><button class="tab-btn" data-tab="pills" onclick="switchTab(this)">Items</button><button class="tab-btn" data-tab="village" onclick="switchTab(this)">Village</button></div><div class="tab-panels"><div class="tab-panel on" id="tab-spirits"></div><div class="tab-panel" id="tab-pills"></div><div class="tab-panel" id="tab-village"></div></div></div>
 </div></div>
 
 <script>
@@ -1546,7 +1554,7 @@ function showWelcomeBack(xpGained,hoursAway,spiritData){const wb=document.getEle
     gains+=' \u00b7 Village gift: +'+bonus+'\u00d7 each ingredient';
     const types=['cafe_bean','wild_essence','focus_shard'];
     types.forEach(t=>{sb.from('emblems').upsert({user_id:S.user.id,emblem_type:t,quantity:S.emblems[t]},{onConflict:'user_id,emblem_type'}).then(()=>{}).catch(e=>console.warn('village gift persist error:',e))});
-    renderItemsTab();
+    renderPillsTab();
   }
   document.getElementById('wbGains').textContent=gains||'Everything is as you left it.';
   wb.classList.remove('gone');
@@ -1836,9 +1844,14 @@ async function sendExpedition(){
   setBusy('send_exped',4000);
   closeModal();
   try{
-    const{data,error}=await sb.rpc('send_expedition',{p_slot:_expedModal.slot,p_spirit_ids:_expedModal.selectedSpirits,p_duration:_expedModal.duration,p_location:_expedModal.location});
-    if(error)throw error;
-    if(data?.error){console.warn('send exped rpc error:',data.error);showToast('error');return}
+    // Try with p_location (V2.6 RPC). Falls back to 3-param signature if DB not yet migrated.
+    let res=await sb.rpc('send_expedition',{p_slot:_expedModal.slot,p_spirit_ids:_expedModal.selectedSpirits,p_duration:_expedModal.duration,p_location:_expedModal.location});
+    if(res.error&&(res.error.code==='PGRST202'||res.error.message?.includes('p_location')||res.error.message?.includes('schema cache'))){
+      console.warn('send_expedition: p_location not in DB yet, retrying without it');
+      res=await sb.rpc('send_expedition',{p_slot:_expedModal.slot,p_spirit_ids:_expedModal.selectedSpirits,p_duration:_expedModal.duration});
+    }
+    if(res.error)throw res.error;
+    if(res.data?.error){console.warn('send exped rpc error:',res.data.error);showToast('error');return}
     await reloadExpeditions();debouncedUpdateAllUI();
     const locLabel=EXPED_LOCATIONS[_expedModal.location]?.label||'the wilderness';
     showToastMsg('🧭','Expedition sent!','Your spirits set off for '+locLabel+'…');
@@ -2125,13 +2138,13 @@ function toggleRankTooltip(){
 document.addEventListener('click',e=>{
   if(_rankTooltipOpen&&!e.target.closest('#tbRank'))hideRankTooltip();
 });
-function updateAllUI(){updateTopBar();renderSpiritsTab();renderItemsTab();renderPillsTab();renderVillageTab();checkMilestones()}
+function updateAllUI(){updateTopBar();renderSpiritsTab();renderPillsTab();renderVillageTab();checkMilestones()}
 
 // ═══ SPIRITS TAB ═══
 function renderSpiritsTab(){
   const el=document.getElementById('tab-spirits');
   if(!S.spirits.length){
-    el.innerHTML='<div class="spirit-empty"><div class="spirit-empty-msg">No spirits yet</div><div class="spirit-empty-hint">Hatch eggs to discover spirits<br>They\'ll grow as you listen</div><button class="empty-action" onclick="switchTab(document.querySelector(\'[data-tab=items]\'))">Go to Hatchery →</button></div>';
+    el.innerHTML='<div class="spirit-empty"><div class="spirit-empty-msg">No spirits yet</div><div class="spirit-empty-hint">Hatch eggs to discover spirits<br>They\'ll grow as you listen</div><button class="empty-action" onclick="switchTab(document.querySelector(\'[data-tab=pills]\'))">Go to Hatchery →</button></div>';
     return;
   }
   let h='<div class="spirits-grid">';
@@ -2161,7 +2174,7 @@ function renderSpiritsTab(){
     h+='</div>';
   });
   h+='</div>';
-  el.innerHTML=h+'<div id="spiritDetail" class="spirit-detail"></div>';
+  el.innerHTML=h;
   if(S.selectedSpirit)showSpiritDetail(S.selectedSpirit);
 }
 // V1.5: Spirit card tap — short quip then open detail
@@ -2176,7 +2189,6 @@ function spiritCardTap(event,id){
 function selectSpirit(id){S.selectedSpirit=id;showSpiritDetail(id)}
 function showSpiritDetail(id){
   const sp=S.spirits.find(s=>s.id===id);if(!sp)return;
-  const el=document.getElementById('spiritDetail');
   const lvl=Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1;
   const xpP=(sp.xp||0)%S.XP_PER_LEVEL;
   const xpPct=Math.round((xpP/S.XP_PER_LEVEL)*100);
@@ -2234,7 +2246,8 @@ function showSpiritDetail(id){
   // Stars
   const stars=[0,1,2].map(i=>i<=sp.evo_stage?'★':'☆').join('');
   const starColor=sp.evo_stage===2?'#ffd480':sp.evo_stage===1?'#8ab4ff':'var(--t4)';
-  el.className='spirit-detail open';
+  const ov=document.getElementById('spiritOverlay');ov.classList.remove('gone');
+  const el=document.getElementById('spiritOverlayInner');
   el.innerHTML=
     '<div class="sd-header">'+
     '<div class="sd-interact-area" onclick="triggerQuip(\''+sp.id+'\',true)">'+
@@ -2270,7 +2283,7 @@ function showSpiritDetail(id){
       '<button class="dismiss-btn" onclick="openDismissModal(\''+sp.id+'\')">Release '+sp.name+' (+'+calcDismissEssence(sp)+' 💠)</button>'+
       '</div>':'');
 }
-function closeSpiritDetail(){S.selectedSpirit=null;document.getElementById('spiritDetail').className='spirit-detail'}
+function closeSpiritDetail(){S.selectedSpirit=null;const ov=document.getElementById('spiritOverlay');if(ov)ov.classList.add('gone')}
 function toggleTraitDesc(id){const el=document.getElementById(id);if(!el)return;const wasOpen=el.classList.contains('show');document.querySelectorAll('.trait-desc.show').forEach(d=>d.classList.remove('show'));if(!wasOpen)el.classList.add('show')}
 
 // ═══ V2.6: TRAIT SECTION BUILDER ═══
@@ -2325,31 +2338,21 @@ function buildJournalSection(spiritId){
   return h;
 }
 
-// ═══ ITEMS TAB — simplified: hatchery, ingredients, pills ═══
-function renderItemsTab(){const el=document.getElementById('tab-items'),prest=calcPrestige(),pendCount=S.pendingEggs.filter(e=>e.status==='pending').length;let h='<div class="section-label">Hatchery</div><div class="hatchery-grid">';
-// If hatchery is empty (new user, trigger didn't fire), show default empty slots
-const slots=S.hatchery.length?S.hatchery:[{id:'def1',slot_number:1,unlocked:true,egg_id:null},{id:'def2',slot_number:2,unlocked:true,egg_id:null},{id:'def3',slot_number:3,unlocked:false},{id:'def4',slot_number:4,unlocked:false},{id:'def5',slot_number:5,unlocked:false}];
-slots.forEach(slot=>{if(!slot.unlocked){const req=SLOT_UNLOCK[slot.slot_number],canU=req&&prest>=req;h+='<div class="hatch-slot '+(canU?'unlockable':'locked')+'" '+(canU?'onclick="unlockSlot('+slot.slot_number+')"':'')+'><div class="hatch-slot-icon">'+(canU?'\uD83D\uDD13':'\uD83D\uDD12')+'</div><div class="hatch-slot-label">'+(canU?'Unlock!':req?req+' prestige':'Locked')+'</div></div>';return}if(!slot.egg_id){h+='<div class="hatch-slot" onclick="openPlaceEggModal(\''+slot.id+'\')"><div class="hatch-slot-icon">\uFF0B</div><div class="hatch-slot-label">Place Egg</div>'+(pendCount>0?'<div class="hatch-slot-eggs">('+pendCount+' available)</div>':'')+'</div>';return}const egg=(S.allEggs||S.pendingEggs).find(e=>e.id===slot.egg_id)||{rarity:'mundane'},started=new Date(slot.started_at),baseDurMs=(slot.hatch_duration_minutes||INCUB_MINS[egg.rarity]||3)*60*1000;
-// Trait effect: Gentle spirits reduce hatch time
-let gentleReduction=0;S.spirits.forEach(sp=>{const g=spiritTraitBonus(sp.id,'hatch_speed');if(g>gentleReduction)gentleReduction=g});
-const durMs=Math.floor(baseDurMs*(1-gentleReduction));const elapsed=Date.now()-started.getTime(),ready=elapsed>=durMs,pct=Math.min(elapsed/durMs*100,100),rem=Math.max(0,Math.ceil((durMs-elapsed)/1000)),rs=rem>60?Math.ceil(rem/60)+'m':rem+'s';
-// V1.5: Rare egg shimmer for illustrious+ rarity
-const isRare=['illustrious','sovereign','celestial','transcendent','mysterious','ancestral','paradox'].includes(egg.rarity);
-h+='<div class="hatch-slot'+(ready?' ready':'')+(isRare&&!ready?' rare-shimmer':'')+'" onclick="'+(ready?'doHatch(\''+slot.id+'\')':'')+'"><div class="hatch-slot-icon">'+(ready?'\uD83D\uDC23':'\uD83E\uDD5A')+'</div><div class="hatch-slot-rarity" style="color:'+(RARITY_COLORS[egg.rarity]||'#888')+'">'+(egg.rarity||'')+'</div>'+(ready?'<div class="hatch-slot-label" style="color:var(--positive)">Hatch!</div>':'<div class="hatch-slot-timer">'+rs+'</div><div class="hatch-slot-bar"><div class="hatch-slot-bar-fill" style="width:'+pct+'%"></div></div>')+'</div>'});
-h+='</div><div class="section-label">Ingredients</div><div class="ing-grid">';
-h+='<div class="ing-row"><span class="ing-icon">\u2615</span><span class="ing-name">Caf\u00e9 Bean</span><span class="ing-count">'+S.emblems.cafe_bean+'</span><button class="ing-swap" onclick="openConvertModal(\'cafe_bean\')" title="Convert">\u21C4</button></div>';
-h+='<div class="ing-row"><span class="ing-icon">\uD83C\uDF3F</span><span class="ing-name">Wild Essence</span><span class="ing-count">'+S.emblems.wild_essence+'</span><button class="ing-swap" onclick="openConvertModal(\'wild_essence\')" title="Convert">\u21C4</button></div>';
-h+='<div class="ing-row"><span class="ing-icon">\u26A1</span><span class="ing-name">Focus Shard</span><span class="ing-count">'+S.emblems.focus_shard+'</span><button class="ing-swap" onclick="openConvertModal(\'focus_shard\')" title="Convert">\u21C4</button></div>';
-h+='<div class="ing-row rare"><span class="ing-icon">🔮</span><span class="ing-name">Àṣẹ Essence</span><span class="ing-count">'+(S.emblems.ashe_essence||0)+'</span><span style="font-size:.4rem;color:var(--special);padding:0 4px">Expeditions</span></div>';
-h+='<div class="ing-row rare"><span class="ing-icon">💠</span><span class="ing-name">Spirit Essence</span><span class="ing-count">'+(S.emblems.spirit_essence||0)+'</span><span style="font-size:.4rem;color:var(--special);padding:0 4px">Release spirits</span></div></div>';
-h+='<div class="section-label">Craft Spirit Pills</div><div class="pill-grid">';
-const pIcons={growth:'\uD83D\uDC8A',clarity:'\u2728',harmony:'\uD83C\uDFB5'};S.pillRecipes.forEach(p=>{const ok=S.emblems.cafe_bean>=p.cost_cafe_bean&&S.emblems.wild_essence>=p.cost_wild_essence&&S.emblems.focus_shard>=p.cost_focus_shard;h+='<div class="pill-row'+(ok?'':' disabled')+'" onclick="openCraftModal(\''+p.id+'\',\''+p.pill_name+'\',\''+p.effect_type+'\')">'+'<span class="pill-icon">'+(pIcons[p.pill_type]||'\uD83D\uDC8A')+'</span><div class="pill-info"><div class="pill-name">'+p.pill_name+'</div><div class="pill-desc">'+p.description+'</div></div><div class="pill-cost">\u2615'+p.cost_cafe_bean+' \uD83C\uDF3F'+p.cost_wild_essence+' \u26A1'+p.cost_focus_shard+'</div></div>'});
-h+='</div>';el.innerHTML=h}
-
 // ═══ V2.5: INVENTORY TAB ═══
 function renderPillsTab(){
   const el=document.getElementById('tab-pills');if(!el)return;
+  const prest=calcPrestige(),pendCount=S.pendingEggs.filter(e=>e.status==='pending').length;
   let h='';
+
+  // ── Hatchery ──
+  h+='<div class="inv-section-label">Hatchery 🥚</div><div class="hatchery-grid">';
+  const slots=S.hatchery.length?S.hatchery:[{id:'def1',slot_number:1,unlocked:true,egg_id:null},{id:'def2',slot_number:2,unlocked:true,egg_id:null},{id:'def3',slot_number:3,unlocked:false},{id:'def4',slot_number:4,unlocked:false},{id:'def5',slot_number:5,unlocked:false}];
+  slots.forEach(slot=>{if(!slot.unlocked){const req=SLOT_UNLOCK[slot.slot_number],canU=req&&prest>=req;h+='<div class="hatch-slot '+(canU?'unlockable':'locked')+'" '+(canU?'onclick="unlockSlot('+slot.slot_number+')"':'')+'><div class="hatch-slot-icon">'+(canU?'\uD83D\uDD13':'\uD83D\uDD12')+'</div><div class="hatch-slot-label">'+(canU?'Unlock!':req?req+' prestige':'Locked')+'</div></div>';return}if(!slot.egg_id){h+='<div class="hatch-slot" onclick="openPlaceEggModal(\''+slot.id+'\')"><div class="hatch-slot-icon">\uFF0B</div><div class="hatch-slot-label">Place Egg</div>'+(pendCount>0?'<div class="hatch-slot-eggs">('+pendCount+' available)</div>':'')+'</div>';return}const egg=(S.allEggs||S.pendingEggs).find(e=>e.id===slot.egg_id)||{rarity:'mundane'},started=new Date(slot.started_at),baseDurMs=(slot.hatch_duration_minutes||INCUB_MINS[egg.rarity]||3)*60*1000;
+  let gentleReduction=0;S.spirits.forEach(sp=>{const g=spiritTraitBonus(sp.id,'hatch_speed');if(g>gentleReduction)gentleReduction=g});
+  const durMs=Math.floor(baseDurMs*(1-gentleReduction));const elapsed=Date.now()-started.getTime(),ready=elapsed>=durMs,pct=Math.min(elapsed/durMs*100,100),rem=Math.max(0,Math.ceil((durMs-elapsed)/1000)),rs=rem>60?Math.ceil(rem/60)+'m':rem+'s';
+  const isRare=['illustrious','sovereign','celestial','transcendent','mysterious','ancestral','paradox'].includes(egg.rarity);
+  h+='<div class="hatch-slot'+(ready?' ready':'')+(isRare&&!ready?' rare-shimmer':'')+'" onclick="'+(ready?'doHatch(\''+slot.id+'\')':'')+'" ><div class="hatch-slot-icon">'+(ready?'\uD83D\uDC23':'\uD83E\uDD5A')+'</div><div class="hatch-slot-rarity" style="color:'+(RARITY_COLORS[egg.rarity]||'#888')+'">'+(egg.rarity||'')+'</div>'+(ready?'<div class="hatch-slot-label" style="color:var(--positive)">Hatch!</div>':'<div class="hatch-slot-timer">'+rs+'</div><div class="hatch-slot-bar"><div class="hatch-slot-bar-fill" style="width:'+pct+'%"></div></div>')+'</div>'});
+  h+='</div>';
 
   // ── Drinks from Café ──
   h+='<div class="inv-section-label">Drinks ☕</div>';
@@ -2479,17 +2482,17 @@ function renderVillageTab(){
     h+='<div style="font-size:.5rem;color:var(--special);margin-top:8px">✦ Maximum rank achieved</div>';
   }
   h+='</div>';
-  // Buildings section
-  h+='<div class="section-label">Village Buildings</div>';
-  h+=renderBuildingsSection();
-  // Expeditions section
-  h+='<div class="section-label" style="margin-top:14px">Expeditions</div><div class="exped-section">';
+  // Expeditions section (above buildings)
+  h+='<div class="section-label">Expeditions</div><div class="exped-section">';
   const slot1Exp=S.expeditions.find(e=>e.slot_number===1&&(getExpedStatus(e)!=='idle'));
   h+=renderExpedSlot(slot1Exp,1,false);
   const slot2Unlocked=p>=400;
   const slot2Exp=S.expeditions.find(e=>e.slot_number===2&&(getExpedStatus(e)!=='idle'));
   h+=renderExpedSlot(slot2Exp,2,!slot2Unlocked);
   h+='</div>';
+  // Buildings section
+  h+='<div class="section-label" style="margin-top:14px">Village Buildings</div>';
+  h+=renderBuildingsSection();
   el.innerHTML=h;
 }
 
@@ -2572,10 +2575,10 @@ function calcPrestige(){const xpl=S.XP_PER_LEVEL||150;let p=0;S.spirits.forEach(
 async function doHatch(slotId){if(S.isGuest||isBusy('hatch_'+slotId))return;setBusy('hatch_'+slotId,5000);
 // Optimistic: mark slot as processing
 const slotIdx=S.hatchery.findIndex(s=>s.id===slotId);
-if(slotIdx>=0){const origEgg=S.hatchery[slotIdx].egg_id;S.hatchery[slotIdx]._hatching=true;renderItemsTab()}
-try{const{data,error}=await sb.rpc('hatch_egg',{p_slot_id:slotId});if(error)throw error;if(data.error){showToast('error');if(slotIdx>=0)S.hatchery[slotIdx]._hatching=false;renderItemsTab();return}
+if(slotIdx>=0){const origEgg=S.hatchery[slotIdx].egg_id;S.hatchery[slotIdx]._hatching=true;renderPillsTab()}
+try{const{data,error}=await sb.rpc('hatch_egg',{p_slot_id:slotId});if(error)throw error;if(data.error){showToast('error');if(slotIdx>=0)S.hatchery[slotIdx]._hatching=false;renderPillsTab();return}
 _lastHatchData=data;
-await loadUserData();updateAllUI();showHatchAnimation(data)}catch(e){console.warn('hatch error:',e);showToast('error');if(slotIdx>=0)S.hatchery[slotIdx]._hatching=false;renderItemsTab()}}
+await loadUserData();updateAllUI();showHatchAnimation(data)}catch(e){console.warn('hatch error:',e);showToast('error');if(slotIdx>=0)S.hatchery[slotIdx]._hatching=false;renderPillsTab()}}
 function showHatchAnimation(data){const ov=document.getElementById('hatchOverlay'),eg=document.getElementById('hatchEgg'),rv=document.getElementById('hatchReveal');
 // V1.4: Rarity-themed overlay background
 ov.className='hatch-overlay rarity-'+(data.rarity||'mundane');
@@ -2642,16 +2645,16 @@ function openPlaceEggModal(slotId){const pend=S.pendingEggs.filter(e=>e.status==
 async function placeEgg(eId,sId){if(S.isGuest||isBusy('place_'+eId))return;setBusy('place_'+eId,3000);closeModal();
 // Optimistic: remove from pending, mark slot as occupied
 const eggIdx=S.pendingEggs.findIndex(e=>e.id===eId);const slotIdx=S.hatchery.findIndex(s=>s.id===sId);
-if(eggIdx>=0&&slotIdx>=0){S.hatchery[slotIdx].egg_id=eId;S.hatchery[slotIdx].started_at=new Date().toISOString();S.pendingEggs.splice(eggIdx,1);renderItemsTab()}
+if(eggIdx>=0&&slotIdx>=0){S.hatchery[slotIdx].egg_id=eId;S.hatchery[slotIdx].started_at=new Date().toISOString();S.pendingEggs.splice(eggIdx,1);renderPillsTab()}
 try{await sb.rpc('place_egg_in_slot',{p_egg_id:eId,p_slot_id:sId});await loadUserData();updateAllUI()}catch(e){console.warn('placeEgg error:',e);showToast('error');await loadUserData();updateAllUI()}}
-function startHatcheryTicker(){if(S.hatchTicker)return;S.hatchTicker=setInterval(()=>{if(!S.isGuest)renderItemsTab()},15000)}
+function startHatcheryTicker(){if(S.hatchTicker)return;S.hatchTicker=setInterval(()=>{if(!S.isGuest)renderPillsTab()},15000)}
 
 // ═══ CRAFT PILLS ═══
 function openCraftModal(recipeId,pillName,effectType){if(S.isGuest)return;if(effectType==='xp_all'){doCraft(recipeId,null);return}const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Use '+pillName+'</div><div class="modal-desc">Choose a spirit:</div><div class="modal-select-grid">'+S.spirits.map(sp=>'<div class="modal-select-row" onclick="doCraft(\''+recipeId+'\',\''+sp.id+'\')"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'" style="width:28px;height:28px;border-radius:50%"><span style="font-size:.7rem">'+sp.name+'</span><span style="font-size:.5rem;color:var(--t4);margin-left:auto">Lv.'+(Math.floor((sp.xp||0)/100)+1)+'</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
 async function doCraft(recipeId,spiritId){closeModal();if(isBusy('craft'))return;setBusy('craft',3000);
 const recipe=S.pillRecipes.find(p=>p.id===recipeId);
 // Optimistic: deduct ingredients immediately
-if(recipe){S.emblems.cafe_bean=Math.max(0,S.emblems.cafe_bean-recipe.cost_cafe_bean);S.emblems.wild_essence=Math.max(0,S.emblems.wild_essence-recipe.cost_wild_essence);S.emblems.focus_shard=Math.max(0,S.emblems.focus_shard-recipe.cost_focus_shard);renderItemsTab();renderSpiritsTab()}
+if(recipe){S.emblems.cafe_bean=Math.max(0,S.emblems.cafe_bean-recipe.cost_cafe_bean);S.emblems.wild_essence=Math.max(0,S.emblems.wild_essence-recipe.cost_wild_essence);S.emblems.focus_shard=Math.max(0,S.emblems.focus_shard-recipe.cost_focus_shard);renderPillsTab();renderSpiritsTab()}
 try{const{data,error}=await sb.rpc('craft_pill',{p_recipe_id:recipeId,p_spirit_id:spiritId});if(error)throw error;if(data?.error){showToast('error');await loadUserData();updateAllUI();return}
 // Trait effect: Studious gives +5% pill XP to the targeted spirit
 if(spiritId){const studBonus=spiritTraitBonus(spiritId,'xp_bonus');if(studBonus>0&&recipe){const bonusXp=Math.floor((recipe.effect_value||0)*studBonus);if(bonusXp>0){const sp=S.spirits.find(s=>s.id===spiritId);if(sp){const newXp=(sp.xp||0)+bonusXp;sb.from('spirits').update({xp:newXp}).eq('id',spiritId).then(()=>{}).catch(e=>console.warn('studious bonus err',e))}}}}
@@ -2659,7 +2662,7 @@ await loadUserData();updateAllUI();showToast(data.leveled_up?'levelup':'craft');
 
 // ═══ CONVERT ═══
 function openConvertModal(from){if(S.isGuest)return;const n={cafe_bean:'Caf\u00e9 Bean',wild_essence:'Wild Essence',focus_shard:'Focus Shard'},ic={cafe_bean:'\u2615',wild_essence:'\uD83C\uDF3F',focus_shard:'\u26A1'},oth=Object.keys(n).filter(k=>k!==from);const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Convert '+ic[from]+'</div><div class="modal-desc">3 <b>'+n[from]+'</b> \u2192 1 other. You have: <b>'+S.emblems[from]+'</b></div><div class="modal-select-grid">'+oth.map(to=>'<div class="modal-select-row'+(S.emblems[from]<3?' style="opacity:.3;pointer-events:none"':'')+'" onclick="doConvert(\''+from+'\',\''+to+'\')"><span>'+ic[to]+' '+n[to]+'</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
-async function doConvert(from,to){closeModal();try{const{data}=await sb.rpc('convert_ingredient',{p_from:from,p_to:to,p_amount:1});if(data?.error){showToast('error');return}S.emblems[from]-=3;S.emblems[to]+=1;renderItemsTab();renderSpiritsTab()}catch(e){showToast('error')}}
+async function doConvert(from,to){closeModal();try{const{data}=await sb.rpc('convert_ingredient',{p_from:from,p_to:to,p_amount:1});if(data?.error){showToast('error');return}S.emblems[from]-=3;S.emblems[to]+=1;renderPillsTab();renderSpiritsTab()}catch(e){showToast('error')}}
 function closeModal(){document.getElementById('modal').classList.remove('open')}
 
 // ═══ ACTIVE CULTIVATION TICKER ═══
@@ -2820,12 +2823,12 @@ document.addEventListener('visibilitychange',()=>{
     if(S.playing&&S.eggAnchor){
       // eggT is re-derived from eggAnchor every tick, so it auto-catches-up already
       // Just force an immediate render
-      if(!S.isGuest)renderItemsTab();
+      if(!S.isGuest)renderPillsTab();
       renderVillageTab();
     }
     // Refresh expedition/hatchery display
     if(!S.isGuest&&S.user){
-      renderItemsTab();renderVillageTab();
+      renderPillsTab();renderVillageTab();
     }
   }
 });
@@ -2834,19 +2837,19 @@ document.addEventListener('visibilitychange',()=>{
 function startTicker(){if(S.ticker)return;if(!S.eggAnchor)S.eggAnchor=Date.now();const eggTime=()=>S.isGuest&&!S.guestEggGiven?S.GUEST_EGG_SEC:(!S.profile?.first_egg_claimed?S.FIRST_EGG_SEC:S.EGG_SEC);S.ticker=setInterval(async()=>{if(!S.playing)return;const now=Date.now();S.eggT=(now-S.eggAnchor)/1000;const total=eggTime();const pct=Math.min((S.eggT/total)*100,100);document.getElementById('eggFill').style.width=pct+'%';const rem=Math.max(0,Math.ceil(total-S.eggT));const mins=Math.floor(rem/60),secs=rem%60;document.getElementById('eggTimer').textContent=mins>0?mins+'m '+secs+'s':secs+'s';
 // V1.3 POLISH: Egg progress glow at 90%+
 const eggProg=document.getElementById('eggProgress');if(pct>=90){eggProg.classList.add('near-ready')}else{eggProg.classList.remove('near-ready')}
-if(S.sessionStartedAt&&S.profile){S.profile._sessionSeconds=Math.floor((now-S.sessionStartedAt)/1000)}const ingChance=(!S.isGuest&&!S.firstIngredientGiven&&S.eggT>30)?0.03:0.0015;if(!S.isGuest&&Math.random()<ingChance){const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;S.firstIngredientGiven=true;renderItemsTab();showToast('ing_'+mat);checkCraftHint()}if(S.eggT>=total){S.eggAnchor=Date.now();S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane')}}else{try{const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;
+if(S.sessionStartedAt&&S.profile){S.profile._sessionSeconds=Math.floor((now-S.sessionStartedAt)/1000)}const ingChance=(!S.isGuest&&!S.firstIngredientGiven&&S.eggT>30)?0.03:0.0015;if(!S.isGuest&&Math.random()<ingChance){const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;S.firstIngredientGiven=true;renderPillsTab();showToast('ing_'+mat);checkCraftHint()}if(S.eggT>=total){S.eggAnchor=Date.now();S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane')}}else{try{const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;
 // V1.4: Daily streak bonus materials
 const streakData=getStreak();if(streakData.bonus>0){for(let sb2=0;sb2<streakData.bonus;sb2++){const bmat=types[Math.floor(Math.random()*3)];S.emblems[bmat]++}}
 await loadUserData();updateAllUI();showToast(data.rarity);autoPlaceEggs();try{sb.rpc('log_event',{p_event:'egg_drop',p_data:{rarity:data.rarity}})}catch(e){}}catch(e){console.warn('egg drop error:',e)}}}},1000)}
 
 // ═══ CRAFT HINT — pulse Items tab when user first has enough materials ═══
-function checkCraftHint(){if(S.craftHintShown||S.isGuest)return;const r=S.pillRecipes[0];if(!r)return;if(S.emblems.cafe_bean>=r.cost_cafe_bean&&S.emblems.wild_essence>=r.cost_wild_essence&&S.emblems.focus_shard>=r.cost_focus_shard){S.craftHintShown=true;const tab=document.querySelector('[data-tab="items"]');if(tab){tab.classList.add('hint');setTimeout(()=>tab.classList.remove('hint'),6000)}}}
+function checkCraftHint(){if(S.craftHintShown||S.isGuest)return;const r=S.pillRecipes[0];if(!r)return;if(S.emblems.cafe_bean>=r.cost_cafe_bean&&S.emblems.wild_essence>=r.cost_wild_essence&&S.emblems.focus_shard>=r.cost_focus_shard){S.craftHintShown=true;const tab=document.querySelector('[data-tab="pills"]');if(tab){tab.classList.add('hint');setTimeout(()=>tab.classList.remove('hint'),6000)}}}
 
 // ═══ GUEST DEMO LOOP — give guests a taste of the gameplay loop ═══
 // _guestDemoTicker hoisted to top
-function startGuestDemo(){if(_guestDemoTicker)return;let demoDrops=0;_guestDemoTicker=setInterval(()=>{if(!S.isGuest||!S.playing)return;demoDrops++;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;renderItemsTab();showToast('ing_'+mat);
+function startGuestDemo(){if(_guestDemoTicker)return;let demoDrops=0;_guestDemoTicker=setInterval(()=>{if(!S.isGuest||!S.playing)return;demoDrops++;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;renderPillsTab();showToast('ing_'+mat);
 // After enough drops, hint at crafting
-if(demoDrops>=3){const r=S.pillRecipes[0];if(r&&S.emblems.cafe_bean>=r.cost_cafe_bean&&S.emblems.wild_essence>=r.cost_wild_essence&&S.emblems.focus_shard>=r.cost_focus_shard){const tab=document.querySelector('[data-tab="items"]');if(tab&&!tab.classList.contains('hint')){tab.classList.add('hint');setTimeout(()=>tab.classList.remove('hint'),6000)}}}
+if(demoDrops>=3){const r=S.pillRecipes[0];if(r&&S.emblems.cafe_bean>=r.cost_cafe_bean&&S.emblems.wild_essence>=r.cost_wild_essence&&S.emblems.focus_shard>=r.cost_focus_shard){const tab=document.querySelector('[data-tab="pills"]');if(tab&&!tab.classList.contains('hint')){tab.classList.add('hint');setTimeout(()=>tab.classList.remove('hint'),6000)}}}
 },45000)}
 
 // ═══ TOAST — simplified, handles all types ═══
