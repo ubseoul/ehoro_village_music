@@ -1546,14 +1546,18 @@ function showWelcomeBack(xpGained,hoursAway,spiritData){const wb=document.getEle
   let gains='';
   if(xpGained>0)gains+=(sp?sp.name+' gained':'Your spirits gained')+' +'+xpGained+' XP';
   if(hoursAway>0)gains+=(gains?' \u00b7 ':'')+Math.round(hoursAway)+'h away';
-  // Village gift for 5+ hour returns
+  // Village gift for 5+ hour returns — atomic server-side grant
   if(hoursAway>=5&&!S.isGuest){
     const bonus=Math.min(Math.floor(hoursAway),8);
-    S.emblems.cafe_bean+=bonus;S.emblems.wild_essence+=bonus;S.emblems.focus_shard+=bonus;
     gains+=' \u00b7 Village gift: +'+bonus+'\u00d7 each ingredient';
-    const types=['cafe_bean','wild_essence','focus_shard'];
-    types.forEach(t=>{sb.from('emblems').upsert({user_id:S.user.id,emblem_type:t,quantity:S.emblems[t]},{onConflict:'user_id,emblem_type'}).then(()=>{}).catch(e=>console.warn('village gift persist error:',e))});
-    renderPillsTab();
+    sb.rpc('grant_village_gift',{p_hours_away:hoursAway}).then(()=>{
+      reloadEmblems().then(()=>renderPillsTab());
+    }).catch(e=>{
+      // Fallback: optimistic update if RPC fails
+      S.emblems.cafe_bean+=bonus;S.emblems.wild_essence+=bonus;S.emblems.focus_shard+=bonus;
+      console.warn('village gift rpc err (optimistic fallback):',e);
+      renderPillsTab();
+    });
   }
   document.getElementById('wbGains').textContent=gains||'Everything is as you left it.';
   wb.classList.remove('gone');
@@ -1581,7 +1585,7 @@ function enterGuest(){document.getElementById('login').classList.add('gone');doc
 function loadGuestDefaults(){S.spirits=[];S.traits={};S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essence:0};S.profile={total_eggs:0,total_listen_seconds:0,username:'guest'};S.hatchery=[{id:'gs1',slot_number:1,unlocked:true,egg_id:null},{id:'gs2',slot_number:2,unlocked:true,egg_id:null},{id:'gs3',slot_number:3,unlocked:false},{id:'gs4',slot_number:4,unlocked:false},{id:'gs5',slot_number:5,unlocked:false}];S.pendingEggs=[];S.expeditions=[];S.pillRecipes=[{id:'d1',pill_name:'Spirit Pill',pill_type:'growth',description:'Grants 50 XP to a spirit.',effect_type:'xp_flat',effect_value:50,cost_cafe_bean:4,cost_wild_essence:2,cost_focus_shard:2},{id:'d2',pill_name:'Greater Spirit Pill',pill_type:'clarity',description:'Grants 100 XP to a spirit.',effect_type:'xp_flat',effect_value:100,cost_cafe_bean:6,cost_wild_essence:6,cost_focus_shard:6},{id:'d3',pill_name:'Village Spirit Pill',pill_type:'harmony',description:'Grants 25 XP to ALL spirits.',effect_type:'xp_all',effect_value:25,cost_cafe_bean:3,cost_wild_essence:3,cost_focus_shard:8}];updateAllUI();document.getElementById('guestBanner').classList.add('show')}
 async function doLogout(){toggleSettings();
 // Persist listen time before logout
-if(S.sessionStartedAt&&S.profile&&S.user&&!S.isGuest){const sec=Math.floor((Date.now()-S.sessionStartedAt)/1000);const newTotal=(S.profile.total_listen_seconds||0)+sec;try{await sb.from('profiles').update({total_listen_seconds:newTotal}).eq('id',S.user.id)}catch(e){}}
+if(S.sessionStartedAt&&S.profile&&S.user&&!S.isGuest){const sec=Math.floor((Date.now()-S.sessionStartedAt)/1000);const newSec=(S.profile.total_listen_seconds||0)+sec;const newMin=Math.floor(newSec/60);try{await sb.from('profiles').update({total_listen_seconds:newSec,total_listen_minutes:newMin}).eq('id',S.user.id);S.profile.total_listen_seconds=newSec;S.profile.total_listen_minutes=newMin}catch(e){}}
 if(S.sessionId){try{await sb.rpc('end_session',{p_session_id:S.sessionId})}catch(e){}S.sessionId=null}
 await sb.auth.signOut();S.user=null;S.playing=false;S.isGuest=true;S.spirits=[];S.hatchery=[];S.pendingEggs=[];S.allEggs=[];S.expeditions=[];
 S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essence:0};S.profile=null;S.sessionStartedAt=null;S.eggAnchor=null;S.profStep=0;S.chosenStarter=null;
@@ -2839,9 +2843,8 @@ document.addEventListener('visibilitychange',()=>{
 function startTicker(){if(S.ticker)return;if(!S.eggAnchor)S.eggAnchor=Date.now();const eggTime=()=>S.isGuest&&!S.guestEggGiven?S.GUEST_EGG_SEC:(!S.profile?.first_egg_claimed?S.FIRST_EGG_SEC:S.EGG_SEC);S.ticker=setInterval(async()=>{if(!S.playing)return;const now=Date.now();S.eggT=(now-S.eggAnchor)/1000;const total=eggTime();const pct=Math.min((S.eggT/total)*100,100);document.getElementById('eggFill').style.width=pct+'%';const rem=Math.max(0,Math.ceil(total-S.eggT));const mins=Math.floor(rem/60),secs=rem%60;document.getElementById('eggTimer').textContent=mins>0?mins+'m '+secs+'s':secs+'s';
 // V1.3 POLISH: Egg progress glow at 90%+
 const eggProg=document.getElementById('eggProgress');if(pct>=90){eggProg.classList.add('near-ready')}else{eggProg.classList.remove('near-ready')}
-if(S.sessionStartedAt&&S.profile){S.profile._sessionSeconds=Math.floor((now-S.sessionStartedAt)/1000)}const ingChance=(!S.isGuest&&!S.firstIngredientGiven&&S.eggT>30)?0.03:0.002;if(!S.isGuest&&Math.random()<ingChance){const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;S.firstIngredientGiven=true;renderPillsTab();showToast('ing_'+mat);checkCraftHint();try{sb.from('emblems').upsert({user_id:S.user.id,emblem_type:mat,quantity:S.emblems[mat]},{onConflict:'user_id,emblem_type'}).then(()=>{}).catch(e=>console.warn('ing persist err',e))}catch(e){}}if(S.eggT>=total){S.eggAnchor=Date.now();S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane')}}else{try{const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;
-// V1.4: Daily streak bonus materials
-const streakData=getStreak();if(streakData.bonus>0){for(let sb2=0;sb2<streakData.bonus;sb2++){const bmat=types[Math.floor(Math.random()*3)];S.emblems[bmat]++}}
+if(S.sessionStartedAt&&S.profile){S.profile._sessionSeconds=Math.floor((now-S.sessionStartedAt)/1000)}const ingChance=(!S.isGuest&&!S.firstIngredientGiven&&S.eggT>30)?0.03:0.002;if(!S.isGuest&&Math.random()<ingChance){const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;S.firstIngredientGiven=true;renderPillsTab();showToast('ing_'+mat);checkCraftHint();try{sb.from('emblems').upsert({user_id:S.user.id,emblem_type:mat,quantity:S.emblems[mat]},{onConflict:'user_id,emblem_type'}).then(()=>{}).catch(e=>console.warn('ing persist err',e))}catch(e){}}if(S.eggT>=total){S.eggAnchor=Date.now();S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane')}}else{try{const streakData2=getStreak();const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe',p_streak_bonus:streakData2.bonus||0});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;
+// V2.6: Streak bonus now passed to server — no client-side add needed
 await loadUserData();updateAllUI();showToast(data.rarity);autoPlaceEggs();try{sb.rpc('log_event',{p_event:'egg_drop',p_data:{rarity:data.rarity}})}catch(e){}}catch(e){console.warn('egg drop error:',e)}}}},1000)}
 
 // ═══ CRAFT HINT — pulse Items tab when user first has enough materials ═══
@@ -2891,7 +2894,8 @@ async function checkBuildingProduction(){
     const{data,error}=await sb.rpc('check_building_production');
     if(error)throw error;
     if(data?.produced&&data.produced.length){
-      await reloadBuildings();syncMaterialsFromInventory();debouncedUpdateAllUI();
+      await Promise.all([reloadBuildings().then(()=>syncMaterialsFromInventory()),reloadEmblems()]);
+      debouncedUpdateAllUI();
       data.produced.forEach(p=>{
         showToastMsg(BUILDING_CONFIGS[p.building]?.emoji||'🏗️',BUILDING_CONFIGS[p.building]?.label+' produced!',p.item_name);
       });
@@ -3058,7 +3062,7 @@ const headers={'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Aut
 if(S.sessionId){try{fetch(SUPABASE_URL+'/rest/v1/rpc/end_session',{method:'POST',headers,body:JSON.stringify({p_session_id:S.sessionId}),keepalive:true})}catch(e){}}
 if(S.sessionStartedAt&&S.profile){const sec=Math.floor((Date.now()-S.sessionStartedAt)/1000);const newTotal=(S.profile.total_listen_seconds||0)+sec;try{fetch(SUPABASE_URL+'/rest/v1/profiles?id=eq.'+S.user.id,{method:'PATCH',headers,body:JSON.stringify({total_listen_seconds:newTotal}),keepalive:true})}catch(e){}}}});
 // Periodic listen time save every 5 minutes (V2.0: increased from 2min)
-setInterval(()=>{if(S.playing&&!S.isGuest&&S.sessionStartedAt&&S.user&&S.profile){const sec=Math.floor((Date.now()-S.sessionStartedAt)/1000);const newTotal=(S.profile.total_listen_seconds||0)+sec;sb.from('profiles').update({total_listen_seconds:newTotal}).eq('id',S.user.id).then(()=>{}).catch(e=>console.warn('listen save error:',e))}},300000);
+setInterval(()=>{if(S.playing&&!S.isGuest&&S.sessionStartedAt&&S.user&&S.profile){const sec=Math.floor((Date.now()-S.sessionStartedAt)/1000);const newSec=(S.profile.total_listen_seconds||0)+sec;const newMin=Math.floor(newSec/60);sb.from('profiles').update({total_listen_seconds:newSec,total_listen_minutes:newMin}).eq('id',S.user.id).then(()=>{S.profile.total_listen_seconds=newSec;S.profile.total_listen_minutes=newMin}).catch(e=>console.warn('listen save error:',e))}},300000);
 
 // ═══ SAFETY CHECK — auto-place eggs if slots available ═══
 async function autoPlaceEggs(){if(S.isGuest)return;const pend=S.pendingEggs.filter(e=>e.status==='pending');const empty=S.hatchery.filter(s=>s.unlocked&&!s.egg_id);if(pend.length&&empty.length){for(let i=0;i<Math.min(pend.length,empty.length);i++){try{await sb.rpc('place_egg_in_slot',{p_egg_id:pend[i].id,p_slot_id:empty[i].id})}catch(e){}}await loadUserData();updateAllUI()}}
