@@ -453,6 +453,58 @@ button.action-busy{opacity:.5;pointer-events:none}
 /* Rarity bonus XP indicator on hatch reveal */
 .hatch-reveal-bonus{font-size:.55rem;color:var(--positive);margin-top:6px;opacity:0;animation:bonusFadeIn .8s ease .3s forwards}
 @keyframes bonusFadeIn{to{opacity:1}}
+
+/* ═══════════════════════════════════════════════
+   V2.6 CSS — TRAITS, JOURNAL, CULTIVATION, LIBRARY
+   ═══════════════════════════════════════════════ */
+
+/* ─── TRAIT SECTION IN SPIRIT DETAIL ─── */
+.sd-trait-slots{font-size:.42rem;color:var(--t4);font-weight:400;font-family:'JetBrains Mono',monospace;margin-left:6px}
+.sd-traits{display:flex;flex-direction:column;gap:4px;margin-bottom:6px}
+.sd-traits-empty{font-size:.5rem;color:var(--t4);padding:8px 0;font-style:italic}
+.sd-trait-cat{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:6px 8px;margin-bottom:3px}
+.sd-trait-cat-label{font-size:.45rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600;display:block;margin-bottom:4px}
+.sd-trait-row{display:flex;align-items:center;gap:6px;padding:2px 0;cursor:pointer}
+.sd-trait-row:hover .sd-trait-name{text-decoration:underline}
+.sd-trait-name{font-size:.62rem;font-weight:500;flex-shrink:0}
+.sd-trait-effect{font-size:.48rem;color:var(--t3);flex:1;text-align:right}
+.sd-trait-desc{font-size:.48rem;color:var(--t3);font-style:italic;padding:3px 6px;margin-top:1px;background:rgba(255,255,255,.02);border-radius:3px;max-height:0;overflow:hidden;opacity:0;transition:all .2s}
+.sd-trait-desc.show{max-height:60px;opacity:1}
+.sd-trait-slot-empty{font-size:.48rem;color:var(--t4);padding:5px 8px;border:1px dashed var(--border);border-radius:var(--radius-sm);text-align:center}
+
+/* ─── SPIRIT JOURNAL ─── */
+.sd-journal{display:flex;flex-direction:column;gap:3px}
+.sd-journal-empty{font-size:.5rem;color:var(--t4);padding:6px 0;font-style:italic}
+.sd-journal-entry{display:flex;align-items:baseline;gap:6px;padding:5px 8px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm)}
+.sd-journal-ico{font-size:.7rem;flex-shrink:0}
+.sd-journal-desc{font-size:.52rem;color:var(--t2);flex:1;line-height:1.4}
+.sd-journal-date{font-size:.42rem;color:var(--t4);flex-shrink:0;font-family:'JetBrains Mono',monospace}
+
+/* ─── CULTIVATION MODAL ─── */
+.cult-modal-path{display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);margin:8px 0;justify-content:center}
+.cult-modal-from{font-size:.62rem;color:var(--t3)}
+.cult-modal-arrow{font-size:.7rem;color:var(--t4)}
+.cult-modal-to{font-size:.62rem;font-weight:600;color:var(--positive)}
+.cult-modal-reqs{display:flex;flex-direction:column;gap:5px;margin:8px 0}
+.cult-modal-req{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-radius:var(--radius-sm);font-size:.55rem;border:1px solid var(--border)}
+.cult-modal-req.met{background:rgba(102,187,153,.04);border-color:rgba(102,187,153,.15);color:var(--t2)}
+.cult-modal-req.met span:last-child{color:var(--positive);font-family:'JetBrains Mono',monospace}
+.cult-modal-req.unmet{background:rgba(204,100,100,.04);border-color:rgba(204,100,100,.15);color:var(--t3)}
+.cult-modal-req.unmet span:last-child{color:var(--negative)}
+.cult-modal-listen-bar{height:3px;background:var(--border);border-radius:2px;margin:-3px 0 2px;overflow:hidden}
+.cult-modal-listen-fill{height:100%;background:var(--special);border-radius:2px;transition:width .4s}
+
+/* ─── CULTIVATION LISTEN PROGRESS IN SPIRIT DETAIL ─── */
+.sd-cult-listen{margin:4px 0}
+.sd-cult-listen-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:2px}
+.sd-cult-listen-fill{height:100%;background:var(--special);border-radius:2px}
+
+/* ─── LIBRARY LOOT REVEAL (tooltip on location in expedition modal) ─── */
+.exped-loc-opt.researched .exped-loc-header::after{content:'Researched';font-size:.38rem;color:var(--special);margin-left:auto;padding:1px 5px;border:1px solid rgba(200,136,255,.2);border-radius:4px}
+.exped-loot-item.researched{opacity:1}
+.exped-loot-rate{font-size:.42rem;color:var(--t4);font-family:'JetBrains Mono',monospace;margin-left:4px}
+
+
 /* ═══════════════════════════════════════════════
    V2.5 CSS — EXPEDITION LOCATIONS, BUILDINGS, INVENTORY
    ═══════════════════════════════════════════════ */
@@ -992,7 +1044,7 @@ const MATERIAL_INFO={
 };
 const WB_MESSAGES=['The village rested while you were away...','Your spirits kept watch in the quiet hours...','The lo-fi played on while you were gone...','A gentle hum welcomes you home...','The spirits sensed your return...'];
 
-let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essence:0},hatchery:[],pendingEggs:[],allEggs:[],pillRecipes:[],expeditions:[],_wickedPills:[],buildings:[],buildingStaff:[],buildingInventory:[],materials:{},playing:false,currentStream:'sakura',eggT:0,eggAnchor:null,EGG_SEC:3600,FIRST_EGG_SEC:240,GUEST_EGG_SEC:30,XP_PER_LEVEL:150,XP_ACTIVE_INTERVAL:300,sessionId:null,sessionStartedAt:null,ticker:null,hatchTicker:null,cultTicker:null,jiggleTicker:null,expedTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null,firstIngredientGiven:false,craftHintShown:false,wbTimer:null,profStep:0,chosenStarter:null,asheListenAccum:0,asheListenTimer:0};
+let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essence:0},hatchery:[],pendingEggs:[],allEggs:[],pillRecipes:[],expeditions:[],_wickedPills:[],buildings:[],buildingStaff:[],buildingInventory:[],materials:{},journal:{},playing:false,currentStream:'sakura',eggT:0,eggAnchor:null,EGG_SEC:3600,FIRST_EGG_SEC:240,GUEST_EGG_SEC:30,XP_PER_LEVEL:150,XP_ACTIVE_INTERVAL:300,sessionId:null,sessionStartedAt:null,ticker:null,hatchTicker:null,cultTicker:null,jiggleTicker:null,expedTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null,firstIngredientGiven:false,craftHintShown:false,wbTimer:null,profStep:0,chosenStarter:null,asheListenAccum:0,asheListenTimer:0};
 
 // ═══ V2.0: WICKED PILL INVENTORY (now DB-backed) ═══
 function getWickedPills(){return S._wickedPills||[]}
@@ -1028,15 +1080,49 @@ function setBusy(key,ms){_busy[key]=true;setTimeout(()=>{_busy[key]=false},ms||3
 function isBusy(key){return !!_busy[key]}
 
 // ═══ TRAIT EFFECTS CONFIG — minimal gameplay impact ═══
-const TRAIT_EFFECTS={
-  'Focused':{type:'xp_bonus',value:0.10,desc:'+10% active cultivation XP'},
-  'Studious':{type:'xp_bonus',value:0.05,desc:'+5% pill XP'},
-  'Wild':{type:'exped_bonus_mats',value:0.15,desc:'+15% expedition materials'},
-  'Adventurous':{type:'exped_bonus_mats',value:0.10,desc:'+10% expedition materials'},
-  'Resilient':{type:'rest_reduction',value:0.20,desc:'-20% expedition rest time'},
-  'Calm':{type:'passive_xp_bonus',value:0.15,desc:'+15% passive XP'},
-  'Gentle':{type:'hatch_speed',value:0.05,desc:'-5% hatch time'}
+// TRAIT_EFFECTS — derived from TRAIT_DEFS for backward compatibility
+// Maps trait_name → {type, value, desc} (same shape as before)
+const TRAIT_EFFECTS=Object.fromEntries(
+  Object.entries(TRAIT_DEFS).map(([name,def])=>[name,{type:def.effect,value:def.value,desc:def.display}])
+);
+// ═══ V2.6: TRAIT DEFINITIONS — 3 categories, slot-based system ═══
+// Slots: Seedling=1, Awakened=2, Ascended=3
+// Category: expedition, cultivation, affinity
+const TRAIT_DEFS={
+  // EXPEDITION TRAITS — boost time in the field
+  'Wild':          {cat:'expedition',evoReq:0,desc:'A restless energy that finds more in every trip.',effect:'exped_bonus_mats',value:0.15,display:'+15% expedition drops'},
+  'Adventurous':   {cat:'expedition',evoReq:0,desc:'They just love to go.',effect:'exped_bonus_mats',value:0.10,display:'+10% expedition drops'},
+  'Resilient':     {cat:'expedition',evoReq:0,desc:'Shakes off the long road.',effect:'rest_reduction',value:0.20,display:'-20% expedition rest time'},
+  'Scout':         {cat:'expedition',evoReq:1,desc:'Reads terrain others overlook.',effect:'exped_bonus_mats',value:0.20,display:'+20% expedition drops'},
+  'Highlands Reader':{cat:'expedition',evoReq:1,desc:'The Bamboo Highlands speak to them.',effect:'location_bonus',location:'bamboo_highlands',value:0.30,display:'+30% drops in Bamboo Highlands'},
+  'Market Sharp':  {cat:'expedition',evoReq:1,desc:'Knows a deal when they see one.',effect:'location_bonus',location:'night_market',value:0.30,display:'+30% drops in Night Market'},
+  'Frost-Hardened':{cat:'expedition',evoReq:2,desc:'The cold is just weather to them.',effect:'location_bonus',location:'frozen_ruins',value:0.40,display:'+40% drops in Frozen Ruins'},
+  'Patient':       {cat:'expedition',evoReq:1,desc:'Waits. Watches. Finds.',effect:'rest_reduction',value:0.35,display:'-35% expedition rest time'},
+  // CULTIVATION TRAITS — grow faster, deeper
+  'Focused':       {cat:'cultivation',evoReq:0,desc:'Music sharpens something in them.',effect:'xp_bonus',value:0.10,display:'+10% active XP'},
+  'Studious':      {cat:'cultivation',evoReq:0,desc:'Absorbs every lesson.',effect:'xp_bonus',value:0.05,display:'+5% XP from pills'},
+  'Calm':          {cat:'cultivation',evoReq:0,desc:'Inner stillness generates outer progress.',effect:'passive_xp_bonus',value:0.15,display:'+15% passive XP'},
+  'Disciplined':   {cat:'cultivation',evoReq:2,desc:'Drills until it breaks open.',effect:'xp_bonus',value:0.25,display:'+25% active XP'},
+  'Deep Roots':    {cat:'cultivation',evoReq:1,desc:'Cultivation advances cost -10% àṣẹ.',effect:'cult_cost_reduction',value:0.10,display:'-10% cultivation cost'},
+  'Meditative':    {cat:'cultivation',evoReq:1,desc:'Listens differently.',effect:'listen_xp',value:0.15,display:'+15% XP from listening'},
+  // AFFINITY TRAITS — social, village, building
+  'Gentle':        {cat:'affinity',evoReq:0,desc:'Tender care makes eggs hatch faster.',effect:'hatch_speed',value:0.05,display:'-5% hatch time'},
+  'Warm':          {cat:'affinity',evoReq:0,desc:'The village feels more alive with them in it.',effect:'village_presence',value:1,display:'Village +1 prestige/day'},
+  'Head Barista':  {cat:'affinity',evoReq:1,desc:'Unlocks Tier 2 Café drinks when manager.',effect:'cafe_tier',value:2,display:'Café drinks Tier 2+'},
+  'Archivist':     {cat:'affinity',evoReq:1,desc:'Speeds up Library research tracks.',effect:'research_speed',value:0.25,display:'+25% research speed'},
+  'Sensei':        {cat:'affinity',evoReq:2,desc:'Dojo trainees gain 2× XP.',effect:'dojo_multiplier',value:2,display:'Dojo trainees 2× XP'},
 };
+
+// Trait slots per evo stage
+const TRAIT_SLOTS={0:1,1:2,2:3};
+
+// Category display
+const TRAIT_CATS={
+  expedition:{label:'Expedition',color:'#8ab4ff',emoji:'🧭'},
+  cultivation:{label:'Cultivation',color:'var(--positive)',emoji:'📿'},
+  affinity:{label:'Affinity',color:'var(--special)',emoji:'✦'},
+};
+
 function spiritHasTraitEffect(spiritId,effectType){
   const tr=S.traits[spiritId]||[];
   return tr.some(t=>TRAIT_EFFECTS[t.trait_name]?.type===effectType);
@@ -1307,6 +1393,8 @@ async function finishProf(){
     await loadUserData();
     await autoPlaceEggs();
     updateAllUI();
+    // V2.6: Check building production after login
+    setTimeout(()=>checkBuildingProduction(),3500);
     localStorage.setItem('starter_pack_done_'+uid,'1');
     // 6) Show spirit arrival or error
     if(S.spirits.length>0){
@@ -1529,8 +1617,10 @@ async function loadUserData(){if(!S.user)return;
   S.traits={};if(traits)traits.forEach(t=>{if(!S.traits[t.spirit_id])S.traits[t.spirit_id]=[];S.traits[t.spirit_id].push(t)});
   // V2.0: Wicked pills from DB
   S._wickedPills=wpills||[];
-  // V2.5: Load buildings in parallel (non-blocking, doesn't block main data)
+  // V2.5: Load buildings in parallel
   if(!S.isGuest)reloadBuildings().then(()=>{syncMaterialsFromInventory()}).catch(e=>console.warn('buildings reload err:',e));
+  // V2.6: Load journal non-blocking
+  if(!S.isGuest)reloadJournal().catch(e=>console.warn('journal reload err:',e));
   // Dismiss reconnect overlay on success
   hideReconnectOverlay();
   }catch(e){
@@ -1761,10 +1851,14 @@ async function claimExpedition(expedId){
     const{data,error}=await sb.rpc('claim_expedition',{p_expedition_id:expedId});
     if(error)throw error;
     if(data?.error){console.warn('claim exped rpc error:',data.error);showToast('error');return}
-    await Promise.all([reloadSpiritsAndTraits(),reloadEmblems(),reloadExpeditions(),reloadBuildings().then(()=>syncMaterialsFromInventory())]);
+    await Promise.all([reloadSpiritsAndTraits(),reloadEmblems(),reloadExpeditions(),reloadBuildings().then(()=>syncMaterialsFromInventory()),reloadJournal()]);
     debouncedUpdateAllUI();
     // Show loot reveal ceremony
     showExpedLootReveal(data,exp);
+    // V2.6: Journal entries for each spirit
+    const sIds=Array.isArray(exp?.spirit_ids)?exp.spirit_ids:[];
+    const locLabel=(EXPED_LOCATIONS[exp?.location]?.label||'expedition');
+    sIds.forEach(sid=>addJournalEntry(sid,'expedition','Returned from '+locLabel+(data.bonus_xp>0?' · +'+data.bonus_xp+' XP':'')));
   }catch(e){console.warn('claim expedition error:',e);showToast('error')}
 }
 
@@ -1926,18 +2020,38 @@ async function openCultivateModal(spiritId){
   if(stage>=5)return;
   const cost=CULT_COSTS[stage];
   const reqLvl=CULT_LVL_REQ[stage];
-  const lvl=Math.floor((sp.xp||0)/100)+1;
+  const lvl=Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1;
+  const listenReq=getCultListenReq(stage);
   const hasAshe=(S.emblems.ashe_essence||0)>=cost;
   const hasLvl=lvl>=reqLvl;
-  const can=hasAshe&&hasLvl;
-  
+  const hasListen=meetsListenReq(stage);
+  const totalMin=getTotalListenMinutes();
+  const cultRedux=spiritTraitBonus(spiritId,'cult_cost_reduction');
+  const actualCost=Math.max(1,Math.floor(cost*(1-cultRedux)));
+  const can=hasAshe&&hasLvl&&hasListen;
   const box=document.getElementById('modalBox');
-  box.innerHTML='<div class="modal-title">Advance Cultivation</div><div class="modal-desc"><b>'+sp.name+'</b> — '+CULT_STAGES[stage]+' → '+CULT_STAGES[stage+1]+'</div><div style="font-size:.6rem;color:var(--t2);line-height:1.6;margin:8px 0"><div'+(hasLvl?'':' style="color:var(--negative)"')+'>Requires: Lv.'+reqLvl+' (currently Lv.'+lvl+')</div><div'+(hasAshe?'':' style="color:var(--negative)"')+'>Cost: '+cost+' Àṣẹ Essence (have '+(S.emblems.ashe_essence||0)+')</div></div><button class="modal-btn" '+(can?'':'disabled')+' onclick="doCultivate(\''+spiritId+'\')">Advance to '+CULT_STAGES[stage+1]+'</button><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';
+  let h='<div class="modal-title">Advance Cultivation</div>';
+  h+='<div class="modal-desc"><b>'+sp.name+'</b></div>';
+  h+='<div class="cult-modal-path"><span class="cult-modal-from">'+CULT_STAGES[stage]+'</span><span class="cult-modal-arrow"> → </span><span class="cult-modal-to">'+CULT_STAGES[stage+1]+'</span></div>';
+  h+='<div class="cult-modal-reqs">';
+  h+='<div class="cult-modal-req '+(hasLvl?'met':'unmet')+'"><span>Level required</span><span>Lv.'+reqLvl+(hasLvl?'':' · need Lv.'+reqLvl)+'</span></div>';
+  if(listenReq>0){
+    const listenPct=Math.min(100,Math.round((totalMin/listenReq)*100));
+    h+='<div class="cult-modal-req '+(hasListen?'met':'unmet')+'"><span>Listen time</span><span>'+totalMin+'m / '+listenReq+'m</span></div>';
+    if(!hasListen)h+='<div class="cult-modal-listen-bar"><div class="cult-modal-listen-fill" style="width:'+listenPct+'%"></div></div>';
+  }
+  h+='<div class="cult-modal-req '+(hasAshe?'met':'unmet')+'"><span>Àṣẹ Essence</span><span>'+actualCost+' 🔮 (have '+(S.emblems.ashe_essence||0)+')</span></div>';
+  h+='</div>';
+  if(cultRedux>0)h+='<div style="font-size:.48rem;color:var(--positive);text-align:center;margin-bottom:6px">Deep Roots: -'+Math.round(cultRedux*100)+'% cost</div>';
+  h+='<button class="modal-btn" '+(can?'':'disabled')+' onclick="doCultivate(\''+spiritId+'\')">Advance to '+CULT_STAGES[stage+1]+'</button>';
+  h+='<button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';
+  box.innerHTML=h;
   document.getElementById('modal').classList.add('open');
 }
-
 async function doCultivate(spiritId){
   closeModal();
+  const sp=S.spirits.find(s=>s.id===spiritId);
+  const oldStage=sp?.cultivation_stage||0;
   try{
     const{data,error}=await sb.rpc('advance_cultivation',{p_spirit_id:spiritId});
     if(error)throw error;
@@ -1945,6 +2059,9 @@ async function doCultivate(spiritId){
     await Promise.all([reloadSpiritsAndTraits(),reloadEmblems()]);
     debouncedUpdateAllUI();
     showToast('cultivation');
+    // V2.6: Write journal entry
+    const newStage=oldStage+1;
+    addJournalEntry(spiritId,'cultivation','Reached '+CULT_STAGES[newStage]+' cultivation stage');
     if(S.selectedSpirit===spiritId)showSpiritDetail(spiritId);
   }catch(e){console.warn('cultivation advance error:',e);showToast('error')}
 }
@@ -2091,9 +2208,18 @@ function showSpiritDetail(id){
   cultHtml+='</div></div>';
   if(cultStage<5){
     const cultCost=CULT_COSTS[cultStage];const cultReqLvl=CULT_LVL_REQ[cultStage];
-    const canCult=lvl>=cultReqLvl&&(S.emblems.ashe_essence||0)>=cultCost&&!S.isGuest;
+    const listenReq=getCultListenReq(cultStage);
+    const hasListen=meetsListenReq(cultStage);
+    const totalMin=getTotalListenMinutes();
+    const cultRedux=spiritTraitBonus(sp.id,'cult_cost_reduction');
+    const actualCost=Math.max(1,Math.floor(cultCost*(1-cultRedux)));
+    const canCult=lvl>=cultReqLvl&&(S.emblems.ashe_essence||0)>=actualCost&&hasListen&&!S.isGuest;
+    if(listenReq>0&&!hasListen){
+      const lPct=Math.min(100,Math.round((totalMin/listenReq)*100));
+      cultHtml+='<div class="sd-cult-listen"><div style="font-size:.42rem;color:var(--t3);margin-bottom:3px">Listen time: '+totalMin+'m / '+listenReq+'m</div><div class="sd-cult-listen-bar"><div class="sd-cult-listen-fill" style="width:'+lPct+'%"></div></div></div>';
+    }
     cultHtml+='<button class="sd-cult-advance" '+(canCult?'':'disabled')+' onclick="openCultivateModal(\''+sp.id+'\')">Advance to '+CULT_STAGES[cultStage+1]+'</button>';
-    cultHtml+='<div class="sd-cult-cost">'+cultCost+' 🔮 Àṣẹ · Lv.'+cultReqLvl+' required'+(lvl<cultReqLvl?' · <span style="color:var(--negative)">need Lv.'+cultReqLvl+'</span>':'')+'</div>';
+    cultHtml+='<div class="sd-cult-cost">'+actualCost+' 🔮 Àṣẹ · Lv.'+cultReqLvl+(listenReq>0?' · '+listenReq+'m listen':'')+' required</div>';
   }else{
     cultHtml+='<div style="font-size:.5rem;color:var(--special);text-align:center;margin-top:4px">✦ Spirit Sovereign — Maximum cultivation ✦</div>';
   }
@@ -2130,16 +2256,10 @@ function showSpiritDetail(id){
     '<div class="sd-bar"><div class="sd-bar-fill" style="width:'+xpPct+'%"></div></div>'+
     '<span class="sd-lvl">'+xpP+' / '+S.XP_PER_LEVEL+'</span>'+
     '</div>'+
-    '<div class="sd-section">Traits</div>'+
-    '<div class="trait-tags">'+
-    (tr.length?tr.map(t=>{
-      const eff=TRAIT_EFFECTS[t.trait_name];
-      const did='td-'+t.trait_name.toLowerCase().replace(/\s/g,'');
-      return'<div class="trait-tag-wrap"><span class="trait-tag '+t.trait_type+(eff?' has-effect':'')+'" onclick="toggleTraitDesc(\''+did+'\')">'+t.trait_name+'</span>'+(eff?'<span class="trait-desc" id="'+did+'">'+eff.desc+'</span>':'')+'</div>';
-    }).join(''):'<span style="font-size:.5rem;color:var(--t4)">Evolve to unlock traits — they boost XP, expeditions, and more</span>')+
-    '</div>'+
+    buildSpiritTraitSection(sp,tr)+
     cultHtml+
     evoReqs+
+    buildJournalSection(sp.id)+
     (!S.isGuest&&S.spirits.length>1&&!spiritUnavailable(sp.id)?
       '<div class="sd-section" style="margin-top:16px;color:var(--t4)">Release</div>'+
       '<div style="text-align:center;padding:8px;background:rgba(204,119,119,.04);border:1px solid rgba(204,119,119,.08);border-radius:var(--radius-sm)">'+
@@ -2149,6 +2269,58 @@ function showSpiritDetail(id){
 }
 function closeSpiritDetail(){S.selectedSpirit=null;document.getElementById('spiritDetail').className='spirit-detail'}
 function toggleTraitDesc(id){const el=document.getElementById(id);if(!el)return;const wasOpen=el.classList.contains('show');document.querySelectorAll('.trait-desc.show').forEach(d=>d.classList.remove('show'));if(!wasOpen)el.classList.add('show')}
+
+// ═══ V2.6: TRAIT SECTION BUILDER ═══
+function buildSpiritTraitSection(sp,tr){
+  const slots=TRAIT_SLOTS[sp.evo_stage]||1;
+  const filled=tr.length;
+  let h='<div class="sd-section">Traits <span class="sd-trait-slots">'+filled+'/'+slots+' slots</span></div>';
+  h+='<div class="sd-traits">';
+  if(filled===0){
+    h+='<div class="sd-traits-empty">Evolve to unlock traits — they boost XP, expeditions, and building work</div>';
+  }else{
+    const byCat={expedition:[],cultivation:[],affinity:[]};
+    tr.forEach(t=>{const def=TRAIT_DEFS[t.trait_name];const cat=def?.cat||'expedition';byCat[cat].push(t)});
+    Object.entries(byCat).forEach(([cat,traits])=>{
+      if(!traits.length)return;
+      const catDef=TRAIT_CATS[cat];
+      h+='<div class="sd-trait-cat"><span class="sd-trait-cat-label" style="color:'+catDef.color+'">'+catDef.emoji+' '+catDef.label+'</span>';
+      traits.forEach(t=>{
+        const def=TRAIT_DEFS[t.trait_name]||{};
+        const did='td-'+t.trait_name.toLowerCase().replace(/\s/g,'');
+        h+='<div class="sd-trait-row" onclick="toggleTraitDesc(\''+did+'\')"><span class="sd-trait-name" style="color:'+catDef.color+'">'+t.trait_name+'</span><span class="sd-trait-effect">'+def.display+'</span></div>';
+        if(def.desc)h+='<div class="trait-desc sd-trait-desc" id="'+did+'">'+def.desc+'</div>';
+      });
+      h+='</div>';
+    });
+  }
+  const emptySlots=slots-filled;
+  if(emptySlots>0&&filled>0){for(let i=0;i<emptySlots;i++)h+='<div class="sd-trait-slot-empty">+ Empty trait slot</div>';}
+  else if(slots<3)h+='<div style="font-size:.42rem;color:var(--t4);margin-top:4px">Evolve to unlock more trait slots ('+slots+'/3)</div>';
+  h+='</div>';
+  return h;
+}
+
+// ═══ V2.6: SPIRIT JOURNAL ═══
+function getJournalFor(spiritId){return(S.journal||{})[spiritId]||[]}
+function buildJournalSection(spiritId){
+  const entries=getJournalFor(spiritId);
+  let h='<div class="sd-section" style="margin-top:14px">Journal</div>';
+  if(!entries.length){
+    h+='<div class="sd-journal-empty">Nothing recorded yet. Evolutions, expeditions, and cultivation breakthroughs will appear here.</div>';
+    return h;
+  }
+  h+='<div class="sd-journal">';
+  entries.slice(0,8).forEach(e=>{
+    const d=new Date(e.ts||e.created_at);
+    const dStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const icons={evolution:'✨',expedition:'🧭',cultivation:'📿',release:'💠',drink:'☕'};
+    const ico=icons[e.event_type]||'·';
+    h+='<div class="sd-journal-entry"><span class="sd-journal-ico">'+ico+'</span><span class="sd-journal-desc">'+esc(e.description||e.desc||'')+'</span><span class="sd-journal-date">'+dStr+'</span></div>';
+  });
+  h+='</div>';
+  return h;
+}
 
 // ═══ ITEMS TAB — simplified: hatchery, ingredients, pills ═══
 function renderItemsTab(){const el=document.getElementById('tab-items'),prest=calcPrestige(),pendCount=S.pendingEggs.filter(e=>e.status==='pending').length;let h='<div class="section-label">Hatchery</div><div class="hatchery-grid">';
@@ -2500,6 +2672,8 @@ function startCultivationTicker(){if(S.cultTicker||S.isGuest)return;S.cultTicker
       debouncedUpdateAllUI();
     }catch(e){console.warn('ashe listen tick error:',e)}
   }
+  // V2.6: Dojo passive XP for assigned workers
+  applyDojoXP();
   try{const{data}=await sb.rpc('tick_active_cultivation');if(data?.success){
 // Trait effect: Focused spirits get bonus active cultivation XP (10% chance of +1)
 for(const sp of S.spirits){const bonus=spiritTraitBonus(sp.id,'xp_bonus');if(bonus>0&&Math.random()<bonus){const newXp=(sp.xp||0)+1;sb.from('spirits').update({xp:newXp}).eq('id',sp.id).then(()=>{}).catch(e=>console.warn('focused bonus err',e))}}
@@ -2519,7 +2693,7 @@ async function doEvolve(spiritId){
     closeSpiritDetail();
     // Show evolution ceremony with new stage data
     const newSp=S.spirits.find(s=>s.id===spiritId)||sp;
-    if(newSp)showEvoCeremony(newSp);
+    if(newSp){showEvoCeremony(newSp);addJournalEntry(spiritId,'evolution','Evolved to '+EVO_LABELS[newSp.evo_stage]);}
     else showToast('evolution');
     checkMilestones();
   }catch(e){console.warn('evolve error:',e);showToast('error')}
@@ -2677,6 +2851,80 @@ function showToast(type){const t=document.getElementById('toast');const ING_NAME
 // Named ingredient toasts
 if(type.startsWith('ing_')){const key=type.slice(4);const ing=ING_NAMES[key];document.getElementById('toastI').textContent=ing?.i||'\u2728';document.getElementById('toastT').textContent='Found '+(ing?.n||'ingredient')+'!';document.getElementById('toastS').textContent='';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);return}
 const rr=RARITY_COLORS[type];if(rr){document.getElementById('toastI').textContent='\uD83E\uDD5A';document.getElementById('toastT').textContent=type.charAt(0).toUpperCase()+type.slice(1)+' Egg';document.getElementById('toastS').textContent=S.isGuest?'Sign up to keep!':''}else{const m=msgs[type]||msgs.welcome;document.getElementById('toastI').textContent=m.i;document.getElementById('toastT').textContent=m.t;document.getElementById('toastS').textContent=m.s||''}t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+
+// ═══ V2.6: JOURNAL RELOAD ═══
+async function reloadJournal(){
+  if(!S.user||S.isGuest)return;
+  const sIds=S.spirits.map(s=>s.id);
+  if(!sIds.length)return;
+  const{data}=await sb.from('spirit_journal').select('*').in('spirit_id',sIds).order('created_at',{ascending:false}).limit(80);
+  S.journal={};
+  (data||[]).forEach(e=>{
+    if(!S.journal[e.spirit_id])S.journal[e.spirit_id]=[];
+    if(S.journal[e.spirit_id].length<10)S.journal[e.spirit_id].push(e);
+  });
+}
+
+async function addJournalEntry(spiritId,eventType,description){
+  if(!S.user||S.isGuest)return;
+  try{
+    await sb.from('spirit_journal').insert({spirit_id:spiritId,user_id:S.user.id,event_type:eventType,description});
+    if(!S.journal[spiritId])S.journal[spiritId]=[];
+    S.journal[spiritId].unshift({spirit_id:spiritId,event_type:eventType,description,created_at:new Date().toISOString()});
+    if(S.journal[spiritId].length>10)S.journal[spiritId].length=10;
+  }catch(e){console.warn('journal write err:',e)}
+}
+
+// ═══ V2.6: BUILDING PRODUCTION ═══
+// Called on login + every 4hrs via ticker to check if buildings have produced
+async function checkBuildingProduction(){
+  if(!S.user||S.isGuest)return;
+  try{
+    const{data,error}=await sb.rpc('check_building_production');
+    if(error)throw error;
+    if(data?.produced&&data.produced.length){
+      await reloadBuildings();syncMaterialsFromInventory();debouncedUpdateAllUI();
+      data.produced.forEach(p=>{
+        showToastMsg(BUILDING_CONFIGS[p.building]?.emoji||'🏗️',BUILDING_CONFIGS[p.building]?.label+' produced!',p.item_name);
+      });
+    }
+  }catch(e){console.warn('building production check err:',e)}
+}
+
+// Dojo passive XP: called from cultivation ticker for any spirits assigned as workers
+function applyDojoXP(){
+  if(!buildingUnlocked('dojo'))return;
+  const workers=getWorkersFor('dojo');
+  if(!workers.length)return;
+  const mgr=getManagerFor('dojo');
+  const mgrSp=mgr?S.spirits.find(s=>s.id===mgr.spirit_id):null;
+  const multiplier=mgrSp&&spiritHasTraitEffect(mgrSp.id,'dojo_multiplier')?2:1;
+  workers.forEach(w=>{
+    const sp=S.spirits.find(s=>s.id===w.spirit_id);
+    if(!sp)return;
+    // 1 XP per 5-min tick, doubled if Sensei trait active
+    const gain=1*multiplier;
+    sp.xp=(sp.xp||0)+gain;
+    // Persist to DB quietly
+    sb.from('spirits').update({xp:sp.xp}).eq('id',sp.id).then(()=>{}).catch(()=>{});
+  });
+}
+
+// Library: get researched locations
+function getResearchedLocations(){
+  const libraryData=getBuildingData('library');
+  if(!libraryData||!libraryData.research_data)return[];
+  try{return JSON.parse(libraryData.research_data)||[];}catch(e){return[];}
+}
+function locationIsResearched(locId){return getResearchedLocations().includes(locId)}
+
+// ═══ V2.6: CULTIVATION REWORK — listen time gate ═══
+// Total listen time in minutes tracked via profile.total_listen_minutes
+// Cultivation stage requirements (in listen minutes)
+const CULT_LISTEN_REQ=[0,30,90,180,360,720]; // minutes per stage
+function getCultListenReq(stage){return CULT_LISTEN_REQ[stage]||0}
+function getTotalListenMinutes(){return Math.floor((S.profile?.total_listen_minutes||0))}
+function meetsListenReq(stage){return getTotalListenMinutes()>=getCultListenReq(stage)}
 
 // ═══ V2.5: BUILDING UNLOCK MODAL ═══
 function openUnlockBuildingModal(buildingType){
