@@ -100,36 +100,52 @@ button:focus-visible,input:focus-visible,select:focus-visible,.spirit-card:focus
 .tab-nav{display:flex;border-bottom:1px solid var(--border);padding:4px 10px;gap:2px}
 .tab-btn{flex:1;padding:7px 0;background:none;border:none;border-radius:8px;color:var(--t3);font-family:inherit;font-size:.55rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}.tab-btn:hover{color:var(--t2);background:var(--glass-hover)}.tab-btn.on{color:var(--t1);background:var(--accent-soft)}
 .tab-panels{flex:1;overflow:hidden;position:relative}.tab-panel{position:absolute;inset:0;overflow-y:auto;padding:10px;opacity:0;pointer-events:none;transition:opacity .2s}.tab-panel.on{opacity:1;pointer-events:all}.tab-panel::-webkit-scrollbar{width:3px}.tab-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-/* SPIRIT CARDS */
-.spirits-grid{display:flex;flex-direction:column;gap:5px}
-.spirits-count{font-size:.5rem;color:var(--t3);text-align:center;padding:8px 0;letter-spacing:.1em}
-/* V1.3 POLISH: Spirit cards - better spacing and hierarchy */
-.spirit-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s}.spirit-card:hover{background:var(--accent-soft);border-color:var(--border-l);transform:translateY(-1px)}
-.spirit-card-img{width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;position:relative}
+/* SPIRIT CARDS — V2.4 REWORK */
+.spirits-grid{display:flex;flex-direction:column;gap:8px}
+.spirits-count{display:none}
+.spirit-card{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);min-height:72px}.spirit-card:hover{background:var(--accent-soft);border-color:var(--border-l);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.12)}
+[data-theme="light"] .spirit-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.spirit-card-img{width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;position:relative}
 .spirit-card-img img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
-.spirit-card-img::before{content:'';position:absolute;inset:-3px;border-radius:50%;z-index:0;opacity:0}
-/* Shimmer auras */
-.spirit-card-img.evo-1::before{opacity:1;background:conic-gradient(from 0deg,transparent,rgba(140,180,255,.3),transparent,rgba(200,220,255,.2),transparent);animation:auraRotate 4s linear infinite}
-.spirit-card-img.evo-2::before{opacity:1;background:conic-gradient(from 0deg,transparent,rgba(255,215,140,.35),transparent,rgba(255,240,200,.25),transparent);animation:auraRotate 3s linear infinite}
+.spirit-card-img::before{content:'';position:absolute;inset:-4px;border-radius:50%;z-index:0;opacity:0}
+.spirit-card-img.evo-1::before{opacity:1;background:conic-gradient(from 0deg,transparent,rgba(140,180,255,.35),transparent,rgba(200,220,255,.25),transparent);animation:auraRotate 4s linear infinite}
+.spirit-card-img.evo-2::before{opacity:1;background:conic-gradient(from 0deg,transparent,rgba(255,215,140,.4),transparent,rgba(255,240,200,.3),transparent);animation:auraRotate 3s linear infinite}
 @keyframes auraRotate{to{transform:rotate(360deg)}}
-.spirit-card-info{flex:1;min-width:0}
-/* V1.3 POLISH: Spirit name gets stronger weight */
-.spirit-card-name{font-size:.75rem;font-weight:600;line-height:1.2}
-.spirit-card-meta{font-size:.55rem;color:var(--t3);margin-top:2px}
-/* Shimmer text for evolved labels */
+.spirit-card-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.spirit-card-name{font-size:.82rem;font-weight:600;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spirit-card-meta{font-size:.58rem;color:var(--t3);display:flex;align-items:center;gap:5px}
 .evo-text-1{background:linear-gradient(90deg,#f5f5f5,#8ab4ff,#f5f5f5);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
 .evo-text-2{background:linear-gradient(90deg,#f5f5f5,#ffd480,#f5f5f5);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
 @keyframes shimText{0%{background-position:200% 0}100%{background-position:-200% 0}}
 [data-theme="light"] .evo-text-1{background:linear-gradient(90deg,#1a1816,#4477cc,#1a1816);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
 [data-theme="light"] .evo-text-2{background:linear-gradient(90deg,#1a1816,#cc8800,#1a1816);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimText 3s ease infinite}
-.spirit-card-xp{width:100%;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:4px}.spirit-card-xp-fill{height:100%;background:var(--positive);border-radius:2px;transition:width 1s linear}
-.spirit-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
-.spirit-card-dots{display:flex;gap:3px}.spirit-card-dot{width:4px;height:4px;border-radius:50%;background:var(--t4)}.spirit-card-dot.on{background:var(--t1)}
+.spirit-card-mood{font-size:.5rem;color:var(--t3);display:flex;align-items:center;gap:3px}
+.spirit-card-xp-wrap{display:flex;align-items:center;gap:5px;margin-top:2px}
+.spirit-card-xp{flex:1;height:4px;background:var(--border);border-radius:4px;overflow:hidden;position:relative}
+.spirit-card-xp-fill{height:100%;background:var(--positive);border-radius:4px;transition:width 2s cubic-bezier(.4,0,.2,1);position:relative}
+.spirit-card-xp-fill::after{content:'';position:absolute;top:0;left:-60%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);border-radius:4px;opacity:0;transition:opacity .5s}
+body.music-playing .spirit-card-xp-fill::after{opacity:1;animation:xpCrawl 3s linear infinite}
+@keyframes xpCrawl{0%{left:-60%}100%{left:110%}}
+.spirit-card-xp-num{font-family:'JetBrains Mono',monospace;font-size:.45rem;color:var(--t4);flex-shrink:0;min-width:28px;text-align:right}
+.spirit-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.spirit-card-stars{display:flex;gap:2px;font-size:.6rem;line-height:1;letter-spacing:1px}
 .spirit-card-lvl{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--t3)}
-/* V1.3 POLISH: Empty states with gentle guidance */
-.spirit-empty{text-align:center;padding:32px 16px}
-.spirit-empty-msg{font-size:.75rem;color:var(--t2);margin-bottom:6px;font-weight:500}
-.spirit-empty-hint{font-size:.6rem;color:var(--t3);line-height:1.5;margin-bottom:16px}
+body.music-playing .spirit-card-img:not(.mood-sleepy){animation:spiritBob 4s ease-in-out infinite}
+body.music-playing .spirit-card:nth-child(2) .spirit-card-img{animation-delay:.5s}
+body.music-playing .spirit-card:nth-child(3) .spirit-card-img{animation-delay:1s}
+body.music-playing .spirit-card:nth-child(4) .spirit-card-img{animation-delay:1.5s}
+body.music-playing .spirit-card:nth-child(5) .spirit-card-img{animation-delay:.8s}
+@keyframes spiritBob{0%,100%{transform:translateY(0)}25%{transform:translateY(-2px)}75%{transform:translateY(1px)}}
+.spirit-card-img.mood-happy::after{content:'';position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--positive);z-index:2;animation:moodPulse 2.5s ease-in-out infinite}
+.spirit-card-img.mood-energized::after{content:'';position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--special);z-index:2;animation:moodPulse 2s ease-in-out infinite}
+.spirit-card-img.mood-sleepy{filter:brightness(.85) saturate(.8)}
+.spirit-card-img.mood-sleepy::after{content:'';position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--t4);z-index:2}
+@keyframes moodPulse{0%,100%{opacity:.6;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
+.spirit-card.on-expedition{opacity:.55}.spirit-card.on-expedition::after{content:'🧭';position:absolute;top:6px;right:8px;font-size:.55rem}
+.spirit-card{position:relative}
+.spirit-empty{text-align:center;padding:40px 16px}
+.spirit-empty-msg{font-size:.82rem;color:var(--t2);margin-bottom:6px;font-weight:500}
+.spirit-empty-hint{font-size:.62rem;color:var(--t3);line-height:1.6;margin-bottom:16px}
 .empty-action{padding:10px 20px;background:var(--t1);color:var(--bg);border:none;border-radius:8px;font-family:inherit;font-size:.7rem;font-weight:600;cursor:pointer;margin-top:8px}
 /* SPIRIT DETAIL */
 .spirit-detail{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:14px;margin-top:8px;display:none}.spirit-detail.open{display:block;animation:fadeIn .2s ease-out}
@@ -438,10 +454,66 @@ button.action-busy{opacity:.5;pointer-events:none}
 .hatch-reveal-bonus{font-size:.55rem;color:var(--positive);margin-top:6px;opacity:0;animation:bonusFadeIn .8s ease .3s forwards}
 @keyframes bonusFadeIn{to{opacity:1}}
 
+/* ═══ V2.4: EVOLUTION CEREMONY ═══ */
+.evo-ceremony{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;flex-direction:column;background:rgba(0,0,0,.92);opacity:0;pointer-events:none;transition:opacity .3s}
+.evo-ceremony.show{opacity:1;pointer-events:all}
+.evo-ceremony-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:1}
+.evo-ceremony-content{position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+.evo-ceremony-label{font-size:.6rem;color:var(--t3);text-transform:uppercase;letter-spacing:.2em;opacity:0;transform:translateY(8px);transition:all .5s .2s}
+.evo-ceremony.show .evo-ceremony-label{opacity:1;transform:translateY(0)}
+.evo-ceremony-portrait{width:120px;height:120px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.15);opacity:0;transform:scale(.7);transition:all .6s .35s cubic-bezier(.34,1.56,.64,1)}
+.evo-ceremony.show .evo-ceremony-portrait{opacity:1;transform:scale(1)}
+.evo-ceremony-portrait img{width:100%;height:100%;object-fit:cover}
+.evo-ceremony-name{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:500;opacity:0;transform:translateY(6px);transition:all .5s .5s}
+.evo-ceremony.show .evo-ceremony-name{opacity:1;transform:translateY(0)}
+.evo-ceremony-stage{font-size:.75rem;font-weight:500;letter-spacing:.05em;opacity:0;transition:all .5s .65s}
+.evo-ceremony.show .evo-ceremony-stage{opacity:1}
+.evo-ceremony-tap{font-size:.55rem;color:var(--t4);letter-spacing:.15em;text-transform:uppercase;position:absolute;bottom:40px;left:0;right:0;text-align:center;opacity:0;animation:evoBlink 1.5s ease-in-out infinite 1.5s}
+@keyframes evoBlink{0%,100%{opacity:.3}50%{opacity:.7}}
+.evo-particles{position:absolute;inset:0;pointer-events:none;z-index:3}
+
+/* ═══ V2.4: VILLAGE RANK TOOLTIP ═══ */
+.tb-rank{position:relative;cursor:default}
+.rank-tooltip{position:absolute;top:calc(100% + 8px);right:0;z-index:60;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:10px 14px;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transform:translateY(-4px);transition:all .2s}
+.rank-tooltip.show{opacity:1;pointer-events:all;transform:translateY(0)}
+.rank-tooltip-title{font-size:.55rem;color:var(--t3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;font-weight:500}
+.rank-tooltip-row{font-size:.6rem;color:var(--t2);padding:4px 0;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border)}
+.rank-tooltip-row:last-child{border-bottom:none}
+.rank-tooltip-rank{font-weight:600}
+.rank-tooltip-row.current{background:var(--accent-dim);margin:0 -4px;padding:4px 4px;border-radius:4px;border-bottom:none}
+.rank-tooltip-row.current .rank-tooltip-rank{color:var(--t1)}
+.rank-tooltip-pts{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--t4);margin-left:auto}
+
+/* ═══ V2.4: XP PULSE ═══ */
+.spirit-card-xp-fill::after{content:'';position:absolute;top:0;left:-60%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);border-radius:4px;opacity:0;transition:opacity .5s}
+body.music-playing .spirit-card-xp-fill::after{opacity:1;animation:xpCrawl 3s linear infinite}
+@keyframes xpCrawl{0%{left:-60%}100%{left:110%}}
+.sd-bar-fill::after{content:'';position:absolute;top:0;left:-60%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);opacity:0;transition:opacity .5s}
+body.music-playing .sd-bar-fill::after{opacity:1;animation:xpCrawl 3s linear infinite}
+
+/* ═══ V2.4: VILLAGE CLEAN ═══ */
+.streak-card,.achieve-section,.achieve-grid{display:none}
+.village-rank-bar{height:3px;background:var(--border);border-radius:3px;overflow:hidden;margin:8px 0 4px}
+.village-rank-bar-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.village-rank-next{font-size:.5rem;color:var(--t4)}
+.village-rank-card{padding:18px;margin-bottom:12px}
+
+/* ═══ V2.4: SPIRIT DETAIL XP ═══ */
+.sd-bar{flex:1;height:5px;background:var(--border);border-radius:5px;overflow:hidden;position:relative}
+.sd-bar-fill{height:100%;background:var(--positive);border-radius:5px;transition:width 1.5s cubic-bezier(.4,0,.2,1);position:relative}
+
+/* ═══ V2.4: MOBILE ═══ */
+@media(max-width:768px){
+  .evo-ceremony-portrait{width:100px;height:100px}
+  .evo-ceremony-name{font-size:1.3rem}
+  .evo-ceremony-tap{bottom:60px}
+}
+
 </style>
 </head>
 <body>
 
+<div class="evo-ceremony" id="evoCeremony"><div class="evo-ceremony-flash" id="evoCeremonyFlash"></div><div class="evo-particles" id="evoCeremonyParticles"></div><div class="evo-ceremony-content"><div class="evo-ceremony-label">Evolution</div><div class="evo-ceremony-portrait" id="evoCeremonyPortrait"><img id="evoCeremonyImg" src=""></div><div class="evo-ceremony-name" id="evoCeremonyName"></div><div class="evo-ceremony-stage" id="evoCeremonyStage"></div></div><div class="evo-ceremony-tap">tap to continue</div></div>
 <div class="onboard gone" id="onboard"><div class="ob-inner"><div class="ob-icon" id="obIcon"></div><div class="ob-title" id="obTitle"></div><div class="ob-desc" id="obDesc"></div><div class="ob-dots"><div class="ob-dot on" id="obD0"></div><div class="ob-dot" id="obD1"></div><div class="ob-dot" id="obD2"></div></div><button class="ob-btn" id="obBtn" onclick="nextOnboard()">Next</button><button class="ob-skip" onclick="finishOnboard()">Skip</button></div></div>
 
 <div class="wb-overlay gone" id="welcomeBack"><div class="wb-inner"><div class="wb-portrait" id="wbPortrait"></div><div class="wb-msg" id="wbMsg"></div><div class="wb-gains" id="wbGains"></div><button class="wb-btn" onclick="dismissWB()">Enter Village</button></div></div>
@@ -485,10 +557,10 @@ button.action-busy{opacity:.5;pointer-events:none}
 </div></div>
 <div class="login gone" id="login"><div class="login-inner"><div class="login-brand"><h1>Ehoro Village</h1><p class="sub">lo-fi &middot; spirits &middot; cultivate</p></div><div class="login-field" id="usernameField" style="display:none"><label>Username</label><input type="text" id="inUser" placeholder="pick a username"></div><div class="login-field"><label>Email</label><input type="email" id="inEmail" placeholder="you@email.com"></div><div class="login-field"><label>Password</label><input type="password" id="inPass" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" minlength="6"></div><button class="l-btn" id="authBtn" onclick="doAuth()">Sign In</button><div class="l-error" id="authError"></div><div class="l-div">or</div><button class="l-secondary" onclick="doGoogleAuth()" style="display:flex;align-items:center;justify-content:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A11.96 11.96 0 0 0 0 12c0 1.94.46 3.77 1.28 5.4l3.56-2.77.01-.54z" fill="#FBBC05"/><path d="M12 4.75c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 1.09 14.97 0 12 0 7.7 0 3.99 2.47 2.18 6.07l3.66 2.84c.87-2.6 3.3-4.16 6.16-4.16z" fill="#EA4335"/></svg> Continue with Google</button><button class="l-secondary" onclick="enterGuest()" style="margin-top:8px">Watch as Guest</button><button class="l-toggle" id="authToggle" onclick="toggleAuthMode()">Need an account? Sign up</button></div></div>
 <div class="shell on" id="shell">
-<div class="topbar"><div class="tb-brand">Ehoro Village</div><div class="tb-right"><div class="tb-rank"><span class="tb-rank-name" id="tbRankName">Ember</span><span class="tb-rank-pts" id="tbRankPts">0 prestige</span></div><button class="tb-gear" onclick="toggleSettings()" title="Settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button><div id="tbAuth"><button class="tb-signin" onclick="showLogin()">Sign In</button></div></div></div>
+<div class="topbar"><div class="tb-brand">Ehoro Village</div><div class="tb-right"><div class="tb-rank" id="tbRank" onmouseenter="showRankTooltip()" onmouseleave="hideRankTooltip()" onclick="toggleRankTooltip()"><span class="tb-rank-name" id="tbRankName">Ember</span><span class="tb-rank-pts" id="tbRankPts">0 pts</span><div class="rank-tooltip" id="rankTooltip"></div></div><button class="tb-gear" onclick="toggleSettings()" title="Settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button><div id="tbAuth"><button class="tb-signin" onclick="showLogin()">Sign In</button></div></div></div>
 <div class="content">
 <div class="video-area"><div class="video-embed" id="videoEmbed"><div class="video-placeholder" id="videoPlaceholder" onclick="startStream()"><div class="vp-play">&#x25B6;</div><div class="vp-text" id="vpText">🌸 Sakura Jazz</div></div></div><div class="player-strip"><button class="ps-play" id="psPlay" onclick="startStream()">&#x25B6;</button><div class="ps-info"><div class="ps-title" id="psTitle">Sakura Jazz</div><div class="ps-sub"><span class="ps-live-dot"></span> <span id="psSub">lo-fi jazz mix</span></div></div></div><div class="stream-switcher"><button class="stream-pill active" id="pillSakura" onclick="switchStream('sakura')">🌸 Sakura Jazz</button><button class="stream-pill" id="pillLofi" onclick="switchStream('lofi')">📼 Lo-Fi Tape V1</button></div></div>
-<div class="sidebar"><div class="egg-progress" id="eggProgress"><span class="egg-progress-label">Next egg</span><div class="egg-progress-bar"><div class="egg-progress-fill" id="eggFill"></div></div><span class="egg-progress-time" id="eggTimer">&mdash;</span></div><div class="tab-nav"><button class="tab-btn on" data-tab="spirits" onclick="switchTab(this)">Spirits</button><button class="tab-btn" data-tab="items" onclick="switchTab(this)">Items</button><button class="tab-btn" data-tab="pills" onclick="switchTab(this)">Pills</button><button class="tab-btn" data-tab="village" onclick="switchTab(this)">Village</button></div><div class="tab-panels"><div class="tab-panel on" id="tab-spirits"></div><div class="tab-panel" id="tab-items"></div><div class="tab-panel" id="tab-pills"></div><div class="tab-panel" id="tab-village"></div></div></div>
+<div class="sidebar"><div class="egg-progress" id="eggProgress"><span class="egg-progress-label">Next egg</span><div class="egg-progress-bar"><div class="egg-progress-fill" id="eggFill"></div></div><span class="egg-progress-time" id="eggTimer">&mdash;</span></div><div class="tab-nav"><button class="tab-btn on" data-tab="spirits" onclick="switchTab(this)">Spirits</button><button class="tab-btn" data-tab="items" onclick="switchTab(this)">Items</button><button class="tab-btn" data-tab="pills" onclick="switchTab(this)">Inventory</button><button class="tab-btn" data-tab="village" onclick="switchTab(this)">Village</button></div><div class="tab-panels"><div class="tab-panel on" id="tab-spirits"></div><div class="tab-panel" id="tab-items"></div><div class="tab-panel" id="tab-pills"></div><div class="tab-panel" id="tab-village"></div></div></div>
 </div></div>
 
 <script>
@@ -615,11 +687,11 @@ function getSpiritMood(sp){
 const CULT_STAGES=['Unrefined','Qi Condensation','Foundation','Core Formation','Nascent Soul','Spirit Sovereign'];
 const CULT_COSTS=[3,8,15,25,40]; // Àṣẹ Essence cost per advancement
 const CULT_LVL_REQ=[3,6,10,15,20]; // Min spirit level per advancement
-const EXPED_CONFIG={short:{label:'Short',minutes:10,restMinutes:3,baseMats:[2,4],bonusXp:5,asheChance:0},medium:{label:'Medium',minutes:20,restMinutes:5,baseMats:[4,8],bonusXp:10,asheChance:0.02},long:{label:'Long',minutes:45,restMinutes:10,baseMats:[8,14],bonusXp:20,asheChance:0.05}};
+const EXPED_CONFIG={short:{label:'Short',minutes:10,restMinutes:8,baseMats:[2,4],bonusXp:5,asheChance:0},medium:{label:'Medium',minutes:20,restMinutes:15,baseMats:[4,8],bonusXp:10,asheChance:0.02},long:{label:'Long',minutes:45,restMinutes:25,baseMats:[8,14],bonusXp:20,asheChance:0.05}};
 const EXPED_SLOT_UNLOCK={2:400}; // Slot 2 unlocks at Silver (400 prestige)
 const WB_MESSAGES=['The village rested while you were away...','Your spirits kept watch in the quiet hours...','The lo-fi played on while you were gone...','A gentle hum welcomes you home...','The spirits sensed your return...'];
 
-let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essence:0},hatchery:[],pendingEggs:[],allEggs:[],pillRecipes:[],expeditions:[],_wickedPills:[],playing:false,currentStream:'sakura',eggT:0,eggAnchor:null,EGG_SEC:3600,FIRST_EGG_SEC:240,GUEST_EGG_SEC:30,sessionId:null,sessionStartedAt:null,ticker:null,hatchTicker:null,cultTicker:null,jiggleTicker:null,expedTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null,firstIngredientGiven:false,craftHintShown:false,wbTimer:null,profStep:0,chosenStarter:null};
+let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essence:0},hatchery:[],pendingEggs:[],allEggs:[],pillRecipes:[],expeditions:[],_wickedPills:[],playing:false,currentStream:'sakura',eggT:0,eggAnchor:null,EGG_SEC:3600,FIRST_EGG_SEC:240,GUEST_EGG_SEC:30,XP_PER_LEVEL:150,XP_ACTIVE_INTERVAL:300,sessionId:null,sessionStartedAt:null,ticker:null,hatchTicker:null,cultTicker:null,jiggleTicker:null,expedTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null,firstIngredientGiven:false,craftHintShown:false,wbTimer:null,profStep:0,chosenStarter:null};
 
 // ═══ V2.0: WICKED PILL INVENTORY (now DB-backed) ═══
 function getWickedPills(){return S._wickedPills||[]}
@@ -1372,7 +1444,11 @@ function showExpedRewardToast(summary,gotAshe){
 }
 
 // ═══ EXPEDITION TICKER ═══
-function startExpeditionTicker(){if(S.expedTicker)return;S.expedTicker=setInterval(()=>{if(!S.isGuest)renderVillageTab()},10000)}
+function startExpeditionTicker(){
+  if(S.expedTicker)return;
+  // Wall-clock based: recalculate every 500ms, no chunking
+  S.expedTicker=setInterval(()=>{if(!S.isGuest)renderVillageTab()},500);
+}
 
 // ═══ V2.0: DAILY STREAK SYSTEM (now DB-backed via profiles.streak_days/streak_last_date) ═══
 function getStreak(){
@@ -1461,11 +1537,98 @@ async function doCultivate(spiritId){
 function startVillageTicker(){setInterval(()=>{if(!S.isGuest&&S.playing)renderVillageTab()},10000)}
 
 // ═══ TOPBAR ═══
-function updateTopBar(){const p=calcPrestige();const rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0];document.getElementById('tbRankName').textContent=rank.name;document.getElementById('tbRankName').style.color=rank.color||'';document.getElementById('tbRankPts').textContent=p+' prestige';const authArea=document.getElementById('tbAuth');if(S.isGuest){authArea.innerHTML='<button class="tb-signin" onclick="showLogin()">Sign In</button>'}else{const uname=S.profile?.username||S.user?.user_metadata?.username||S.user?.email?.split('@')[0]||'user';authArea.innerHTML='<span class="tb-user">'+esc(uname)+'</span>'}document.querySelectorAll('.sdLogoutDiv,.sdLogoutItem').forEach(el=>el.style.display=S.isGuest?'none':'')}
+function updateTopBar(){
+  const p=calcPrestige();
+  const rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0];
+  document.getElementById('tbRankName').textContent=rank.name;
+  document.getElementById('tbRankName').style.color=rank.color||'';
+  document.getElementById('tbRankPts').textContent=p+' pts';
+  const authArea=document.getElementById('tbAuth');
+  if(S.isGuest){authArea.innerHTML='<button class="tb-signin" onclick="showLogin()">Sign In</button>'}
+  else{const uname=S.profile?.username||S.user?.user_metadata?.username||S.user?.email?.split('@')[0]||'user';authArea.innerHTML='<span class="tb-user">'+esc(uname)+'</span>'}
+  document.querySelectorAll('.sdLogoutDiv,.sdLogoutItem').forEach(el=>el.style.display=S.isGuest?'none':'');
+}
+
+// ═══ V2.4: RANK TOOLTIP ═══
+const RANK_BENEFITS={
+  'Ember':'Starting rank. Your village is just a spark.',
+  'Stone':'Expedition slot 1 unlocked. Village taking shape.',
+  'Silver':'Expedition slot 2 unlocked (400 pts). Respected.',
+  'Bronze':'Hatchery slot 3 unlocked (150 pts). Growing.',
+  'Gold':'Hatchery slot 4 unlocked (400 pts). Prosperous.',
+  'Emerald':'Hatchery slot 5 unlocked. A beacon.',
+  'Celestial':'Maximum rank. Transcendent.'
+};
+let _rankTooltipOpen=false;
+function showRankTooltip(){
+  const tt=document.getElementById('rankTooltip');if(!tt)return;
+  const p=calcPrestige();
+  const rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0];
+  let h='<div class="rank-tooltip-title">Village Ranks</div>';
+  VILLAGE_RANKS.forEach(r=>{
+    const isCurrent=r.name===rank.name;
+    const achieved=p>=r.min;
+    h+='<div class="rank-tooltip-row'+(isCurrent?' current':'')+'" style="'+(achieved?'':'opacity:.4')+'">';
+    h+='<span class="rank-tooltip-rank" style="color:'+(r.color||'var(--t3)')+'">'+r.name+'</span>';
+    h+='<span style="font-size:.48rem;color:var(--t3);flex:1;padding:0 6px">'+r.desc+'</span>';
+    h+='<span class="rank-tooltip-pts">'+r.min+'</span>';
+    h+='</div>';
+  });
+  tt.innerHTML=h;
+  tt.classList.add('show');
+  _rankTooltipOpen=true;
+}
+function hideRankTooltip(){
+  const tt=document.getElementById('rankTooltip');if(!tt)return;
+  tt.classList.remove('show');
+  _rankTooltipOpen=false;
+}
+function toggleRankTooltip(){
+  if(_rankTooltipOpen)hideRankTooltip();else showRankTooltip();
+}
+// Close rank tooltip on outside click
+document.addEventListener('click',e=>{
+  if(_rankTooltipOpen&&!e.target.closest('#tbRank'))hideRankTooltip();
+});
 function updateAllUI(){updateTopBar();renderSpiritsTab();renderItemsTab();renderPillsTab();renderVillageTab();checkMilestones()}
 
 // ═══ SPIRITS TAB ═══
-function renderSpiritsTab(){const el=document.getElementById('tab-spirits');if(!S.spirits.length){el.innerHTML='<div class="spirit-empty"><div class="spirit-empty-msg">No spirits yet</div><div class="spirit-empty-hint">Hatch eggs to discover spirits<br>They\'ll grow as you listen</div><button class="empty-action" onclick="switchTab(document.querySelector(\'[data-tab=items]\'))">Go to Hatchery →</button></div>';return}let h='<div class="spirits-grid">';S.spirits.forEach(sp=>{const lvl=Math.floor((sp.xp||0)/100)+1,xpP=(sp.xp||0)%100,evoClass=sp.evo_stage>0?'evo-'+sp.evo_stage:'',evoText=sp.evo_stage===1?'evo-text-1':sp.evo_stage===2?'evo-text-2':'',onExp=spiritUnavailable(sp.id),mood=getSpiritMood(sp),moodClass=mood.mood!=='content'?' mood-'+mood.mood:'',align=getSpiritAlignment(sp.id),alignHtml=align!=='neutral'?'<div class="spirit-alignment '+align+'">'+(align==='wicked'?'🩸 Wicked':'✦ Heavenly')+'</div>':'';h+='<div class="spirit-card'+(onExp?' on-expedition':'')+'" data-sid="'+sp.id+'" onclick="spiritCardTap(event,\''+sp.id+'\')"><div class="spirit-card-img '+evoClass+moodClass+'"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div><div class="spirit-card-info"><div class="spirit-card-name">'+sp.name+'</div><div class="spirit-card-meta"><span class="'+evoText+'">'+EVO_LABELS[sp.evo_stage]+'</span> \u00b7 Lv.'+lvl+'</div>'+alignHtml+'<div class="spirit-card-mood">'+mood.emoji+' '+mood.label+'</div><div class="spirit-card-xp"><div class="spirit-card-xp-fill" style="width:'+xpP+'%"></div></div></div><div class="spirit-card-right"><div class="spirit-card-dots">'+[0,1,2].map(i=>'<div class="spirit-card-dot'+(i<=sp.evo_stage?' on':'')+'"></div>').join('')+'</div><div class="spirit-card-lvl">'+xpP+'/100</div></div></div>'});h+='</div><div class="spirits-count">'+S.spirits.length+' of 30 discovered</div>';el.innerHTML=h+'<div id="spiritDetail" class="spirit-detail"></div>';if(S.selectedSpirit)showSpiritDetail(S.selectedSpirit)}
+function renderSpiritsTab(){
+  const el=document.getElementById('tab-spirits');
+  if(!S.spirits.length){
+    el.innerHTML='<div class="spirit-empty"><div class="spirit-empty-msg">No spirits yet</div><div class="spirit-empty-hint">Hatch eggs to discover spirits<br>They\'ll grow as you listen</div><button class="empty-action" onclick="switchTab(document.querySelector(\'[data-tab=items]\'))">Go to Hatchery →</button></div>';
+    return;
+  }
+  let h='<div class="spirits-grid">';
+  S.spirits.forEach(sp=>{
+    const lvl=Math.floor((sp.xp||0)/100)+1;
+    const xpP=(sp.xp||0)%S.XP_PER_LEVEL;
+    const xpPct=Math.round((xpP/S.XP_PER_LEVEL)*100);
+    const evoClass=sp.evo_stage>0?'evo-'+sp.evo_stage:'';
+    const evoText=sp.evo_stage===1?'evo-text-1':sp.evo_stage===2?'evo-text-2':'';
+    const onExp=spiritUnavailable(sp.id);
+    const mood=getSpiritMood(sp);
+    const moodClass=mood.mood!=='content'?' mood-'+mood.mood:'';
+    const align=getSpiritAlignment(sp.id);
+    const alignDot=align!=='neutral'?' <span style="color:'+(align==='wicked'?'#c77':'#daa520')+'">'+(align==='wicked'?'🩸':'✦')+'</span>':'';
+    // Stars: ★ filled, ☆ empty
+    const stars=[0,1,2].map(i=>i<=sp.evo_stage?'★':'☆').join('');
+    const starColor=sp.evo_stage===2?'#ffd480':sp.evo_stage===1?'#8ab4ff':'var(--t4)';
+    h+='<div class="spirit-card'+(onExp?' on-expedition':'')+'" data-sid="'+sp.id+'" onclick="spiritCardTap(event,\''+sp.id+'\')">';
+    h+='<div class="spirit-card-img '+evoClass+moodClass+'"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div>';
+    h+='<div class="spirit-card-info">';
+    h+='<div class="spirit-card-name">'+sp.name+alignDot+'</div>';
+    h+='<div class="spirit-card-meta"><span class="'+evoText+'">'+EVO_LABELS[sp.evo_stage]+'</span> · Lv.'+lvl+'</div>';
+    h+='<div class="spirit-card-mood">'+mood.emoji+' '+mood.label+'</div>';
+    h+='<div class="spirit-card-xp-wrap"><div class="spirit-card-xp"><div class="spirit-card-xp-fill" style="width:'+xpPct+'%"></div></div><span class="spirit-card-xp-num">'+xpP+'/'+S.XP_PER_LEVEL+'</span></div>';
+    h+='</div>';
+    h+='<div class="spirit-card-right"><div class="spirit-card-stars" style="color:'+starColor+'">'+stars+'</div><div class="spirit-card-lvl">Lv.'+lvl+'</div></div>';
+    h+='</div>';
+  });
+  h+='</div>';
+  el.innerHTML=h+'<div id="spiritDetail" class="spirit-detail"></div>';
+  if(S.selectedSpirit)showSpiritDetail(S.selectedSpirit);
+}
 // V1.5: Spirit card tap — short quip then open detail
 let _lastCardTap={};
 function spiritCardTap(event,id){
@@ -1476,41 +1639,99 @@ function spiritCardTap(event,id){
   setTimeout(()=>{if(Date.now()-_lastCardTap[id]>=380)selectSpirit(id)},400);
 }
 function selectSpirit(id){S.selectedSpirit=id;showSpiritDetail(id)}
-function showSpiritDetail(id){const sp=S.spirits.find(s=>s.id===id);if(!sp)return;const el=document.getElementById('spiritDetail'),lvl=Math.floor((sp.xp||0)/100)+1,xpP=(sp.xp||0)%100,tr=S.traits[sp.id]||[],cost=sp.evo_stage===0?5:12,reqLvl=sp.evo_stage===0?3:5,reqXp=(reqLvl-1)*100,meetsLvl=(sp.xp||0)>=reqXp,meetsMats=S.emblems.cafe_bean>=cost&&S.emblems.wild_essence>=cost&&S.emblems.focus_shard>=cost,can=sp.evo_stage<2&&!S.isGuest&&meetsLvl&&meetsMats,evoText=sp.evo_stage===1?'evo-text-1':sp.evo_stage===2?'evo-text-2':'';
-const onExped=spiritOnExpedition(sp.id);
-const isResting=spiritResting(sp.id);
-let statusLine='';
-if(onExped)statusLine='<div style="font-size:.5rem;color:var(--positive);margin:4px 0">🧭 On expedition</div>';
-else if(isResting)statusLine='<div style="font-size:.5rem;color:var(--special);margin:4px 0">💤 Resting from expedition</div>';
-// Build evolution requirements text
-let evoReqs='';
-if(sp.evo_stage<2){
-  const reqs=[];
-  if(!meetsLvl)reqs.push('Requires Lv.'+reqLvl+' (currently Lv.'+lvl+')');
-  reqs.push('Cost: '+cost+'\u00d7 each (\u2615'+S.emblems.cafe_bean+' \uD83C\uDF3F'+S.emblems.wild_essence+' \u26A1'+S.emblems.focus_shard+')');
-  evoReqs='<button class="sd-evolve-btn" '+(can?'':'disabled')+' onclick="doEvolve(\''+sp.id+'\')">Evolve to '+EVO_LABELS[sp.evo_stage+1]+'</button><div class="sd-evolve-cost"'+(meetsLvl?'':' style="color:var(--negative)"')+'>'+reqs.join(' \u00b7 ')+'</div>';
-}else{evoReqs='<div style="text-align:center;font-size:.6rem;color:var(--t3);margin-top:10px">\u2728 Fully Ascended</div>'}
-// Cultivation stage section
-const cultStage=sp.cultivation_stage||0;
-let cultHtml='<div class="sd-section">Spirit Cultivation</div>';
-cultHtml+='<div class="sd-cult-stage"><span class="sd-cult-label">'+CULT_STAGES[cultStage]+'</span><div class="sd-cult-dots">';
-for(let i=0;i<5;i++)cultHtml+='<div class="sd-cult-dot'+(i<cultStage?' on':'')+'"></div>';
-cultHtml+='</div></div>';
-if(cultStage<5){
-  const cultCost=CULT_COSTS[cultStage];const cultReqLvl=CULT_LVL_REQ[cultStage];
-  const canCult=lvl>=cultReqLvl&&(S.emblems.ashe_essence||0)>=cultCost&&!S.isGuest;
-  cultHtml+='<button class="sd-cult-advance" '+(canCult?'':'disabled')+' onclick="openCultivateModal(\''+sp.id+'\')">Advance to '+CULT_STAGES[cultStage+1]+'</button>';
-  cultHtml+='<div class="sd-cult-cost">'+cultCost+' 🔮 Àṣẹ · Lv.'+cultReqLvl+' required'+(lvl<cultReqLvl?' · <span style="color:var(--negative)">need Lv.'+cultReqLvl+'</span>':'')+'</div>';
-}else{
-  cultHtml+='<div style="font-size:.5rem;color:var(--special);text-align:center;margin-top:4px">✦ Spirit Sovereign — Maximum cultivation ✦</div>';
+function showSpiritDetail(id){
+  const sp=S.spirits.find(s=>s.id===id);if(!sp)return;
+  const el=document.getElementById('spiritDetail');
+  const lvl=Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1;
+  const xpP=(sp.xp||0)%S.XP_PER_LEVEL;
+  const xpPct=Math.round((xpP/S.XP_PER_LEVEL)*100);
+  const tr=S.traits[sp.id]||[];
+  const cost=sp.evo_stage===0?5:12;
+  const reqLvl=sp.evo_stage===0?3:5;
+  const reqXp=(reqLvl-1)*S.XP_PER_LEVEL;
+  const meetsLvl=(sp.xp||0)>=reqXp;
+  const meetsMats=S.emblems.cafe_bean>=cost&&S.emblems.wild_essence>=cost&&S.emblems.focus_shard>=cost;
+  const can=sp.evo_stage<2&&!S.isGuest&&meetsLvl&&meetsMats;
+  const evoText=sp.evo_stage===1?'evo-text-1':sp.evo_stage===2?'evo-text-2':'';
+  const onExped=spiritOnExpedition(sp.id);
+  const isResting=spiritResting(sp.id);
+  let statusLine='';
+  if(onExped)statusLine='<div style="font-size:.5rem;color:var(--positive);margin:4px 0">🧭 On expedition</div>';
+  else if(isResting)statusLine='<div style="font-size:.5rem;color:var(--special);margin:4px 0">💤 Resting from expedition</div>';
+  // Evolution requirements
+  let evoReqs='';
+  if(sp.evo_stage<2){
+    const reqs=[];
+    if(!meetsLvl)reqs.push('<span style="color:var(--negative)">Requires Lv.'+reqLvl+' (currently Lv.'+lvl+')</span>');
+    reqs.push('Cost: '+cost+'× each (☕'+S.emblems.cafe_bean+' 🌿'+S.emblems.wild_essence+' ⚡'+S.emblems.focus_shard+')');
+    evoReqs='<button class="sd-evolve-btn" '+(can?'':'disabled')+' onclick="doEvolve(\''+sp.id+'\')">Evolve to '+EVO_LABELS[sp.evo_stage+1]+'</button><div class="sd-evolve-cost">'+reqs.join(' · ')+'</div>';
+  }else{
+    evoReqs='<div style="text-align:center;font-size:.6rem;color:var(--special);margin-top:10px">✨ Fully Ascended</div>';
+  }
+  // Cultivation stage
+  const cultStage=sp.cultivation_stage||0;
+  let cultHtml='<div class="sd-section">Spirit Cultivation</div>';
+  cultHtml+='<div class="sd-cult-stage"><span class="sd-cult-label">'+CULT_STAGES[cultStage]+'</span><div class="sd-cult-dots">';
+  for(let i=0;i<5;i++)cultHtml+='<div class="sd-cult-dot'+(i<cultStage?' on':'')+'"></div>';
+  cultHtml+='</div></div>';
+  if(cultStage<5){
+    const cultCost=CULT_COSTS[cultStage];const cultReqLvl=CULT_LVL_REQ[cultStage];
+    const canCult=lvl>=cultReqLvl&&(S.emblems.ashe_essence||0)>=cultCost&&!S.isGuest;
+    cultHtml+='<button class="sd-cult-advance" '+(canCult?'':'disabled')+' onclick="openCultivateModal(\''+sp.id+'\')">Advance to '+CULT_STAGES[cultStage+1]+'</button>';
+    cultHtml+='<div class="sd-cult-cost">'+cultCost+' 🔮 Àṣẹ · Lv.'+cultReqLvl+' required'+(lvl<cultReqLvl?' · <span style="color:var(--negative)">need Lv.'+cultReqLvl+'</span>':'')+'</div>';
+  }else{
+    cultHtml+='<div style="font-size:.5rem;color:var(--special);text-align:center;margin-top:4px">✦ Spirit Sovereign — Maximum cultivation ✦</div>';
+  }
+  // Alignment badge
+  const align=getSpiritAlignment(sp.id);
+  let alignBadge='';
+  if(align==='wicked')alignBadge='<div class="sd-alignment wicked">🩸 Wicked</div>';
+  else if(align==='heavenly')alignBadge='<div class="sd-alignment heavenly">✦ Heavenly</div>';
+  // Stars
+  const stars=[0,1,2].map(i=>i<=sp.evo_stage?'★':'☆').join('');
+  const starColor=sp.evo_stage===2?'#ffd480':sp.evo_stage===1?'#8ab4ff':'var(--t4)';
+  el.className='spirit-detail open';
+  el.innerHTML=
+    '<div class="sd-header">'+
+    '<div class="sd-interact-area" onclick="triggerQuip(\''+sp.id+'\',true)">'+
+    '<div class="sd-portrait"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div>'+
+    '</div>'+
+    '<div class="sd-info">'+
+    '<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:3px">'+
+    '<div class="sd-name">'+sp.name+'</div>'+
+    '<div style="font-size:.7rem;color:'+starColor+'">'+stars+'</div>'+
+    '</div>'+
+    '<div class="sd-stage"><span class="'+evoText+'">'+EVO_LABELS[sp.evo_stage]+'</span> · '+spiritName(sp.spirit_type)+'</div>'+
+    '<div style="font-size:.52rem;color:var(--t4);margin-bottom:2px">Level '+lvl+'</div>'+
+    alignBadge+
+    '<div class="sd-bio">'+spiritBio(sp.spirit_type)+'</div>'+
+    '</div>'+
+    '<button class="sd-close" onclick="closeSpiritDetail()">✕</button>'+
+    '</div>'+
+    '<div class="sd-interact-text" id="sdInteractText"></div>'+
+    statusLine+
+    '<div class="sd-section">XP — Level '+lvl+'</div>'+
+    '<div class="sd-bar-wrap">'+
+    '<div class="sd-bar"><div class="sd-bar-fill" style="width:'+xpPct+'%"></div></div>'+
+    '<span class="sd-lvl">'+xpP+' / '+S.XP_PER_LEVEL+'</span>'+
+    '</div>'+
+    '<div class="sd-section">Traits</div>'+
+    '<div class="trait-tags">'+
+    (tr.length?tr.map(t=>{
+      const eff=TRAIT_EFFECTS[t.trait_name];
+      const did='td-'+t.trait_name.toLowerCase().replace(/\s/g,'');
+      return'<div class="trait-tag-wrap"><span class="trait-tag '+t.trait_type+(eff?' has-effect':'')+'" onclick="toggleTraitDesc(\''+did+'\')">'+t.trait_name+'</span>'+(eff?'<span class="trait-desc" id="'+did+'">'+eff.desc+'</span>':'')+'</div>';
+    }).join(''):'<span style="font-size:.5rem;color:var(--t4)">Evolve to unlock traits — they boost XP, expeditions, and more</span>')+
+    '</div>'+
+    cultHtml+
+    evoReqs+
+    (!S.isGuest&&S.spirits.length>1&&!spiritUnavailable(sp.id)?
+      '<div class="sd-section" style="margin-top:16px;color:var(--t4)">Release</div>'+
+      '<div style="text-align:center;padding:8px;background:rgba(204,119,119,.04);border:1px solid rgba(204,119,119,.08);border-radius:var(--radius-sm)">'+
+      '<div style="font-size:.45rem;color:var(--t4);margin-bottom:6px">Release this spirit to earn Spirit Essence</div>'+
+      '<button class="dismiss-btn" onclick="openDismissModal(\''+sp.id+'\')">Release '+sp.name+' (+'+calcDismissEssence(sp)+' 💠)</button>'+
+      '</div>':'');
 }
-el.className='spirit-detail open';
-// V1.5: Alignment indicator
-const align=getSpiritAlignment(sp.id);
-let alignBadge='';
-if(align==='wicked')alignBadge='<div class="sd-alignment wicked">🩸 Wicked</div>';
-else if(align==='heavenly')alignBadge='<div class="sd-alignment heavenly">✦ Heavenly</div>';
-el.innerHTML='<div class="sd-header"><div class="sd-interact-area" onclick="triggerQuip(\''+sp.id+'\',true)"><div class="sd-portrait"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'"></div></div><div class="sd-info"><div class="sd-name">'+sp.name+'</div><div class="sd-stage"><span class="'+evoText+'">'+EVO_LABELS[sp.evo_stage]+'</span> \u00b7 '+spiritName(sp.spirit_type)+'</div>'+alignBadge+'<div class="sd-bio">'+spiritBio(sp.spirit_type)+'</div></div><button class="sd-close" onclick="closeSpiritDetail()">\u2715</button></div><div class="sd-interact-text" id="sdInteractText"></div>'+statusLine+'<div class="sd-section">Level</div><div class="sd-bar-wrap"><div class="sd-bar"><div class="sd-bar-fill" style="width:'+xpP+'%"></div></div><span class="sd-lvl">Lv.'+lvl+' ('+xpP+'/100)</span></div><div class="sd-section">Traits</div><div class="trait-tags">'+(tr.length?tr.map(t=>{const eff=TRAIT_EFFECTS[t.trait_name];const did='td-'+t.trait_name.toLowerCase().replace(/\s/g,'');return'<div class="trait-tag-wrap"><span class="trait-tag '+t.trait_type+(eff?' has-effect':'')+'" onclick="toggleTraitDesc(\''+did+'\')">'+t.trait_name+'</span>'+(eff?'<span class="trait-desc" id="'+did+'">'+eff.desc+'</span>':'')+'</div>'}).join(''):'<span style="font-size:.5rem;color:var(--t4)">Evolve to unlock traits \u2014 they boost XP, expeditions, and more</span>')+'</div>'+cultHtml+evoReqs+(!S.isGuest&&S.spirits.length>1&&!spiritUnavailable(sp.id)?'<div class="sd-section" style="margin-top:16px;color:var(--t4)">Release</div><div style="text-align:center;padding:8px;background:rgba(204,119,119,.04);border:1px solid rgba(204,119,119,.08);border-radius:var(--radius-sm)"><div style="font-size:.45rem;color:var(--t4);margin-bottom:6px">Release this spirit to earn Spirit Essence for Heavenly Pills</div><button class="dismiss-btn" onclick="openDismissModal(\''+sp.id+'\')">Release '+sp.name+' (+'+calcDismissEssence(sp)+' 💠 Spirit Essence)</button></div>':'')}
 function closeSpiritDetail(){S.selectedSpirit=null;document.getElementById('spiritDetail').className='spirit-detail'}
 function toggleTraitDesc(id){const el=document.getElementById(id);if(!el)return;const wasOpen=el.classList.contains('show');document.querySelectorAll('.trait-desc.show').forEach(d=>d.classList.remove('show'));if(!wasOpen)el.classList.add('show')}
 
@@ -1581,25 +1802,39 @@ function renderPillsTab(){
 }
 
 // ═══ VILLAGE TAB ═══
-function renderVillageTab(){const el=document.getElementById('tab-village'),p=calcPrestige(),rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0],next=VILLAGE_RANKS[VILLAGE_RANKS.indexOf(rank)+1],totalSec=(S.profile?.total_listen_seconds||0)+(S.profile?._sessionSeconds||0),hrs=Math.floor(totalSec/3600),rmins=Math.floor((totalSec%3600)/60),timeStr=hrs>0?hrs+'h '+rmins+'m':rmins+'m';
-let h='<div class="village-rank-card"><div class="village-rank-label">Village Rank</div><div class="village-rank-name">'+rank.name+'</div><div class="village-rank-desc">'+rank.desc+'</div>'+(next?'<div style="font-size:.5rem;color:var(--t4);margin-top:6px">Next: '+next.name+' ('+next.min+')</div>':'')+'</div>';
-// Daily streak
-if(!S.isGuest)h+=renderStreakCard();
-h+='<div class="village-stat-grid"><div class="village-stat"><div class="village-stat-num">'+p+'</div><div class="village-stat-label">Prestige</div></div><div class="village-stat"><div class="village-stat-num">'+(S.profile?.total_eggs||0)+'</div><div class="village-stat-label">Eggs</div></div><div class="village-stat"><div class="village-stat-num">'+S.spirits.length+'</div><div class="village-stat-label">Spirits</div></div><div class="village-stat"><div class="village-stat-num">'+timeStr+'</div><div class="village-stat-label">Listened</div></div></div>';
-
-// Expeditions section
-h+='<div class="section-label" style="margin-top:12px">Expeditions</div><div class="exped-section">';
-const slot1Exp=S.expeditions.find(e=>e.slot_number===1&&(getExpedStatus(e)!=='idle'));
-h+=renderExpedSlot(slot1Exp,1,false);
-const slot2Unlocked=p>=400;
-const slot2Exp=S.expeditions.find(e=>e.slot_number===2&&(getExpedStatus(e)!=='idle'));
-h+=renderExpedSlot(slot2Exp,2,!slot2Unlocked);
-h+='</div>';
-// Achievements
-if(!S.isGuest)h+=renderAchievements();
-
-el.innerHTML=h}
-function calcPrestige(){let p=0;S.spirits.forEach(sp=>{p+=(sp.evo_stage+1)*10;p+=Math.floor((sp.xp||0)/100)*5;p+=(sp.cultivation_stage||0)*20});p+=(S.profile?.total_eggs||0)*2;p+=Math.floor((S.profile?.total_listen_seconds||0)/3600)*3;return p}
+function renderVillageTab(){
+  const el=document.getElementById('tab-village');
+  const p=calcPrestige();
+  const rank=VILLAGE_RANKS.slice().reverse().find(r=>p>=r.min)||VILLAGE_RANKS[0];
+  const next=VILLAGE_RANKS[VILLAGE_RANKS.indexOf(rank)+1];
+  // Rank progress bar
+  const fromPts=rank.min;
+  const toPts=next?next.min:rank.min;
+  const pct=next?Math.min(100,Math.round(((p-fromPts)/(toPts-fromPts))*100)):100;
+  let h='<div class="village-rank-card">';
+  h+='<div class="village-rank-label">Village Rank</div>';
+  h+='<div class="village-rank-name" style="color:'+(rank.color||'var(--t1)')+'">'+rank.name+'</div>';
+  h+='<div class="village-rank-desc">'+rank.desc+'</div>';
+  if(next){
+    h+='<div class="village-rank-progress">';
+    h+='<div class="village-rank-bar"><div class="village-rank-bar-fill" style="width:'+pct+'%;background:'+(rank.color||'var(--t2)')+'"></div></div>';
+    h+='<div class="village-rank-next">'+p+' / '+next.min+' pts · Next: <span style="color:'+(next.color||'var(--t2)')+'">'+next.name+'</span></div>';
+    h+='</div>';
+  }else{
+    h+='<div style="font-size:.5rem;color:var(--special);margin-top:8px">✦ Maximum rank achieved</div>';
+  }
+  h+='</div>';
+  // Expeditions section
+  h+='<div class="section-label">Expeditions</div><div class="exped-section">';
+  const slot1Exp=S.expeditions.find(e=>e.slot_number===1&&(getExpedStatus(e)!=='idle'));
+  h+=renderExpedSlot(slot1Exp,1,false);
+  const slot2Unlocked=p>=400;
+  const slot2Exp=S.expeditions.find(e=>e.slot_number===2&&(getExpedStatus(e)!=='idle'));
+  h+=renderExpedSlot(slot2Exp,2,!slot2Unlocked);
+  h+='</div>';
+  el.innerHTML=h;
+}
+function calcPrestige(){const xpl=S.XP_PER_LEVEL||150;let p=0;S.spirits.forEach(sp=>{p+=(sp.evo_stage+1)*10;p+=Math.floor((sp.xp||0)/xpl)*5;p+=(sp.cultivation_stage||0)*20});p+=Math.floor((S.profile?.total_listen_seconds||0)/3600)*3;return p}
 
 // ═══ HATCH ═══
 async function doHatch(slotId){if(S.isGuest||isBusy('hatch_'+slotId))return;setBusy('hatch_'+slotId,5000);
@@ -1699,10 +1934,74 @@ function closeModal(){document.getElementById('modal').classList.remove('open')}
 function startCultivationTicker(){if(S.cultTicker||S.isGuest)return;S.cultTicker=setInterval(async()=>{if(!S.playing||S.isGuest)return;try{const{data}=await sb.rpc('tick_active_cultivation');if(data?.success){
 // Trait effect: Focused spirits get bonus active cultivation XP (10% chance of +1)
 for(const sp of S.spirits){const bonus=spiritTraitBonus(sp.id,'xp_bonus');if(bonus>0&&Math.random()<bonus){const newXp=(sp.xp||0)+1;sb.from('spirits').update({xp:newXp}).eq('id',sp.id).then(()=>{}).catch(e=>console.warn('focused bonus err',e))}}
-await loadUserData();updateAllUI()}}catch(e){console.warn('cultivation tick error:',e)}},1200000)}
+await loadUserData();updateAllUI()}}catch(e){console.warn('cultivation tick error:',e)}},300000)}
 
 // ═══ EVOLUTION ═══
-async function doEvolve(spiritId){if(S.isGuest||isBusy('evolve_'+spiritId))return;setBusy('evolve_'+spiritId,5000);try{const{data,error}=await sb.rpc('evolve_spirit',{p_spirit_id:spiritId});if(error)throw error;if(data.error){showToast('error');return}await loadUserData();updateAllUI();showToast('evolution');showEvoAnimation();if(S.selectedSpirit===spiritId)showSpiritDetail(spiritId)}catch(e){console.warn('evolve error:',e);showToast('error')}}
+async function doEvolve(spiritId){
+  if(S.isGuest||isBusy('evolve_'+spiritId))return;
+  setBusy('evolve_'+spiritId,5000);
+  const sp=S.spirits.find(s=>s.id===spiritId);
+  try{
+    const{data,error}=await sb.rpc('evolve_spirit',{p_spirit_id:spiritId});
+    if(error)throw error;
+    if(data.error){showToast('error');return}
+    await loadUserData();
+    updateAllUI();
+    closeSpiritDetail();
+    // Show evolution ceremony with new stage data
+    const newSp=S.spirits.find(s=>s.id===spiritId)||sp;
+    if(newSp)showEvoCeremony(newSp);
+    else showToast('evolution');
+    checkMilestones();
+  }catch(e){console.warn('evolve error:',e);showToast('error')}
+}
+
+// ═══ V2.4: EVOLUTION CEREMONY ═══
+function showEvoCeremony(sp){
+  const ov=document.getElementById('evoCeremony');
+  if(!ov)return showToast('evolution');
+  // Set content
+  document.getElementById('evoCeremonyImg').src=spiritImg(sp.spirit_type,sp.evo_stage);
+  document.getElementById('evoCeremonyName').textContent=sp.name;
+  const stageColors=['','#8ab4ff','#ffd480'];
+  const stageEl=document.getElementById('evoCeremonyStage');
+  stageEl.textContent=EVO_LABELS[sp.evo_stage];
+  stageEl.style.color=stageColors[sp.evo_stage]||'var(--t2)';
+  // Flash then show
+  const flash=document.getElementById('evoCeremonyFlash');
+  flash.style.opacity='0.85';
+  flash.style.transition='opacity 0.15s';
+  setTimeout(()=>{
+    flash.style.transition='opacity 0.6s';
+    flash.style.opacity='0';
+  },150);
+  ov.classList.add('show');
+  // Particles
+  const pContainer=document.getElementById('evoCeremonyParticles');
+  pContainer.innerHTML='';
+  const colors=sp.evo_stage===2?['#ffd700','#ff9500','#fff','#ffd480']:['#8ab4ff','#c8f','#fff','#b0d0ff'];
+  for(let i=0;i<24;i++){
+    const p=document.createElement('div');
+    const size=4+Math.random()*6;
+    p.style.cssText='position:absolute;width:'+size+'px;height:'+size+'px;border-radius:50%;pointer-events:none;left:50%;top:50%;background:'+colors[i%colors.length];
+    const a=Math.random()*Math.PI*2,d=80+Math.random()*160,dur=600+Math.random()*800;
+    p.animate([
+      {transform:'translate(-50%,-50%) translate(0,0) scale(1)',opacity:1},
+      {transform:'translate(-50%,-50%) translate('+Math.cos(a)*d+'px,'+Math.sin(a)*d+'px) scale(0)',opacity:0}
+    ],{duration:dur,easing:'cubic-bezier(.34,1.56,.64,1)',delay:200});
+    pContainer.appendChild(p);
+    setTimeout(()=>p.remove(),dur+300);
+  }
+}
+function closeEvoCeremony(){
+  document.getElementById('evoCeremony').classList.remove('show');
+  if(S.selectedSpirit)showSpiritDetail(S.selectedSpirit);
+}
+// Tap anywhere on ceremony to close
+document.addEventListener('click',e=>{
+  const ov=document.getElementById('evoCeremony');
+  if(ov&&ov.classList.contains('show'))closeEvoCeremony();
+});
 function showEvoAnimation(){const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;z-index:200;pointer-events:none;';document.body.appendChild(ov);spawnParticles(ov,'evo');for(let w=0;w<3;w++){setTimeout(()=>spawnParticles(ov,'evo'),w*300)}setTimeout(()=>ov.remove(),2000)}
 
 // ═══ STREAM META ═══
@@ -1728,7 +2027,7 @@ function switchStream(key){
   const vpText=document.getElementById('vpText');if(vpText)vpText.textContent=(key==='sakura'?'🌸 ':'📼 ')+meta.label;
   // If already playing, tear down iframe and restart with new stream
   if(wasPlaying){
-    S.playing=false;
+    S.playing=false;document.body.classList.remove('music-playing');
     const embed=document.getElementById('videoEmbed');
     const ifr=embed.querySelector('iframe');if(ifr)ifr.remove();
     embed.classList.remove('loaded');
@@ -1740,7 +2039,7 @@ function switchStream(key){
 
 // ═══ STREAM — uses S.currentStream ═══
 let _lastHatchData=null;
-async function startStream(){if(S.playing)return;S.playing=true;S.sessionStartedAt=Date.now();S.eggAnchor=Date.now();const meta=getStreamMeta();const embed=document.getElementById('videoEmbed');const iframe=document.createElement('iframe');iframe.src='https://www.youtube.com/embed/'+meta.id+'?autoplay=1&rel=0&loop=1&playlist='+meta.id;iframe.allow='autoplay; encrypted-media';iframe.allowFullscreen=true;
+async function startStream(){if(S.playing)return;S.playing=true;document.body.classList.add('music-playing');S.sessionStartedAt=Date.now();S.eggAnchor=Date.now();const meta=getStreamMeta();const embed=document.getElementById('videoEmbed');const iframe=document.createElement('iframe');iframe.src='https://www.youtube.com/embed/'+meta.id+'?autoplay=1&rel=0&loop=1&playlist='+meta.id;iframe.allow='autoplay; encrypted-media';iframe.allowFullscreen=true;
 // YouTube fallback — if iframe fails to load
 iframe.onerror=function(){showYTFallback()};
 // Also set a timeout in case iframe silently fails
@@ -1761,7 +2060,7 @@ function showYTFallback(){
   fb.innerHTML='<div class="yt-fallback-msg">Video couldn\'t load.<br>Check your connection and try again.</div><button class="yt-fallback-btn" onclick="retryStream()">Retry</button>';
   embed.appendChild(fb);
 }
-function retryStream(){const fb=document.querySelector('.yt-fallback');if(fb)fb.remove();S.playing=false;startStream()}
+function retryStream(){const fb=document.querySelector('.yt-fallback');if(fb)fb.remove();S.playing=false;document.body.classList.remove('music-playing');startStream()}
 
 // ═══ SHARE HATCH ═══
 
