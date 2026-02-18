@@ -828,7 +828,7 @@ const STREAM_LOFI='ojyT8dK0ZiA';   // 📼 Ehoro Village Lo-Fi Tape V1
 const STREAM_YT=STREAM_SAKURA;     // legacy alias — keeps existing refs working
 const RARITY_COLORS={mundane:'#888',adept:'#8ab',refined:'#7a7',illustrious:'#ba8',sovereign:'#a8c',celestial:'#8cf',transcendent:'#fc8',mysterious:'#c8f',ancestral:'#f88',paradox:'#fff'};
 const INCUB_MINS={mundane:3,adept:7,refined:14,illustrious:20,sovereign:30,celestial:45,transcendent:60,mysterious:90,ancestral:90,paradox:90};
-const VILLAGE_RANKS=[{name:'Ember',min:0,desc:'Your village is a spark.',color:'#a08070'},{name:'Stone',min:50,desc:'Solid foundation.',color:'#909090'},{name:'Bronze',min:150,desc:'A real village.',color:'#cd8c52'},{name:'Silver',min:400,desc:'Respected.',color:'#b8c0cc'},{name:'Gold',min:800,desc:'Prosperous.',color:'#d4a843'},{name:'Emerald',min:1500,desc:'A beacon.',color:'#4cba8a'},{name:'Celestial',min:3000,desc:'Transcendent.',color:'#7cb8f0'}];
+const VILLAGE_RANKS=[{name:'Ember',min:0,desc:'Your village is a spark.',color:'#a08070'},{name:'Stone',min:50,desc:'Solid foundation.',color:'#909090'},{name:'Bronze',min:120,desc:'A real village.',color:'#cd8c52'},{name:'Silver',min:280,desc:'Respected.',color:'#b8c0cc'},{name:'Gold',min:550,desc:'Prosperous.',color:'#d4a843'},{name:'Emerald',min:950,desc:'A beacon.',color:'#4cba8a'},{name:'Celestial',min:1800,desc:'Transcendent.',color:'#7cb8f0'}];
 const SLOT_UNLOCK={3:50,4:150,5:400};
 
 // ═══ V1.5: SPIRIT INTERACTION QUIPS ═══
@@ -860,10 +860,10 @@ const SPIRIT_QUIPS={
 };
 // ═══ V1.5: WICKED PILL TIERS ═══
 const WICKED_TIERS=[
-  {id:'minor_wicked',name:'Minor Wicked Pill',xp:75,icon:'🩸',desc:'75 XP to one spirit',check:(sp)=>{const lvl=Math.floor((sp.xp||0)/100)+1;return lvl<=2&&sp.evo_stage===0}},
-  {id:'wicked',name:'Wicked Pill',xp:150,icon:'🩸',desc:'150 XP to one spirit',check:(sp)=>{const lvl=Math.floor((sp.xp||0)/100)+1;return lvl>=3&&lvl<=4}},
-  {id:'greater_wicked',name:'Greater Wicked Pill',xp:250,icon:'🩸',desc:'250 XP to one spirit',check:(sp)=>{const lvl=Math.floor((sp.xp||0)/100)+1;return lvl>=5&&sp.evo_stage>=1&&sp.evo_stage<2}},
-  {id:'supreme_wicked',name:'Supreme Wicked Pill',xp:500,icon:'🩸',desc:'500 XP to one spirit',check:(sp)=>{const lvl=Math.floor((sp.xp||0)/100)+1;return lvl>=5&&sp.evo_stage>=2}}
+  {id:'minor_wicked',name:'Minor Wicked Pill',xp:75,icon:'🩸',desc:'75 XP to one spirit',check:(sp)=>{const lvl=Math.floor((sp.xp||0)/150)+1;return lvl<=2&&sp.evo_stage===0}},
+  {id:'wicked',name:'Wicked Pill',xp:150,icon:'🩸',desc:'150 XP to one spirit',check:(sp)=>{const lvl=Math.floor((sp.xp||0)/150)+1;return lvl>=3&&lvl<=4}},
+  {id:'greater_wicked',name:'Greater Wicked Pill',xp:250,icon:'🩸',desc:'250 XP to one spirit',check:(sp)=>{const lvl=Math.floor((sp.xp||0)/150)+1;return lvl>=5&&sp.evo_stage>=1&&sp.evo_stage<2}},
+  {id:'supreme_wicked',name:'Supreme Wicked Pill',xp:500,icon:'🩸',desc:'500 XP to one spirit',check:(sp)=>{const lvl=Math.floor((sp.xp||0)/150)+1;return lvl>=5&&sp.evo_stage>=2}}
 ];
 function getWickedTier(sp){
   // Return highest matching tier
@@ -926,8 +926,8 @@ function getSpiritMood(sp){
 }
 const CULT_STAGES=['Unrefined','Qi Condensation','Foundation','Core Formation','Nascent Soul','Spirit Sovereign'];
 const CULT_COSTS=[3,8,15,25,40]; // Àṣẹ Essence cost per advancement
-const CULT_LVL_REQ=[3,6,10,15,20]; // Min spirit level per advancement
-const EXPED_CONFIG={short:{label:'Short',minutes:10,restMinutes:8,baseMats:[2,4],bonusXp:5,asheChance:0},medium:{label:'Medium',minutes:20,restMinutes:15,baseMats:[4,8],bonusXp:10,asheChance:0.02},long:{label:'Long',minutes:45,restMinutes:25,baseMats:[8,14],bonusXp:20,asheChance:0.05}};
+const CULT_LVL_REQ=[3,6,10,12,16]; // Min spirit level per advancement
+const EXPED_CONFIG={short:{label:'Short',minutes:10,restMinutes:3,baseMats:[2,4],bonusXp:8,asheChance:0.01},medium:{label:'Medium',minutes:20,restMinutes:15,baseMats:[4,8],bonusXp:10,asheChance:0.04},long:{label:'Long',minutes:45,restMinutes:25,baseMats:[8,14],bonusXp:25,asheChance:0.10}};
 const EXPED_SLOT_UNLOCK={2:400};
 
 // ═══ V2.5: EXPEDITION LOCATIONS ═══
@@ -943,7 +943,7 @@ const EXPED_LOCATIONS={
       {id:'focus_shard',label:'Focus Shard',emoji:'⚡',type:'emblem',rarity:'common',weight:25},
       {id:'canvas_roll',label:'Canvas Roll',emoji:'🎨',type:'material',rarity:'uncommon',weight:10},
       {id:'mystery_egg',label:'Mystery Egg',emoji:'🥚',type:'egg',rarity:'rare',weight:5},
-      {id:'ashe_essence',label:'Àṣẹ Essence',emoji:'🔮',type:'emblem',rarity:'uncommon',weight:12},
+      {id:'ashe_essence',label:'Àṣẹ Essence',emoji:'🔮',type:'emblem',rarity:'uncommon',weight:16},
     ],
     bonusTraits:['Market Sharp'],
     flavorLines:["Your spirits return smelling of spices and street food.","They navigated the crowds with ease.","Something glints in their satchel..."]
@@ -972,12 +972,11 @@ const EXPED_LOCATIONS={
     durations:{short:false,medium:false,long:true},
     lootTable:[
       {id:'focus_shard',label:'Focus Shard',emoji:'⚡',type:'emblem',rarity:'common',weight:25},
-      {id:'ashe_essence',label:'Àṣẹ Essence',emoji:'🔮',type:'emblem',rarity:'uncommon',weight:20},
+      {id:'ashe_essence',label:'Àṣẹ Essence',emoji:'🔮',type:'emblem',rarity:'uncommon',weight:25},
       {id:'training_scroll',label:'Training Scroll',emoji:'📜',type:'material',rarity:'uncommon',weight:18},
       {id:'ruin_fragment',label:'Ruin Fragment',emoji:'🏚️',type:'material',rarity:'uncommon',weight:15},
       {id:'wardens_crest',label:"Warden's Crest",emoji:'👁️',type:'material',rarity:'rare',weight:8},
       {id:'rare_egg',label:'Illustrious Egg',emoji:'🥚',type:'egg',rarity:'rare',weight:6},
-      {id:'ashe_essence',label:'Àṣẹ Essence',emoji:'🔮',type:'emblem',rarity:'rare',weight:8},
     ],
     bonusTraits:['Frost-Hardened','Disciplined'],
     flavorLines:["The cold didn't break them. They brought something back.","Ruins have a way of teaching what comfort cannot.","Whatever stood here once — your spirits felt it."]
@@ -1004,7 +1003,7 @@ const BUILDING_CONFIGS={
   dojo:{
     id:'dojo',label:'The Dojo',emoji:'⚔️',
     desc:'Discipline sharpens what talent starts.',
-    unlockMaterials:{training_scroll:1,ashe_essence:50},
+    unlockMaterials:{training_scroll:1,ashe_essence:25},
     roles:{manager:{label:'Sensei',slots:1},worker:{label:'Trainee',slots:2}},
     passiveBuff:{desc:'Expedition rest time -10%',type:'rest_reduction',value:0.10},
     staffedBuff:{desc:'Trainees gain Discipline XP daily',type:'daily_train'},
@@ -1013,7 +1012,7 @@ const BUILDING_CONFIGS={
   library:{
     id:'library',label:'Village Library',emoji:'📚',
     desc:'Every secret the village has ever learned lives here.',
-    unlockMaterials:{ancient_tome:1,ashe_essence:75},
+    unlockMaterials:{ancient_tome:1,ashe_essence:40},
     roles:{manager:{label:'Head Archivist',slots:1},worker:{label:'Researcher',slots:2}},
     passiveBuff:{desc:'Passive XP rate +10%',type:'passive_xp',value:0.10},
     staffedBuff:{desc:'Research reveals expedition loot tables',type:'research'},
@@ -1031,7 +1030,7 @@ const BUILDING_CONFIGS={
   studio:{
     id:'studio',label:'The Studio',emoji:'🎨',
     desc:'Where spirits make something that lasts.',
-    unlockMaterials:{canvas_roll:1,spirit_essence:40},
+    unlockMaterials:{canvas_roll:1,spirit_essence:20},
     roles:{manager:{label:'Lead Artist',slots:1},worker:{label:'Artist',slots:2}},
     passiveBuff:{desc:'XP from listening +10%',type:'listen_xp',value:0.10},
     staffedBuff:{desc:'Daily Village Record production',type:'daily_record'},
@@ -2149,7 +2148,7 @@ function renderSpiritsTab(){
   }
   let h='<div class="spirits-grid">';
   S.spirits.forEach(sp=>{
-    const lvl=Math.floor((sp.xp||0)/100)+1;
+    const lvl=Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1;
     const xpP=(sp.xp||0)%S.XP_PER_LEVEL;
     const xpPct=Math.round((xpP/S.XP_PER_LEVEL)*100);
     const evoClass=sp.evo_stage>0?'evo-'+sp.evo_stage:'';
@@ -2157,6 +2156,9 @@ function renderSpiritsTab(){
     const onExp=spiritUnavailable(sp.id);
     const mood=getSpiritMood(sp);
     const moodClass=mood.mood!=='content'?' mood-'+mood.mood:'';
+    // Resting countdown
+    let restCountdown='';
+    if(mood.mood==='energized'&&spiritResting(sp.id)){const restExp=S.expeditions.find(e=>{const ids=Array.isArray(e.spirit_ids)?e.spirit_ids:[];return ids.includes(sp.id)&&getExpedStatus(e)==='resting'});if(restExp&&restExp.rest_until){const rm=Math.max(0,new Date(restExp.rest_until).getTime()-Date.now());const rMin=Math.floor(rm/60000),rSec=Math.floor((rm%60000)/1000);restCountdown=' · '+rMin+'m '+rSec+'s'}};
     const align=getSpiritAlignment(sp.id);
     const alignDot=align!=='neutral'?' <span style="color:'+(align==='wicked'?'#c77':'#daa520')+'">'+(align==='wicked'?'🩸':'✦')+'</span>':'';
     // Stars: ★ filled, ☆ empty
@@ -2167,7 +2169,7 @@ function renderSpiritsTab(){
     h+='<div class="spirit-card-info">';
     h+='<div class="spirit-card-name">'+sp.name+alignDot+'</div>';
     h+='<div class="spirit-card-meta"><span class="'+evoText+'">'+EVO_LABELS[sp.evo_stage]+'</span> · Lv.'+lvl+'</div>';
-    h+='<div class="spirit-card-mood">'+mood.emoji+' '+mood.label+'</div>';
+    h+='<div class="spirit-card-mood">'+mood.emoji+' '+mood.label+restCountdown+'</div>';
     h+='<div class="spirit-card-xp-wrap"><div class="spirit-card-xp"><div class="spirit-card-xp-fill" style="width:'+xpPct+'%"></div></div><span class="spirit-card-xp-num">'+xpP+'/'+S.XP_PER_LEVEL+'</span></div>';
     h+='</div>';
     h+='<div class="spirit-card-right"><div class="spirit-card-stars" style="color:'+starColor+'">'+stars+'</div><div class="spirit-card-lvl">Lv.'+lvl+'</div></div>';
@@ -2569,7 +2571,7 @@ function renderBuildingsSection(){
   h+='</div>';
   return h;
 }
-function calcPrestige(){const xpl=S.XP_PER_LEVEL||150;let p=0;S.spirits.forEach(sp=>{p+=(sp.evo_stage+1)*10;p+=Math.floor((sp.xp||0)/xpl)*5;p+=(sp.cultivation_stage||0)*20});p+=Math.floor((S.profile?.total_listen_seconds||0)/3600)*3;return p}
+function calcPrestige(){const xpl=S.XP_PER_LEVEL||150;let p=0;S.spirits.forEach(sp=>{const evoBonus=[15,30,50][sp.evo_stage]||15;p+=evoBonus;p+=Math.floor((sp.xp||0)/xpl)*7;p+=(sp.cultivation_stage||0)*25});p+=Math.floor((S.profile?.total_listen_seconds||0)/3600)*4;return p}
 
 // ═══ HATCH ═══
 async function doHatch(slotId){if(S.isGuest||isBusy('hatch_'+slotId))return;setBusy('hatch_'+slotId,5000);
@@ -2650,7 +2652,7 @@ try{await sb.rpc('place_egg_in_slot',{p_egg_id:eId,p_slot_id:sId});await loadUse
 function startHatcheryTicker(){if(S.hatchTicker)return;S.hatchTicker=setInterval(()=>{if(!S.isGuest)renderPillsTab()},15000)}
 
 // ═══ CRAFT PILLS ═══
-function openCraftModal(recipeId,pillName,effectType){if(S.isGuest)return;if(effectType==='xp_all'){doCraft(recipeId,null);return}const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Use '+pillName+'</div><div class="modal-desc">Choose a spirit:</div><div class="modal-select-grid">'+S.spirits.map(sp=>'<div class="modal-select-row" onclick="doCraft(\''+recipeId+'\',\''+sp.id+'\')"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'" style="width:28px;height:28px;border-radius:50%"><span style="font-size:.7rem">'+sp.name+'</span><span style="font-size:.5rem;color:var(--t4);margin-left:auto">Lv.'+(Math.floor((sp.xp||0)/100)+1)+'</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
+function openCraftModal(recipeId,pillName,effectType){if(S.isGuest)return;if(effectType==='xp_all'){doCraft(recipeId,null);return}const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Use '+pillName+'</div><div class="modal-desc">Choose a spirit:</div><div class="modal-select-grid">'+S.spirits.map(sp=>'<div class="modal-select-row" onclick="doCraft(\''+recipeId+'\',\''+sp.id+'\')"><img src="'+spiritImg(sp.spirit_type,sp.evo_stage)+'" style="width:28px;height:28px;border-radius:50%"><span style="font-size:.7rem">'+sp.name+'</span><span style="font-size:.5rem;color:var(--t4);margin-left:auto">Lv.'+(Math.floor((sp.xp||0)/S.XP_PER_LEVEL)+1)+'</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
 async function doCraft(recipeId,spiritId){closeModal();if(isBusy('craft'))return;setBusy('craft',3000);
 const recipe=S.pillRecipes.find(p=>p.id===recipeId);
 // Optimistic: deduct ingredients immediately
@@ -2837,7 +2839,7 @@ document.addEventListener('visibilitychange',()=>{
 function startTicker(){if(S.ticker)return;if(!S.eggAnchor)S.eggAnchor=Date.now();const eggTime=()=>S.isGuest&&!S.guestEggGiven?S.GUEST_EGG_SEC:(!S.profile?.first_egg_claimed?S.FIRST_EGG_SEC:S.EGG_SEC);S.ticker=setInterval(async()=>{if(!S.playing)return;const now=Date.now();S.eggT=(now-S.eggAnchor)/1000;const total=eggTime();const pct=Math.min((S.eggT/total)*100,100);document.getElementById('eggFill').style.width=pct+'%';const rem=Math.max(0,Math.ceil(total-S.eggT));const mins=Math.floor(rem/60),secs=rem%60;document.getElementById('eggTimer').textContent=mins>0?mins+'m '+secs+'s':secs+'s';
 // V1.3 POLISH: Egg progress glow at 90%+
 const eggProg=document.getElementById('eggProgress');if(pct>=90){eggProg.classList.add('near-ready')}else{eggProg.classList.remove('near-ready')}
-if(S.sessionStartedAt&&S.profile){S.profile._sessionSeconds=Math.floor((now-S.sessionStartedAt)/1000)}const ingChance=(!S.isGuest&&!S.firstIngredientGiven&&S.eggT>30)?0.03:0.0015;if(!S.isGuest&&Math.random()<ingChance){const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;S.firstIngredientGiven=true;renderPillsTab();showToast('ing_'+mat);checkCraftHint()}if(S.eggT>=total){S.eggAnchor=Date.now();S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane')}}else{try{const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;
+if(S.sessionStartedAt&&S.profile){S.profile._sessionSeconds=Math.floor((now-S.sessionStartedAt)/1000)}const ingChance=(!S.isGuest&&!S.firstIngredientGiven&&S.eggT>30)?0.03:0.002;if(!S.isGuest&&Math.random()<ingChance){const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;S.firstIngredientGiven=true;renderPillsTab();showToast('ing_'+mat);checkCraftHint();try{sb.from('emblems').upsert({user_id:S.user.id,emblem_type:mat,quantity:S.emblems[mat]},{onConflict:'user_id,emblem_type'}).then(()=>{}).catch(e=>console.warn('ing persist err',e))}catch(e){}}if(S.eggT>=total){S.eggAnchor=Date.now();S.eggT=0;if(S.isGuest){if(!S.guestEggGiven){S.guestEggGiven=true;showToast('mundane')}}else{try{const{data,error}=await sb.rpc('claim_egg_drop',{p_playlist:'cafe'});if(error)throw error;if(data.error==='too_fast')return;if(data.error==='pending_full'){showToast('full');return}if(!S.profile.first_egg_claimed){S.profile.first_egg_claimed=true;sb.from('profiles').update({first_egg_claimed:true}).eq('id',S.user.id)}S.profile.total_eggs=data.total_eggs;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;
 // V1.4: Daily streak bonus materials
 const streakData=getStreak();if(streakData.bonus>0){for(let sb2=0;sb2<streakData.bonus;sb2++){const bmat=types[Math.floor(Math.random()*3)];S.emblems[bmat]++}}
 await loadUserData();updateAllUI();showToast(data.rarity);autoPlaceEggs();try{sb.rpc('log_event',{p_event:'egg_drop',p_data:{rarity:data.rarity}})}catch(e){}}catch(e){console.warn('egg drop error:',e)}}}},1000)}
@@ -2908,8 +2910,8 @@ function applyDojoXP(){
   workers.forEach(w=>{
     const sp=S.spirits.find(s=>s.id===w.spirit_id);
     if(!sp)return;
-    // 1 XP per 5-min tick, doubled if Sensei trait active
-    const gain=1*multiplier;
+    // 8 XP per 5-min tick (≈96 XP/hr), doubled if Sensei trait active
+    const gain=8*multiplier;
     sp.xp=(sp.xp||0)+gain;
     // Persist to DB quietly
     sb.from('spirits').update({xp:sp.xp}).eq('id',sp.id).then(()=>{}).catch(()=>{});
@@ -2927,7 +2929,7 @@ function locationIsResearched(locId){return getResearchedLocations().includes(lo
 // ═══ V2.6: CULTIVATION REWORK — listen time gate ═══
 // Total listen time in minutes tracked via profile.total_listen_minutes
 // Cultivation stage requirements (in listen minutes)
-const CULT_LISTEN_REQ=[0,30,90,180,360,720]; // minutes per stage
+const CULT_LISTEN_REQ=[0,30,90,180,0,0]; // minutes per stage (stages 4-5 gate removed — Àṣẹ cost is gate enough)
 function getCultListenReq(stage){return CULT_LISTEN_REQ[stage]||0}
 function getTotalListenMinutes(){return Math.floor((S.profile?.total_listen_minutes||0))}
 function meetsListenReq(stage){return getTotalListenMinutes()>=getCultListenReq(stage)}
