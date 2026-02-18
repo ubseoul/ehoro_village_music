@@ -1045,6 +1045,8 @@ const MATERIAL_INFO={
 const WB_MESSAGES=['The village rested while you were away...','Your spirits kept watch in the quiet hours...','The lo-fi played on while you were gone...','A gentle hum welcomes you home...','The spirits sensed your return...'];
 
 let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essence:0},hatchery:[],pendingEggs:[],allEggs:[],pillRecipes:[],expeditions:[],_wickedPills:[],buildings:[],buildingStaff:[],buildingInventory:[],materials:{},journal:{},playing:false,currentStream:'sakura',eggT:0,eggAnchor:null,EGG_SEC:3600,FIRST_EGG_SEC:240,GUEST_EGG_SEC:30,XP_PER_LEVEL:150,XP_ACTIVE_INTERVAL:300,sessionId:null,sessionStartedAt:null,ticker:null,hatchTicker:null,cultTicker:null,jiggleTicker:null,expedTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null,firstIngredientGiven:false,craftHintShown:false,wbTimer:null,profStep:0,chosenStarter:null,asheListenAccum:0,asheListenTimer:0};
+let _guestDemoTicker=null; // Hoisted — used in signOut before guest demo section
+let _reconnectRetry=null;  // Hoisted — used in hideReconnectOverlay before declaration
 
 // ═══ V2.0: WICKED PILL INVENTORY (now DB-backed) ═══
 function getWickedPills(){return S._wickedPills||[]}
@@ -1079,12 +1081,6 @@ let _busy={};
 function setBusy(key,ms){_busy[key]=true;setTimeout(()=>{_busy[key]=false},ms||3000)}
 function isBusy(key){return !!_busy[key]}
 
-// ═══ TRAIT EFFECTS CONFIG — minimal gameplay impact ═══
-// TRAIT_EFFECTS — derived from TRAIT_DEFS for backward compatibility
-// Maps trait_name → {type, value, desc} (same shape as before)
-const TRAIT_EFFECTS=Object.fromEntries(
-  Object.entries(TRAIT_DEFS).map(([name,def])=>[name,{type:def.effect,value:def.value,desc:def.display}])
-);
 // ═══ V2.6: TRAIT DEFINITIONS — 3 categories, slot-based system ═══
 // Slots: Seedling=1, Awakened=2, Ascended=3
 // Category: expedition, cultivation, affinity
@@ -1122,6 +1118,13 @@ const TRAIT_CATS={
   cultivation:{label:'Cultivation',color:'var(--positive)',emoji:'📿'},
   affinity:{label:'Affinity',color:'var(--special)',emoji:'✦'},
 };
+
+// ═══ TRAIT EFFECTS CONFIG — minimal gameplay impact ═══
+// TRAIT_EFFECTS — derived from TRAIT_DEFS for backward compatibility
+// Maps trait_name → {type, value, desc} (same shape as before)
+const TRAIT_EFFECTS=Object.fromEntries(
+  Object.entries(TRAIT_DEFS).map(([name,def])=>[name,{type:def.effect,value:def.value,desc:def.display}])
+);
 
 function spiritHasTraitEffect(spiritId,effectType){
   const tr=S.traits[spiritId]||[];
@@ -1631,7 +1634,7 @@ async function loadUserData(){if(!S.user)return;
 }
 
 // ═══ RECONNECTING OVERLAY ═══
-let _reconnectRetry=null;
+// _reconnectRetry hoisted to top
 function showReconnectOverlay(){
   const ov=document.getElementById('reconnectOverlay');if(!ov)return;
   ov.classList.remove('gone');
@@ -2840,7 +2843,7 @@ await loadUserData();updateAllUI();showToast(data.rarity);autoPlaceEggs();try{sb
 function checkCraftHint(){if(S.craftHintShown||S.isGuest)return;const r=S.pillRecipes[0];if(!r)return;if(S.emblems.cafe_bean>=r.cost_cafe_bean&&S.emblems.wild_essence>=r.cost_wild_essence&&S.emblems.focus_shard>=r.cost_focus_shard){S.craftHintShown=true;const tab=document.querySelector('[data-tab="items"]');if(tab){tab.classList.add('hint');setTimeout(()=>tab.classList.remove('hint'),6000)}}}
 
 // ═══ GUEST DEMO LOOP — give guests a taste of the gameplay loop ═══
-let _guestDemoTicker=null;
+// _guestDemoTicker hoisted to top
 function startGuestDemo(){if(_guestDemoTicker)return;let demoDrops=0;_guestDemoTicker=setInterval(()=>{if(!S.isGuest||!S.playing)return;demoDrops++;const types=['cafe_bean','wild_essence','focus_shard'];const mat=types[Math.floor(Math.random()*3)];S.emblems[mat]++;renderItemsTab();showToast('ing_'+mat);
 // After enough drops, hint at crafting
 if(demoDrops>=3){const r=S.pillRecipes[0];if(r&&S.emblems.cafe_bean>=r.cost_cafe_bean&&S.emblems.wild_essence>=r.cost_wild_essence&&S.emblems.focus_shard>=r.cost_focus_shard){const tab=document.querySelector('[data-tab="items"]');if(tab&&!tab.classList.contains('hint')){tab.classList.add('hint');setTimeout(()=>tab.classList.remove('hint'),6000)}}}
