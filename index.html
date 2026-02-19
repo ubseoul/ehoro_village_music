@@ -2222,7 +2222,7 @@ async function persistExpeditionClaim(expedId,loot,retries=3){
   console.warn('persist exped: all retries failed for',expedId,'— loot was already applied locally');
 }
 
-// ═══ PROPER RPC EXPEDITION CLAIM ═══
+
 // ═══ PROPER RPC EXPEDITION CLAIM ═══
 async function claimExpedition(expedId) {
   if (S.isGuest || isBusy('claim_' + expedId)) return;
@@ -2231,18 +2231,28 @@ async function claimExpedition(expedId) {
     const exp = S.expeditions.find(e => e.id === expedId);
     if (!exp) { console.warn('claim: expedition not found', expedId); return; }
     
-    // Call the correct RPC function name based on your schema
-    let { data, error } = await sb.rpc('do_claim_expedition', { p_expedition_id_text: expedId });
+    // Call the correct RPC function with the standard parameter
+    let { data, error } = await sb.rpc('do_claim_expedition', { p_expedition_id: expedId });
     
-    // Fallback just in case the parameter name in your DB is actually p_expedition_id
-    if (error && (error.code === 'PGRST202' || error.message?.includes('p_expedition_id_text'))) {
-      const retry = await sb.rpc('do_claim_expedition', { p_expedition_id: expedId });
+    // Fallback if the database schema uses the text version
+    if (error && error.code === 'PGRST202') {
+      console.warn("Retrying with p_expedition_id_text...");
+      const retry = await sb.rpc('do_claim_expedition', { p_expedition_id_text: expedId });
       data = retry.data;
       error = retry.error;
     }
 
-    if (error) throw error;
-    if (data?.error) { console.warn('claim rpc error:', data.error); showToast('error'); return; }
+    // 🔴 NEW: If we STILL get an error, log the exact Postgres details so we can fix it
+    if (error) {
+      console.error("🔥 SUPABASE RPC ERROR:", JSON.stringify(error, null, 2));
+      throw error;
+    }
+    
+    if (data?.error) { 
+      console.warn('claim rpc returned error in data:', data.error); 
+      showToast('error'); 
+      return; 
+    }
 
     await Promise.all([
       reloadSpiritsAndTraits(),
@@ -2257,7 +2267,7 @@ async function claimExpedition(expedId) {
       markFirstExpedDone(exp.location || 'night_market');
     }
 
-    // Ensure we don't crash if server returns missing fields
+    // Safely parse the loot reveal to prevent crashes
     const revealData = {
       bonus_xp: data?.bonus_xp || 0,
       got_ashe: data?.got_ashe || false,
@@ -2271,7 +2281,11 @@ async function claimExpedition(expedId) {
     sIds.forEach(sid => addJournalEntry(sid, 'expedition', 'Returned from ' + locLabel + (revealData.bonus_xp > 0 ? ' · +' + revealData.bonus_xp + ' XP' : '')));
 
   } catch (e) {
-    console.warn('claim expedition error:', e); 
+    // 🔴 NEW: Deep error logging
+    console.error('claim expedition error details:', JSON.stringify(e, null, 2)); 
+    if (e.message) console.error("Message:", e.message);
+    if (e.details) console.error("Details:", e.details);
+    if (e.hint) console.error("Hint:", e.hint);
     showToast('error');
   }
 }
