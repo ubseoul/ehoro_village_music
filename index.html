@@ -2223,6 +2223,7 @@ async function persistExpeditionClaim(expedId,loot,retries=3){
 }
 
 // ═══ PROPER RPC EXPEDITION CLAIM ═══
+// ═══ PROPER RPC EXPEDITION CLAIM ═══
 async function claimExpedition(expedId) {
   if (S.isGuest || isBusy('claim_' + expedId)) return;
   setBusy('claim_' + expedId, 5000);
@@ -2230,7 +2231,16 @@ async function claimExpedition(expedId) {
     const exp = S.expeditions.find(e => e.id === expedId);
     if (!exp) { console.warn('claim: expedition not found', expedId); return; }
     
-    const { data, error } = await sb.rpc('claim_expedition', { p_expedition_id: expedId });
+    // Call the correct RPC function name based on your schema
+    let { data, error } = await sb.rpc('do_claim_expedition', { p_expedition_id_text: expedId });
+    
+    // Fallback just in case the parameter name in your DB is actually p_expedition_id
+    if (error && (error.code === 'PGRST202' || error.message?.includes('p_expedition_id_text'))) {
+      const retry = await sb.rpc('do_claim_expedition', { p_expedition_id: expedId });
+      data = retry.data;
+      error = retry.error;
+    }
+
     if (error) throw error;
     if (data?.error) { console.warn('claim rpc error:', data.error); showToast('error'); return; }
 
