@@ -2223,6 +2223,7 @@ async function persistExpeditionClaim(expedId,loot,retries=3){
 }
 
 
+
 // ═══ PROPER RPC EXPEDITION CLAIM ═══
 async function claimExpedition(expedId) {
   if (S.isGuest || isBusy('claim_' + expedId)) return;
@@ -2231,29 +2232,20 @@ async function claimExpedition(expedId) {
     const exp = S.expeditions.find(e => e.id === expedId);
     if (!exp) { console.warn('claim: expedition not found', expedId); return; }
     
-    // Call the correct RPC function with the standard parameter
+    // Call the database function
     let { data, error } = await sb.rpc('do_claim_expedition', { p_expedition_id: expedId });
     
-    // Fallback if the database schema uses the text version
+    // Safe Fallback: Try with text parameter if the UUID one fails
     if (error && error.code === 'PGRST202') {
-      console.warn("Retrying with p_expedition_id_text...");
       const retry = await sb.rpc('do_claim_expedition', { p_expedition_id_text: expedId });
       data = retry.data;
       error = retry.error;
     }
 
-    // 🔴 NEW: If we STILL get an error, log the exact Postgres details so we can fix it
-    if (error) {
-      console.error("🔥 SUPABASE RPC ERROR:", JSON.stringify(error, null, 2));
-      throw error;
-    }
-    
-    if (data?.error) { 
-      console.warn('claim rpc returned error in data:', data.error); 
-      showToast('error'); 
-      return; 
-    }
+    if (error) throw error;
+    if (data?.error) { console.warn('claim rpc error:', data.error); showToast('error'); return; }
 
+    // Sync state quietly
     await Promise.all([
       reloadSpiritsAndTraits(),
       reloadEmblems(),
@@ -2263,11 +2255,12 @@ async function claimExpedition(expedId) {
     ]);
     debouncedUpdateAllUI();
 
+    // Trigger first-expedition flag safely
     if (!S.isGuest && isFirstExpedToLoc(exp.location || 'night_market')) {
       markFirstExpedDone(exp.location || 'night_market');
     }
 
-    // Safely parse the loot reveal to prevent crashes
+    // Show the animated loot reveal!
     const revealData = {
       bonus_xp: data?.bonus_xp || 0,
       got_ashe: data?.got_ashe || false,
@@ -2276,20 +2269,17 @@ async function claimExpedition(expedId) {
     };
     showExpedLootReveal(revealData, exp);
     
+    // Log to journal
     const sIds = Array.isArray(exp?.spirit_ids) ? exp.spirit_ids : [];
     const locLabel = (EXPED_LOCATIONS[exp?.location]?.label || 'expedition');
     sIds.forEach(sid => addJournalEntry(sid, 'expedition', 'Returned from ' + locLabel + (revealData.bonus_xp > 0 ? ' · +' + revealData.bonus_xp + ' XP' : '')));
 
   } catch (e) {
-    // 🔴 NEW: Deep error logging
     console.error('claim expedition error details:', JSON.stringify(e, null, 2)); 
     if (e.message) console.error("Message:", e.message);
-    if (e.details) console.error("Details:", e.details);
-    if (e.hint) console.error("Hint:", e.hint);
     showToast('error');
   }
 }
-
 // ═══ V2.5: EXPEDITION LOOT REVEAL ═══
 // V2.8: First expedition to each location guarantees a building material drop shown in reveal
 const LOCATION_FIRST_DROP={
@@ -2308,12 +2298,17 @@ function isFirstExpedToLoc(locId){
   const col=FIRST_EXPED_PROFILE_COL[locId];
   return col?!S.profile[col]:false;
 }
-function markFirstExpedDone(locId){
-  // Optimistic client update; server sets flag inside claim_expedition RPC
-  const col=FIRST_EXPED_PROFILE_COL[locId];
-  if(col&&S.profile)S.profile[col]=true;
-  // Belt-and-suspenders: also call the flag RPC in case RPC missed it
-  if(S.user&&col)sb.rpc('set_first_expedition_flag',{p_location:locId}).catch(e=>console.warn('first exped flag err:',e));
+// ═══ FIRST EXPEDITION TRACKING (CRASH-PROOF) ═══
+function markFirstExpedDone(locId) {
+  const col = FIRST_EXPED_PROFILE_COL[locId];
+  if (col && S.profile) S.profile[col] = true;
+  
+  // Fix: Supabase builder doesn't support .catch() directly. Use .then()
+  if (S.user && col) {
+    sb.rpc('set_first_expedition_flag', { p_location: locId }).then(res => {
+      if (res.error) console.warn('first exped flag err:', res.error);
+    });
+  }
 }
 
 function showExpedLootReveal(data,exp){
