@@ -915,8 +915,9 @@ function hasMaterial(id,qty=1){return getMaterialCount(id)>=qty}
 function syncMaterialsFromInventory(){
   const mats={};
   (S.buildingInventory||[]).filter(i=>i.item_type==='material').forEach(i=>{
-    const key = i.item_id || i.item_name;
-    mats[key] = (mats[key] || 0) + (i.quantity || 1);
+    // V3.2: key off item_id (e.g. 'grinder_stone'), fall back to item_name for legacy rows
+    const key=i.item_id||i.item_name;
+    mats[key]=(mats[key]||0)+(i.quantity||1);
   });
   S.materials=mats;
 }
@@ -2076,9 +2077,24 @@ const LOCATION_FIRST_DROP={
   bamboo_highlands:{mat:'grinder_stone',emoji:'🪨',label:'Grinder Stone',hint:'This material helps unlock Village Buildings!'},
   frozen_ruins:{mat:'ruin_fragment',emoji:'🏚️',label:'Ruin Fragment',hint:'This material helps unlock Village Buildings!'}
 };
-function getFirstExpedKey(locId){return'firstExped_'+locId+'_'+(S.user?.id||'guest')}
-function isFirstExpedToLoc(locId){return!localStorage.getItem(getFirstExpedKey(locId))}
-function markFirstExpedDone(locId){try{localStorage.setItem(getFirstExpedKey(locId),'1')}catch(e){}}
+// V3.2: First expedition flags stored on profiles table (cross-device)
+const FIRST_EXPED_PROFILE_COL={
+  night_market:'first_exped_night_market',
+  bamboo_highlands:'first_exped_bamboo_highlands',
+  frozen_ruins:'first_exped_frozen_ruins'
+};
+function isFirstExpedToLoc(locId){
+  if(!S.profile)return false;
+  const col=FIRST_EXPED_PROFILE_COL[locId];
+  return col?!S.profile[col]:false;
+}
+function markFirstExpedDone(locId){
+  // Optimistic client update; server sets flag inside claim_expedition RPC
+  const col=FIRST_EXPED_PROFILE_COL[locId];
+  if(col&&S.profile)S.profile[col]=true;
+  // Belt-and-suspenders: also call the flag RPC in case RPC missed it
+  if(S.user&&col)sb.rpc('set_first_expedition_flag',{p_location:locId}).catch(e=>console.warn('first exped flag err:',e));
+}
 
 function showExpedLootReveal(data,exp){
   const ov=document.getElementById('lootRevealOverlay');
@@ -3121,8 +3137,8 @@ function startCultivationTicker(){if(S.cultTicker||S.isGuest)return;S.cultTicker
   // V2.6: Dojo passive XP for assigned workers
   applyDojoXP();
   try{const{data}=await sb.rpc('tick_active_cultivation');if(data?.success){
-// Trait effect: Focused spirits get bonus active cultivation XP (10% chance of +1)
-for(const sp of S.spirits){const bonus=spiritTraitBonus(sp.id,'xp_bonus');if(bonus>0&&Math.random()<bonus){const newXp=(sp.xp||0)+1;sb.from('spirits').update({xp:newXp}).eq('id',sp.id).then(()=>{}).catch(e=>console.warn('focused bonus err',e))}}
+// V3.2: Trait XP bonuses (Focused, Disciplined, Meditative, Calm) and drink buffs
+// are now applied server-side inside tick_active_cultivation RPC. No client-side override needed.
 await loadUserData();updateAllUI()}}catch(e){console.warn('cultivation tick error:',e)}},300000)}
 
 // ═══ EVOLUTION ═══
@@ -3392,10 +3408,11 @@ function getResearchedLocations(){
 function locationIsResearched(locId){return getResearchedLocations().includes(locId)}
 
 // ═══ V2.9: BUILDING TIER SYSTEM ═══
-// Tier stored client-side in localStorage keyed per user+building (no DB schema change needed)
-function getBuildingTierKey(buildingId){return'bldg_tier_'+buildingId+'_'+(S.user?.id||'guest')}
-function getBuildingTier(buildingId){return parseInt(localStorage.getItem(getBuildingTierKey(buildingId))||'1')}
-function setBuildingTier(buildingId,tier){try{localStorage.setItem(getBuildingTierKey(buildingId),String(tier))}catch(e){}}
+// V3.2: Tier now stored in buildings.tier column — read from S.buildings
+function getBuildingTier(buildingId){
+  const bld=S.buildings.find(b=>b.building_type===buildingId);
+  return bld?Math.max(1,parseInt(bld.tier||1)):1;
+}
 function canUpgradeBuilding(buildingId){
   const cfg=BUILDING_CONFIGS[buildingId];if(!cfg||!cfg.tiers)return false;
   const currentTier=getBuildingTier(buildingId);
@@ -3408,35 +3425,53 @@ function canUpgradeBuilding(buildingId){
     return hasMaterial(mat,qty);
   });
 }
-function upgradeBuilding(buildingId){
+async function upgradeBuilding(buildingId){
   if(S.isGuest||!canUpgradeBuilding(buildingId))return;
+  if(isBusy('upgrade_'+buildingId))return;
+  setBusy('upgrade_'+buildingId,5000);
   const cfg=BUILDING_CONFIGS[buildingId];
   const currentTier=getBuildingTier(buildingId);
   const nextTierDef=cfg.tiers[currentTier];
   if(!nextTierDef||!nextTierDef.upgradeCost)return;
-  // Deduct costs optimistically
+  // Deduct costs client-side (optimistic) then call RPC to persist tier
   Object.entries(nextTierDef.upgradeCost).forEach(([mat,qty])=>{
     if(['cafe_bean','wild_essence','focus_shard','ashe_essence','spirit_essence'].includes(mat)){
       S.emblems[mat]=Math.max(0,(S.emblems[mat]||0)-qty);
       sb.from('emblems').upsert({user_id:S.user.id,emblem_type:mat,quantity:S.emblems[mat]},{onConflict:'user_id,emblem_type'}).catch(e=>console.warn('tier upgrade emblem err:',e));
     }else{
-      // Deduct material from inventory
       deductMaterial(mat,qty);
     }
   });
-  const newTier=currentTier+1;
-  setBuildingTier(buildingId,newTier);
-  closeBuildingModal();
-  showToastMsg(cfg.emoji,'Upgraded!',cfg.label+' is now Tier '+newTier);
-  debouncedUpdateAllUI();
-  openBuildingModal(buildingId); // reopen refreshed
+  try{
+    const{data,error}=await sb.rpc('upgrade_building',{p_building_type:buildingId});
+    if(error)throw error;
+    if(data?.error){console.warn('upgrade building rpc error:',data.error);showToast('error');return}
+    await reloadBuildings();syncMaterialsFromInventory();
+    const newTier=getBuildingTier(buildingId);
+    closeBuildingModal();
+    showToastMsg(cfg.emoji,'Upgraded!',cfg.label+' is now Tier '+newTier);
+    debouncedUpdateAllUI();
+    openBuildingModal(buildingId);
+  }catch(e){console.warn('upgrade building error:',e);showToast('error')}
 }
 
-// ═══ V2.9: LIBRARY RESEARCH STATE ═══
-// Research state: {locId: {status:'idle'|'researching'|'done', startedListenMin: N}}
-function getLibraryResearchKey(){return'lib_research_'+(S.user?.id||'guest')}
-function getLibraryResearch(){try{return JSON.parse(localStorage.getItem(getLibraryResearchKey())||'{}')}catch(e){return{}}}
-function setLibraryResearch(data){try{localStorage.setItem(getLibraryResearchKey(),JSON.stringify(data))}catch(e){}}
+// ═══ V3.2: LIBRARY RESEARCH STATE — stored in buildings.research_data (DB, cross-device) ═══
+function getLibraryResearch(){
+  const bld=S.buildings.find(b=>b.building_type==='library');
+  if(!bld)return{};
+  try{return JSON.parse(bld.research_data||'{}')}catch(e){return{}}
+}
+async function setLibraryResearch(data){
+  const bld=S.buildings.find(b=>b.building_type==='library');
+  if(!bld||!S.user)return;
+  const json=JSON.stringify(data);
+  // Update in-memory immediately
+  bld.research_data=json;
+  // Persist to DB
+  try{
+    await sb.from('buildings').update({research_data:json}).eq('id',bld.id).eq('user_id',S.user.id);
+  }catch(e){console.warn('library research save err:',e)}
+}
 function getResearchDurationMin(buildingId){
   const tier=getBuildingTier(buildingId||'library');
   return tier>=3?30:tier>=2?45:60;
@@ -3452,7 +3487,7 @@ function startResearch(locId){
   if(data[locId]?.status==='done')return;
   const totalMin=getTotalListenMinutes();
   data[locId]={status:'researching',startedListenMin:totalMin,durationMin:getResearchDurationMin('library')};
-  setLibraryResearch(data);
+  setLibraryResearch(data); // async, no await needed here — in-memory update is instant
   // Immediately refresh the modal view
   openBuildingModal('library');
   showToastMsg('📚','Research started!','Listen to progress the research');
