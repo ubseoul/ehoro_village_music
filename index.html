@@ -2030,24 +2030,40 @@ function toggleExpedSpirit(sid){
   else if(_expedModal.selectedSpirits.length<3)_expedModal.selectedSpirits.push(sid);
   renderExpedModalContent(document.getElementById('modalBox'));
 }
-// ═══ SEND EXPEDITION ═══
-async function sendExpedition(){
-  if(S.isGuest||!_expedModal.selectedSpirits.length||isBusy('send_exped'))return;
-  setBusy('send_exped',4000);
+
+// ═══ SEND EXPEDITION (HARDENED) ═══
+async function sendExpedition() {
+  if (S.isGuest || !_expedModal.selectedSpirits.length || isBusy('send_exped')) return;
+  setBusy('send_exped', 4000);
   closeModal();
-  try{
-    // Try with p_location (V2.6 RPC). Falls back to 3-param signature if DB not yet migrated.
-    let res=await sb.rpc('send_expedition',{p_slot:_expedModal.slot,p_spirit_ids:_expedModal.selectedSpirits,p_duration:_expedModal.duration,p_location:_expedModal.location});
-    if(res.error&&(res.error.code==='PGRST202'||res.error.message?.includes('p_location')||res.error.message?.includes('schema cache'))){
-      console.warn('send_expedition: p_location not in DB yet, retrying without it');
-      res=await sb.rpc('send_expedition',{p_slot:_expedModal.slot,p_spirit_ids:_expedModal.selectedSpirits,p_duration:_expedModal.duration});
+  try {
+    const payload = {
+      p_slot: _expedModal.slot,
+      p_spirit_ids: _expedModal.selectedSpirits,
+      p_duration: _expedModal.duration,
+      p_location: _expedModal.location || 'night_market'
+    };
+    
+    let res = await sb.rpc('send_expedition', payload);
+    
+    // Fallback if DB schema lacks p_location parameter
+    if (res.error && (res.error.code === 'PGRST202' || res.error.message?.includes('p_location'))) {
+      console.warn('send_expedition: p_location not in DB yet, falling back to 3-param');
+      delete payload.p_location;
+      res = await sb.rpc('send_expedition', payload);
     }
-    if(res.error)throw res.error;
-    if(res.data?.error){console.warn('send exped rpc error:',res.data.error);showToast('error');return}
-    await reloadExpeditions();debouncedUpdateAllUI();
-    const locLabel=EXPED_LOCATIONS[_expedModal.location]?.label||'the wilderness';
-    showToastMsg('🧭','Expedition sent!','Your spirits set off for '+locLabel+'…');
-  }catch(e){console.warn('send expedition error:',e);showToast('error')}
+    
+    if (res.error) throw res.error;
+    if (res.data?.error) { console.warn('send exped rpc error:', res.data.error); showToast('error'); return; }
+    
+    await reloadExpeditions(); 
+    debouncedUpdateAllUI();
+    const locLabel = EXPED_LOCATIONS[_expedModal.location]?.label || 'the wilderness';
+    showToastMsg('🧭', 'Expedition sent!', 'Your spirits set off for ' + locLabel + '…');
+  } catch (e) {
+    console.warn('send expedition error:', e); 
+    showToast('error');
+  }
 }
 
 // ═══ V3.3: CLAIM EXPEDITION — NUCLEAR LOCAL-FIRST REBUILD ═══
@@ -2206,34 +2222,48 @@ async function persistExpeditionClaim(expedId,loot,retries=3){
   console.warn('persist exped: all retries failed for',expedId,'— loot was already applied locally');
 }
 
-async function claimExpedition(expedId){
-  if(S.isGuest||isBusy('claim_'+expedId))return;
-  setBusy('claim_'+expedId,5000);
-  try{
-    const exp=S.expeditions.find(e=>e.id===expedId);
-    if(!exp){console.warn('claim: expedition not found',expedId);return}
-    // ── LOCAL-FIRST: Calculate loot instantly ──
-    const loot=calculateExpeditionLoot(exp);
-    // ── Apply to local state immediately ──
-    applyExpedLootToLocalState(exp,loot);
+// ═══ PROPER RPC EXPEDITION CLAIM ═══
+async function claimExpedition(expedId) {
+  if (S.isGuest || isBusy('claim_' + expedId)) return;
+  setBusy('claim_' + expedId, 5000);
+  try {
+    const exp = S.expeditions.find(e => e.id === expedId);
+    if (!exp) { console.warn('claim: expedition not found', expedId); return; }
+    
+    const { data, error } = await sb.rpc('claim_expedition', { p_expedition_id: expedId });
+    if (error) throw error;
+    if (data?.error) { console.warn('claim rpc error:', data.error); showToast('error'); return; }
+
+    await Promise.all([
+      reloadSpiritsAndTraits(),
+      reloadEmblems(),
+      reloadExpeditions(),
+      reloadBuildings().then(() => syncMaterialsFromInventory()),
+      reloadJournal()
+    ]);
     debouncedUpdateAllUI();
-    // ── Show loot reveal ceremony with local data ──
-    const revealData={
-      bonus_xp:loot.bonus_xp,
-      got_ashe:loot.got_ashe,
-      total_mats:loot.total_mats,
-      loot_items:loot.loot_items
+
+    if (!S.isGuest && isFirstExpedToLoc(exp.location || 'night_market')) {
+      markFirstExpedDone(exp.location || 'night_market');
+    }
+
+    // Ensure we don't crash if server returns missing fields
+    const revealData = {
+      bonus_xp: data?.bonus_xp || 0,
+      got_ashe: data?.got_ashe || false,
+      total_mats: data?.total_mats || 0,
+      loot_items: data?.loot_items || []
     };
-    showExpedLootReveal(revealData,exp);
-    // V2.6: Journal entries for each spirit
-    const sIds=Array.isArray(exp?.spirit_ids)?exp.spirit_ids:[];
-    const locLabel=(EXPED_LOCATIONS[exp?.location]?.label||'expedition');
-    sIds.forEach(sid=>addJournalEntry(sid,'expedition','Returned from '+locLabel+(loot.bonus_xp>0?' · +'+loot.bonus_xp+' XP':'')));
-    // V2.8: First expedition tracking
-    if(!S.isGuest&&isFirstExpedToLoc(exp.location||'night_market'))markFirstExpedDone(exp.location||'night_market');
-    // ── Fire-and-forget DB persistence (1s delay) ──
-    setTimeout(()=>persistExpeditionClaim(expedId,loot),1000);
-  }catch(e){console.warn('claim expedition error:',e);showToast('error')}
+    showExpedLootReveal(revealData, exp);
+    
+    const sIds = Array.isArray(exp?.spirit_ids) ? exp.spirit_ids : [];
+    const locLabel = (EXPED_LOCATIONS[exp?.location]?.label || 'expedition');
+    sIds.forEach(sid => addJournalEntry(sid, 'expedition', 'Returned from ' + locLabel + (revealData.bonus_xp > 0 ? ' · +' + revealData.bonus_xp + ' XP' : '')));
+
+  } catch (e) {
+    console.warn('claim expedition error:', e); 
+    showToast('error');
+  }
 }
 
 // ═══ V2.5: EXPEDITION LOOT REVEAL ═══
@@ -3189,13 +3219,45 @@ function closeBuildingModal(){
 function calcPrestige(){const xpl=S.XP_PER_LEVEL||150;let p=0;S.spirits.forEach(sp=>{const evoBonus=[15,30,50][sp.evo_stage]||15;p+=evoBonus;p+=Math.floor((sp.xp||0)/xpl)*7});p+=Math.floor((S.profile?.total_listen_seconds||0)/3600)*4;return p}
 
 // ═══ HATCH ═══
-async function doHatch(slotId){if(S.isGuest||isBusy('hatch_'+slotId))return;setBusy('hatch_'+slotId,5000);
-// Optimistic: mark slot as processing
-const slotIdx=S.hatchery.findIndex(s=>s.id===slotId);
-if(slotIdx>=0){const origEgg=S.hatchery[slotIdx].egg_id;S.hatchery[slotIdx]._hatching=true;renderPillsTab()}
-try{const{data,error}=await sb.rpc('hatch_egg',{p_slot_id:slotId});if(error)throw error;if(data.error){showToast('error');if(slotIdx>=0)S.hatchery[slotIdx]._hatching=false;renderPillsTab();return}
-_lastHatchData=data;
-await loadUserData();updateAllUI();showHatchAnimation(data)}catch(e){console.warn('hatch error:',e);showToast('error');if(slotIdx>=0)S.hatchery[slotIdx]._hatching=false;renderPillsTab()}}
+// ═══ HATCH EGG (SAFELY VALIDATED) ═══
+async function doHatch(slotId) {
+  if (S.isGuest || isBusy('hatch_' + slotId)) return;
+  setBusy('hatch_' + slotId, 5000);
+  const slotIdx = S.hatchery.findIndex(s => s.id === slotId);
+  if (slotIdx >= 0) { S.hatchery[slotIdx]._hatching = true; renderPillsTab(); }
+  
+  try {
+    const { data, error } = await sb.rpc('hatch_egg', { p_slot_id: slotId });
+    if (error) throw error;
+    // Fix: Strict null check before accessing .error
+    if (!data || data.error) { 
+      console.warn('hatch rpc error:', data?.error || 'No data returned');
+      showToast('error'); 
+      if (slotIdx >= 0) S.hatchery[slotIdx]._hatching = false; 
+      renderPillsTab(); 
+      return; 
+    }
+    
+    _lastHatchData = data;
+    await loadUserData(); 
+    updateAllUI(); 
+    
+    // Ensure animation never crashes on missing properties
+    const safeData = {
+      rarity: data.rarity || 'mundane',
+      spirit_type: data.spirit_type || 'timi',
+      evo_stage: data.evo_stage || 0
+    };
+    showHatchAnimation(safeData);
+  } catch (e) {
+    console.warn('hatch error:', e); 
+    showToast('error'); 
+    if (slotIdx >= 0) S.hatchery[slotIdx]._hatching = false; 
+    renderPillsTab();
+  }
+}
+
+  
 function showHatchAnimation(data){const ov=document.getElementById('hatchOverlay'),eg=document.getElementById('hatchEgg'),rv=document.getElementById('hatchReveal');
 // V1.4: Rarity-themed overlay background
 ov.className='hatch-overlay rarity-'+(data.rarity||'mundane');
@@ -3268,11 +3330,35 @@ async function unlockSlot(num){if(S.isGuest)return;try{const{data}=await sb.rpc(
 
 // ═══ PLACE EGG ═══
 function openPlaceEggModal(slotId){const pend=S.pendingEggs.filter(e=>e.status==='pending');if(!pend.length){showToast('no_eggs');return}const box=document.getElementById('modalBox');box.innerHTML='<div class="modal-title">Place an Egg</div><div class="modal-select-grid">'+pend.map(e=>'<div class="modal-select-row" onclick="placeEgg(\''+e.id+'\',\''+slotId+'\')"><span>\uD83E\uDD5A</span><span style="color:'+(RARITY_COLORS[e.rarity]||'#888')+'">'+e.rarity+'</span><span style="font-size:.5rem;color:var(--t4);margin-left:auto">'+(INCUB_MINS[e.rarity]||5)+'m</span></div>').join('')+'</div><button class="modal-btn secondary" onclick="closeModal()">Cancel</button>';document.getElementById('modal').classList.add('open')}
-async function placeEgg(eId,sId){if(S.isGuest||isBusy('place_'+eId))return;setBusy('place_'+eId,3000);closeModal();
-// Optimistic: remove from pending, mark slot as occupied
-const eggIdx=S.pendingEggs.findIndex(e=>e.id===eId);const slotIdx=S.hatchery.findIndex(s=>s.id===sId);
-if(eggIdx>=0&&slotIdx>=0){S.hatchery[slotIdx].egg_id=eId;S.hatchery[slotIdx].started_at=new Date().toISOString();S.pendingEggs.splice(eggIdx,1);renderPillsTab()}
-try{await sb.rpc('place_egg_in_slot',{p_egg_id:eId,p_slot_id:sId});await loadUserData();updateAllUI()}catch(e){console.warn('placeEgg error:',e);showToast('error');await loadUserData();updateAllUI()}}
+async function placeEgg(eId, sId) {
+  if (S.isGuest || isBusy('place_' + eId)) return;
+  setBusy('place_' + eId, 3000);
+  closeModal();
+  
+  const eggIdx = S.pendingEggs.findIndex(e => e.id === eId);
+  const slotIdx = S.hatchery.findIndex(s => s.id === sId);
+  if (eggIdx >= 0 && slotIdx >= 0) {
+    S.hatchery[slotIdx].egg_id = eId;
+    S.hatchery[slotIdx].started_at = new Date().toISOString();
+    S.pendingEggs.splice(eggIdx, 1);
+    renderPillsTab();
+  }
+  
+  try {
+    const { data, error } = await sb.rpc('place_egg_in_slot', { p_egg_id: eId, p_slot_id: sId });
+    if (error) throw error;
+    if (data?.error) console.warn('place egg error:', data.error);
+    await loadUserData();
+    updateAllUI();
+  } catch (e) {
+    console.warn('placeEgg error:', e);
+    showToast('error');
+    await loadUserData();
+    updateAllUI();
+  }
+}
+
+  
 function startHatcheryTicker(){if(S.hatchTicker)return;S.hatchTicker=setInterval(()=>{if(!S.isGuest){renderPillsTab();checkHatchReady();}},15000)}
 
 // ═══ CRAFT PILLS ═══
@@ -3314,23 +3400,33 @@ function startCultivationTicker(){if(S.cultTicker||S.isGuest)return;S.cultTicker
 await loadUserData();updateAllUI()}}catch(e){console.warn('cultivation tick error:',e)}},300000)}
 
 // ═══ EVOLUTION ═══
-async function doEvolve(spiritId){
-  if(S.isGuest||isBusy('evolve_'+spiritId))return;
-  setBusy('evolve_'+spiritId,5000);
-  const sp=S.spirits.find(s=>s.id===spiritId);
-  try{
-    const{data,error}=await sb.rpc('evolve_spirit',{p_spirit_id:spiritId});
-    if(error)throw error;
-    if(data.error){showToast('error');return}
+// ═══ EVOLUTION ═══
+async function doEvolve(spiritId) {
+  if (S.isGuest || isBusy('evolve_' + spiritId)) return;
+  setBusy('evolve_' + spiritId, 5000);
+  const sp = S.spirits.find(s => s.id === spiritId);
+  try {
+    const { data, error } = await sb.rpc('evolve_spirit', { p_spirit_id: spiritId });
+    if (error) throw error;
+    // Fix: Use optional chaining to prevent crash if data is null
+    if (data?.error) { showToast('error'); return; }
+    
     await loadUserData();
     updateAllUI();
     closeSpiritDetail();
-    // Show evolution ceremony with new stage data
-    const newSp=S.spirits.find(s=>s.id===spiritId)||sp;
-    if(newSp){showEvoCeremony(newSp);addJournalEntry(spiritId,'evolution','Evolved to '+EVO_LABELS[newSp.evo_stage]);}
-    else showToast('evolution');
+    
+    const newSp = S.spirits.find(s => s.id === spiritId) || sp;
+    if (newSp) {
+      showEvoCeremony(newSp);
+      addJournalEntry(spiritId, 'evolution', 'Evolved to ' + EVO_LABELS[newSp.evo_stage]);
+    } else {
+      showToast('evolution');
+    }
     checkMilestones();
-  }catch(e){console.warn('evolve error:',e);showToast('error')}
+  } catch (e) {
+    console.warn('evolve error:', e);
+    showToast('error');
+  }
 }
 
 // ═══ V2.4/V2.8: EVOLUTION CEREMONY — enhanced ═══
