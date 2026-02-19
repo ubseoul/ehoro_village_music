@@ -892,7 +892,7 @@ async function reloadSpiritsAndTraits(){if(!S.user)return;const sIds=(await sb.f
 async function reloadEmblems(){if(!S.user)return;const{data:emb}=await sb.from('emblems').select('*').eq('user_id',S.user.id);if(emb)emb.forEach(e=>{S.emblems[e.emblem_type]=e.quantity})}
 async function reloadHatchery(){if(!S.user)return;const[{data:hatch},{data:eggs}]=await Promise.all([sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('eggs').select('*').eq('user_id',S.user.id).in('status',['pending','incubating']).limit(30)]);if(hatch)S.hatchery=hatch;const allEggs=eggs||[];S.pendingEggs=allEggs.filter(e=>e.status==='pending');S.allEggs=allEggs}
 async function reloadExpeditions(){if(!S.user)return;const{data:expeds}=await sb.from('expeditions').select('*').eq('user_id',S.user.id);if(expeds!==undefined)S.expeditions=expeds||[]}
-async function reloadWickedPills(){if(!S.user||S.isGuest)return;const{data}=await sb.from('wicked_pills').select('*').eq('user_id',S.user.id).order('created_at');S._wickedPills=data||[]}
+async function reloadWickedPills(){if(!S.user||S.isGuest)return;const{data}=await sb.from('wicked_pills').select('*').eq('user_id',S.user.id).order('id');S._wickedPills=data||[]}
 
 // ═══ V2.5: BUILDINGS RELOAD ═══
 async function reloadBuildings(){
@@ -900,7 +900,7 @@ async function reloadBuildings(){
   const[{data:blds},{data:staff},{data:inv}]=await Promise.all([
     sb.from('buildings').select('*').eq('user_id',S.user.id),
     sb.from('building_staff').select('*').eq('user_id',S.user.id),
-    sb.from('building_inventory').select('*').eq('user_id',S.user.id).order('created_at',{ascending:false})
+    sb.from('building_inventory').select('*').eq('user_id',S.user.id).order('id',{ascending:false})
   ]);
   S.buildings=blds||[];
   S.buildingStaff=staff||[];
@@ -1792,7 +1792,7 @@ async function loadUserData(){if(!S.user)return;
   const sIds=(await sb.from('spirits').select('id').eq('user_id',S.user.id)).data?.map(s=>s.id)||[];
   const hasRealPills=S.pillRecipes.length&&S.pillRecipes[0].id&&S.pillRecipes[0].id.length>10;
   const fetchPills=hasRealPills?Promise.resolve({data:null}):sb.from('pill_recipes').select('*');
-  const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:eggs},{data:pills},{data:expeds},{data:wpills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).maybeSingle(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).in('status',['pending','incubating']).limit(30),fetchPills,sb.from('expeditions').select('*').eq('user_id',S.user.id),sb.from('wicked_pills').select('*').eq('user_id',S.user.id).order('created_at')]);
+  const[{data:prof},{data:spirits},{data:emb},{data:hatch},{data:traits},{data:eggs},{data:pills},{data:expeds},{data:wpills}]=await Promise.all([sb.from('profiles').select('*').eq('id',S.user.id).maybeSingle(),sb.from('spirits').select('*').eq('user_id',S.user.id),sb.from('emblems').select('*').eq('user_id',S.user.id),sb.from('hatchery').select('*').eq('user_id',S.user.id).order('slot_number'),sb.from('spirit_traits').select('*').in('spirit_id',sIds.length?sIds:['00000000-0000-0000-0000-000000000000']),sb.from('eggs').select('*').eq('user_id',S.user.id).in('status',['pending','incubating']).limit(30),fetchPills,sb.from('expeditions').select('*').eq('user_id',S.user.id),sb.from('wicked_pills').select('*').eq('user_id',S.user.id).order('id')]);
   // Only overwrite S if we got valid data back (never overwrite with nulls from failed fetch)
   if(prof!==undefined)S.profile=prof||S.profile;
   if(S.profile&&S.profile.starter_claimed===undefined)S.profile.starter_claimed=false;
