@@ -2056,7 +2056,7 @@ async function claimExpedition(expedId){
   setBusy('claim_'+expedId,5000);
   try{
     const exp=S.expeditions.find(e=>e.id===expedId);
-    const{data,error}=await sb.rpc('claim_expedition',{p_expedition_id:expedId});
+    const{data,error}=await sb.rpc('claim_expedition_v2',{p_expedition_id:expedId});
     if(error)throw error;
     if(data?.error){console.warn('claim exped rpc error:',data.error);showToast('error');return}
     await Promise.all([reloadSpiritsAndTraits(),reloadEmblems(),reloadExpeditions(),reloadBuildings().then(()=>syncMaterialsFromInventory()),reloadJournal()]);
