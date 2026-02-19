@@ -2441,11 +2441,13 @@ function showSpiritDetail(id){
   const xpP=(sp.xp||0)%S.XP_PER_LEVEL;
   const xpPct=Math.round((xpP/S.XP_PER_LEVEL)*100);
   const tr=S.traits[sp.id]||[];
+  const cultRedux=spiritTraitBonus(sp.id,'cult_cost_reduction');
   const cost=sp.evo_stage===0?5:12;
+  const displayCost=Math.max(1,Math.floor(cost*(1-cultRedux)));
   const reqLvl=sp.evo_stage===0?3:5;
   const reqXp=(reqLvl-1)*S.XP_PER_LEVEL;
   const meetsLvl=(sp.xp||0)>=reqXp;
-  const meetsMats=S.emblems.cafe_bean>=cost&&S.emblems.wild_essence>=cost&&S.emblems.focus_shard>=cost;
+  const meetsMats=S.emblems.cafe_bean>=displayCost&&S.emblems.wild_essence>=displayCost&&S.emblems.focus_shard>=displayCost;
   const can=sp.evo_stage<2&&!S.isGuest&&meetsLvl&&meetsMats;
   const evoText=sp.evo_stage===1?'evo-text-1':sp.evo_stage===2?'evo-text-2':'';
   const onExped=spiritOnExpedition(sp.id);
@@ -2463,7 +2465,8 @@ function showSpiritDetail(id){
   if(sp.evo_stage<2){
     const reqs=[];
     if(!meetsLvl)reqs.push('<span style="color:var(--negative)">Requires Lv.'+reqLvl+' (currently Lv.'+lvl+')</span>');
-    reqs.push('Cost: '+cost+'× each (☕'+S.emblems.cafe_bean+' 🌿'+S.emblems.wild_essence+' ⚡'+S.emblems.focus_shard+')');
+    const costLabel=cultRedux>0?displayCost+'× each <span style="color:var(--positive);font-size:.42rem">Deep Roots -'+Math.round(cultRedux*100)+'%</span>':displayCost+'× each';
+    reqs.push('Cost: '+costLabel+' (☕'+S.emblems.cafe_bean+' 🌿'+S.emblems.wild_essence+' ⚡'+S.emblems.focus_shard+')');
     evoReqs='<button class="sd-evolve-btn" '+(can?'':'disabled')+' onclick="doEvolve(\''+sp.id+'\')">Evolve to '+EVO_LABELS[sp.evo_stage+1]+'</button><div class="sd-evolve-cost">'+reqs.join(' · ')+'</div>';
   }else{
     evoReqs='<div style="text-align:center;font-size:.6rem;color:var(--special);margin-top:10px">✨ Fully Ascended</div>';
@@ -2471,8 +2474,8 @@ function showSpiritDetail(id){
   // Alignment badge
   const align=getSpiritAlignment(sp.id);
   let alignBadge='';
-  if(align==='wicked')alignBadge='<div class="sd-alignment wicked">🩸 Wicked</div>';
-  else if(align==='heavenly')alignBadge='<div class="sd-alignment heavenly">✦ Heavenly</div>';
+  if(align==='wicked')alignBadge='<div class="sd-alignment wicked" title="+10% expedition materials">🩸 Wicked <span style="font-size:.38rem;opacity:.7">+10% mats</span></div>';
+  else if(align==='heavenly')alignBadge='<div class="sd-alignment heavenly" title="+15% passive XP per tick">✦ Heavenly <span style="font-size:.38rem;opacity:.7">+15% XP</span></div>';
   // Stars
   const stars=[0,1,2].map(i=>i<=sp.evo_stage?'★':'☆').join('');
   const starColor=sp.evo_stage===2?'#ffd480':sp.evo_stage===1?'#8ab4ff':'var(--t4)';
@@ -2886,11 +2889,14 @@ function openBuildingModal(buildingId){
     if(buildingId==='cafe'){
       h+='<div class="bm-section" style="margin-top:14px">Drink Menu</div>';
       const cafeTier=getBuildingTier('cafe');
+      // Head Barista trait: manager with this trait unlocks T2 drinks even at T1 building
+      const hasHeadBarista=mgrSp&&spiritHasTraitEffect(mgrSp.id,'cafe_tier');
+      const effectiveCafeTier=hasHeadBarista?Math.max(cafeTier,2):cafeTier;
+      if(hasHeadBarista&&cafeTier<2)h+='<div style="font-size:.45rem;color:var(--positive);margin-bottom:6px">✦ '+mgrSp.name+'\'s Head Barista trait unlocks T2 drinks</div>';
       cfg.craftItems.forEach(drink=>{
         const mgrLevel=mgrSp?getCraftLevel(mgrSp.id):0;
         const available=mgrLevel>=drink.minCraftLevel;
-        // Tier 1 café: only show House Brew; Tier 2: up to tier 3 drinks; Tier 3: all
-        const tierLocked=(cafeTier<2&&drink.tier>1)||(cafeTier<3&&drink.tier>3);
+        const tierLocked=(effectiveCafeTier<2&&drink.tier>1)||(effectiveCafeTier<3&&drink.tier>3);
         h+='<div class="bm-cafe-drink" style="'+(tierLocked?'opacity:.2':available?'':'opacity:.4')+'">';
         h+='<div style="flex:1"><div class="bm-cafe-drink-name">'+drink.name+(tierLocked?' 🔒':'')+'</div>';
         h+='<div class="bm-cafe-drink-desc">'+drink.desc+'</div></div>';
@@ -3474,7 +3480,11 @@ async function setLibraryResearch(data){
 }
 function getResearchDurationMin(buildingId){
   const tier=getBuildingTier(buildingId||'library');
-  return tier>=3?30:tier>=2?45:60;
+  let base=tier>=3?30:tier>=2?45:60;
+  // Archivist trait: -25% research time if library manager has it
+  const mgr=getManagerFor('library');
+  if(mgr&&spiritHasTraitEffect(mgr.spirit_id,'research_speed'))base=Math.max(10,Math.round(base*0.75));
+  return base;
 }
 function startResearch(locId){
   if(S.isGuest)return;
