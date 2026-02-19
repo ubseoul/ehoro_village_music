@@ -817,239 +817,6 @@ body.music-playing .sd-bar-fill::after{opacity:1;animation:xpCrawl 3s linear inf
 .library-loot-preview{margin-top:5px;display:flex;flex-wrap:wrap;gap:3px}
 .library-loot-tag{font-size:.42rem;padding:1px 5px;border-radius:6px;background:rgba(200,136,255,.06);border:1px solid rgba(200,136,255,.12);color:var(--t3)}
 .library-loot-tag.rare{color:var(--special);border-color:rgba(200,136,255,.2)}
-
-/* ═══════════════════════════════════════
-   UX FIX PATCH — targeted corrections
-   ═══════════════════════════════════════ */
-
-/* FIX 1 — Building modal: centered on desktop, sheet on mobile */
-.building-modal-overlay{
-  align-items:center !important;
-}
-.building-modal-sheet{
-  border-radius:var(--radius) !important;
-  animation:modalCenter .3s cubic-bezier(.34,1.4,.64,1) !important;
-}
-@keyframes modalCenter{from{opacity:0;transform:scale(.93) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
-@media(max-width:768px){
-  .building-modal-overlay{align-items:flex-end !important;}
-  .building-modal-sheet{
-    border-radius:var(--radius) var(--radius) 0 0 !important;
-    animation:sheetUp .35s cubic-bezier(.34,1.4,.64,1) !important;
-  }
-  .building-modal-sheet::before{
-    content:'';display:block;
-    width:32px;height:4px;border-radius:2px;
-    background:var(--border-l);
-    margin:10px auto 0;
-  }
-}
-
-/* FIX 2 — Mobile video: minimum 50% screen height */
-@media(max-width:768px){
-  .video-area{
-    flex:none !important;
-    height:50vh !important;
-    min-height:50vh !important;
-    max-height:55vh !important;
-  }
-  /* Make sidebar take remaining space without competing */
-  .sidebar{
-    flex:1 !important;
-    min-height:0 !important;
-    height:auto !important;
-  }
-  /* Ensure tab panels scroll within available space */
-  .tab-panels{
-    flex:1;
-    overflow:hidden;
-    min-height:0;
-  }
-}
-@media(max-width:420px){
-  .video-area{
-    height:50vh !important;
-    min-height:50vh !important;
-  }
-}
-
-/* FIX 3 — Send Expedition button: proper dark theme styling */
-.exped-btn{
-  background:var(--t1) !important;
-  color:var(--bg) !important;
-  border:none !important;
-  font-weight:600 !important;
-  padding:10px 8px !important;
-  font-size:.68rem !important;
-}
-.exped-btn.claim{
-  background:var(--positive) !important;
-  color:#050505 !important;
-}
-.exped-btn.secondary{
-  background:var(--accent-soft) !important;
-  border:1px solid var(--glass-border) !important;
-  color:var(--t2) !important;
-}
-/* Expedition slot container needs border so button has context */
-.exped-slot{
-  background:var(--card-bg);
-  border:1px solid var(--card-border);
-  border-radius:var(--radius-sm);
-  padding:10px;
-  margin-bottom:6px;
-}
-
-/* FIX 4 — Tab bar: stronger active/inactive contrast */
-.tab-btn{
-  color:var(--t3) !important;
-  font-size:.56rem !important;
-  font-weight:500 !important;
-  letter-spacing:.06em !important;
-}
-.tab-btn.on{
-  color:var(--t1) !important;
-  background:var(--accent-soft) !important;
-  font-weight:600 !important;
-}
-.tab-btn:hover{
-  color:var(--t2) !important;
-}
-/* Mobile: slightly larger tap targets and better contrast */
-@media(max-width:768px){
-  .tab-btn{
-    font-size:.54rem !important;
-    padding:8px 0 !important;
-    min-height:38px !important;
-  }
-  .tab-nav{
-    padding:4px 8px !important;
-    gap:3px !important;
-  }
-}
-
-/* FIX 5 — Ingredient rows: consistent padding + gap */
-.ing-row{
-  padding:9px 12px !important;
-  gap:10px !important;
-}
-.ing-grid{
-  gap:5px !important;
-}
-@media(max-width:768px){
-  .ing-row{
-    padding:8px 10px !important;
-    min-height:46px !important;
-  }
-}
-
-/* FIX 6 — Hatchery slots: better proportions on mobile */
-@media(max-width:768px){
-  .hatchery-grid{
-    gap:4px !important;
-  }
-  .hatch-slot{
-    min-height:56px !important;
-    max-height:72px !important;
-    padding:6px 3px !important;
-    min-width:48px !important;
-  }
-  .hatch-slot-icon{font-size:.85rem !important}
-  .hatch-slot-label{font-size:.42rem !important}
-  .hatch-slot-timer{font-size:.42rem !important}
-}
-
-/* FIX 7 — Village rank bar: visible fill + progress text */
-.village-rank-bar{
-  height:4px !important;
-  background:var(--border) !important;
-  border-radius:4px !important;
-  overflow:hidden;
-  margin:10px 0 5px !important;
-}
-.village-rank-bar-fill{
-  height:100% !important;
-  border-radius:4px !important;
-  min-width:4px; /* always show a sliver even at 0 */
-  transition:width 1.2s cubic-bezier(.4,0,.2,1) !important;
-}
-/* Ensure rank card has enough padding to show the bar */
-.village-rank-card{
-  padding:16px !important;
-}
-
-/* FIX 8 — Stream switcher: clearer active state */
-.stream-pill{
-  padding:7px 10px !important;
-  font-size:.62rem !important;
-  border-radius:20px !important;
-}
-.stream-pill.active{
-  background:var(--t1) !important;
-  color:var(--bg) !important;
-  border-color:var(--t1) !important;
-  font-weight:600 !important;
-}
-[data-theme="light"] .stream-pill.active{
-  background:var(--t1) !important;
-  color:var(--bg) !important;
-  border-color:var(--t1) !important;
-}
-.stream-pill:not(.active){
-  color:var(--t3) !important;
-  border-color:var(--border) !important;
-}
-
-/* FIX 9 — Guest banner: scroll content clears the banner */
-/* Tab panels add bottom padding so last item isn't hidden under banner */
-.guest-banner.show ~ .shell .tab-panel,
-body.has-guest-banner .tab-panel{
-  padding-bottom:80px !important;
-}
-/* More reliable: always give tab-panel bottom breathing room on mobile */
-@media(max-width:768px){
-  .tab-panel{
-    padding-bottom:84px !important;
-  }
-}
-
-/* FIX 10 — Section labels: more legible */
-.section-label,
-.inv-section-label,
-.exped-section-label{
-  font-size:.52rem !important;
-  color:var(--t2) !important;
-  letter-spacing:.14em !important;
-  font-weight:600 !important;
-  margin-bottom:7px !important;
-}
-@media(max-width:768px){
-  .section-label,
-  .inv-section-label,
-  .exped-section-label{
-    font-size:.5rem !important;
-  }
-}
-
-/* FIX 11 — Stream 50% min on mobile (reinforced) */
-@media(max-width:768px){
-  .content{
-    flex-direction:column !important;
-    overflow:hidden !important;
-  }
-  /* Hard enforce: video gets exactly 50vh, sidebar gets rest */
-  .video-area{
-    flex:0 0 50vh !important;
-    height:50vh !important;
-    min-height:50vh !important;
-    max-height:50vh !important;
-  }
-  .sidebar{
-    flex:1 1 0 !important;
-    min-height:0 !important;
-    overflow:hidden !important;
-  }
-}
 </style>
 </head>
 <body>
@@ -1107,7 +874,7 @@ body.has-guest-banner .tab-panel{
 <div class="shell on" id="shell">
 <div class="topbar"><div class="tb-brand">Ehoro Village</div><div class="tb-right"><div class="tb-rank" id="tbRank" onmouseenter="showRankTooltip()" onmouseleave="hideRankTooltip()" onclick="toggleRankTooltip()"><span class="tb-rank-name" id="tbRankName">Ember</span><span class="tb-rank-pts" id="tbRankPts">0 pts</span><div class="rank-tooltip" id="rankTooltip"></div></div><button class="tb-gear" onclick="toggleSettings()" title="Settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button><div id="tbAuth"><button class="tb-signin" onclick="showLogin()">Sign In</button></div></div></div>
 <div class="content">
-<div class="video-area"><div class="video-embed" id="videoEmbed"><div class="video-placeholder" id="videoPlaceholder" onclick="startStream()"><div class="vp-play">&#x25B6;</div><div class="vp-text" id="vpText">🌸 Sakura Jazz</div></div></div><div class="player-strip"><button class="ps-play" id="psPlay" onclick="startStream()">&#x25B6;</button><div class="ps-info"><div class="ps-title" id="psTitle">Sakura Jazz</div><div class="ps-sub"><span class="ps-live-dot"></span> <span id="psSub">lo-fi jazz mix</span></div></div></div><div class="stream-switcher"><button class="stream-pill active" id="pillSakura" onclick="switchStream('sakura')">🌸 Sakura Jazz</button><button class="stream-pill" id="pillLofi" onclick="switchStream('lofi')">📼 Lo-Fi Tape V1</button></div></div>
+<div class="video-area"><div class="video-embed" id="videoEmbed"><div class="video-placeholder" id="videoPlaceholder" onclick="startStream()"><div class="vp-play">&#x25B6;</div><div class="vp-text" id="vpText">🌙 Ehoro Village Radio</div></div></div><div class="player-strip"><button class="ps-play" id="psPlay" onclick="startStream()">&#x25B6;</button><div class="ps-info"><div class="ps-title" id="psTitle">Ehoro Village Radio</div><div class="ps-sub"><span class="ps-live-dot"></span> <span id="psSub">lo-fi beats to study to</span></div></div></div><div class="stream-switcher"><button class="stream-pill active" id="pillEhoro" onclick="switchStream('ehoro')">🌙 Ehoro Radio</button><button class="stream-pill" id="pillSakura" onclick="switchStream('sakura')">🌸 Sakura Jazz</button><button class="stream-pill" id="pillLofi" onclick="switchStream('lofi')">📼 Lo-Fi Tape</button></div></div>
 <div class="sidebar"><div class="egg-progress" id="eggProgress"><span class="egg-progress-label">Next egg</span><div class="egg-progress-bar"><div class="egg-progress-fill" id="eggFill"></div></div><span class="egg-progress-time" id="eggTimer">&mdash;</span></div><div class="tab-nav"><button class="tab-btn on" id="tabBtnSpirits" data-tab="spirits" onclick="switchTab(this)">Spirits</button><button class="tab-btn" id="tabBtnPills" data-tab="pills" onclick="switchTab(this)">Items</button><button class="tab-btn" id="tabBtnVillage" data-tab="village" onclick="switchTab(this)">Village</button></div><div class="tab-panels"><div class="tab-panel on" id="tab-spirits"></div><div class="tab-panel" id="tab-pills"></div><div class="tab-panel" id="tab-village"></div></div></div>
 </div></div>
 
@@ -1148,8 +915,7 @@ function hasMaterial(id,qty=1){return getMaterialCount(id)>=qty}
 function syncMaterialsFromInventory(){
   const mats={};
   (S.buildingInventory||[]).filter(i=>i.item_type==='material').forEach(i=>{
-    const key=i.item_id||i.item_name;
-    mats[key]=(mats[key]||0)+(i.quantity||1);
+    mats[i.item_name]=(mats[i.item_name]||0)+1;
   });
   S.materials=mats;
 }
@@ -1189,9 +955,10 @@ function withTimeout(promise,ms=8000){return Promise.race([promise,new Promise((
 // Basic connectivity check (non-blocking)
 async function checkSupabaseConnectivity(){try{await fetch(SUPABASE_URL+'/rest/v1/',{method:'HEAD',headers:{'apikey':SUPABASE_ANON_KEY}})}catch(e){console.warn('Network connectivity issue detected. Some features may not work properly.')}}
 checkSupabaseConnectivity();
-const STREAM_SAKURA='rESYC5ikn58'; // 🌸 Sakura Jazz — primary stream
+const STREAM_EHORO='VrnORnrOphA';   // 🌙 Ehoro Village Radio — new primary stream
+const STREAM_SAKURA='rESYC5ikn58'; // 🌸 Sakura Jazz
 const STREAM_LOFI='ojyT8dK0ZiA';   // 📼 Ehoro Village Lo-Fi Tape V1
-const STREAM_YT=STREAM_SAKURA;     // legacy alias — keeps existing refs working
+const STREAM_YT=STREAM_EHORO;      // legacy alias
 const RARITY_COLORS={mundane:'#888',adept:'#8ab',refined:'#7a7',illustrious:'#ba8',sovereign:'#a8c',celestial:'#8cf',transcendent:'#fc8',mysterious:'#c8f',ancestral:'#f88',paradox:'#fff'};
 const INCUB_MINS={mundane:3,adept:7,refined:14,illustrious:20,sovereign:30,celestial:45,transcendent:60,mysterious:90,ancestral:90,paradox:90};
 const VILLAGE_RANKS=[{name:'Ember',min:0,desc:'Your village is a spark.',color:'#a08070'},{name:'Stone',min:50,desc:'Solid foundation.',color:'#909090'},{name:'Bronze',min:120,desc:'A real village.',color:'#cd8c52'},{name:'Silver',min:280,desc:'Respected.',color:'#b8c0cc'},{name:'Gold',min:550,desc:'Prosperous.',color:'#d4a843'},{name:'Emerald',min:950,desc:'A beacon.',color:'#4cba8a'},{name:'Celestial',min:1800,desc:'Transcendent.',color:'#7cb8f0'}];
@@ -1441,7 +1208,7 @@ const MATERIAL_INFO={
 };
 const WB_MESSAGES=['The village rested while you were away...','Your spirits kept watch in the quiet hours...','The lo-fi played on while you were gone...','A gentle hum welcomes you home...','The spirits sensed your return...'];
 
-let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essence:0},hatchery:[],pendingEggs:[],allEggs:[],pillRecipes:[],expeditions:[],_wickedPills:[],buildings:[],buildingStaff:[],buildingInventory:[],materials:{},journal:{},playing:false,currentStream:'sakura',eggT:0,eggAnchor:null,EGG_SEC:3600,FIRST_EGG_SEC:240,GUEST_EGG_SEC:30,XP_PER_LEVEL:150,XP_ACTIVE_INTERVAL:300,sessionId:null,sessionStartedAt:null,ticker:null,hatchTicker:null,cultTicker:null,jiggleTicker:null,expedTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null,firstIngredientGiven:false,craftHintShown:false,wbTimer:null,profStep:0,chosenStarter:null,asheListenAccum:0,asheListenTimer:0};
+let S={user:null,profile:null,spirits:[],traits:{},emblems:{cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essence:0},hatchery:[],pendingEggs:[],allEggs:[],pillRecipes:[],expeditions:[],_wickedPills:[],buildings:[],buildingStaff:[],buildingInventory:[],materials:{},journal:{},playing:false,currentStream:'ehoro',eggT:0,eggAnchor:null,EGG_SEC:3600,FIRST_EGG_SEC:240,GUEST_EGG_SEC:30,XP_PER_LEVEL:150,XP_ACTIVE_INTERVAL:300,sessionId:null,sessionStartedAt:null,ticker:null,hatchTicker:null,cultTicker:null,jiggleTicker:null,expedTicker:null,authMode:'login',isGuest:true,guestEggGiven:false,theme:'dark',obStep:0,settingsOpen:false,selectedSpirit:null,firstIngredientGiven:false,craftHintShown:false,wbTimer:null,profStep:0,chosenStarter:null,asheListenAccum:0,asheListenTimer:0};
 let _guestDemoTicker=null; // Hoisted — used in signOut before guest demo section
 let _reconnectRetry=null;  // Hoisted — used in hideReconnectOverlay before declaration
 
@@ -1997,12 +1764,12 @@ S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essenc
 [S.ticker,S.hatchTicker,S.cultTicker,S.jiggleTicker,S.expedTicker,_guestDemoTicker].forEach(t=>{if(t)clearInterval(t)});S.ticker=S.hatchTicker=S.cultTicker=S.jiggleTicker=S.expedTicker=null;_guestDemoTicker=null;
 const em=document.getElementById('videoEmbed'),ifr=em.querySelector('iframe');if(ifr)ifr.remove();em.classList.remove('loaded');
 // Reset stream switcher UI to Sakura Jazz default
-S.currentStream='sakura';
+S.currentStream='ehoro';
 document.querySelectorAll('.stream-pill').forEach(p=>p.classList.remove('active'));
-const pillDef=document.getElementById('pillSakura');if(pillDef)pillDef.classList.add('active');
-const psTitle=document.getElementById('psTitle');if(psTitle)psTitle.textContent='Sakura Jazz';
-const psSub=document.getElementById('psSub');if(psSub)psSub.textContent='lo-fi jazz mix';
-const vpText=document.getElementById('vpText');if(vpText)vpText.textContent='🌸 Sakura Jazz';
+const pillDef=document.getElementById('pillEhoro');if(pillDef)pillDef.classList.add('active');
+const psTitle=document.getElementById('psTitle');if(psTitle)psTitle.textContent='Ehoro Village Radio';
+const psSub=document.getElementById('psSub');if(psSub)psSub.textContent='lo-fi beats to study to';
+const vpText=document.getElementById('vpText');if(vpText)vpText.textContent='🌙 Ehoro Village Radio';
 document.getElementById('guestBanner').classList.remove('show');
 document.getElementById('login').classList.remove('gone');updateTopBar()}
 async function checkSession(){
@@ -3448,10 +3215,11 @@ function showEvoAnimation(){const ov=document.createElement('div');ov.style.cssT
 
 // ═══ STREAM META ═══
 const STREAM_META={
+  ehoro:{id:STREAM_EHORO,label:'Ehoro Village Radio',sub:'lo-fi beats to study to',playlist:'ehoro_radio'},
   sakura:{id:STREAM_SAKURA,label:'Sakura Jazz',sub:'lo-fi jazz mix',playlist:'sakura_jazz'},
-  lofi:{id:STREAM_LOFI,label:'Lo-Fi Tape V1',sub:'ehoro village classics',playlist:'ehoro_radio'}
+  lofi:{id:STREAM_LOFI,label:'Lo-Fi Tape V1',sub:'ehoro village classics',playlist:'ehoro_lofi'}
 };
-function getStreamMeta(){return STREAM_META[S.currentStream]||STREAM_META.sakura}
+function getStreamMeta(){return STREAM_META[S.currentStream]||STREAM_META.ehoro}
 
 // ═══ SWITCH STREAM — swap between Sakura Jazz and Lo-Fi Tape V1 ═══
 function switchStream(key){
@@ -3466,7 +3234,7 @@ function switchStream(key){
   const meta=getStreamMeta();
   const psTitle=document.getElementById('psTitle');if(psTitle)psTitle.textContent=meta.label;
   const psSub=document.getElementById('psSub');if(psSub)psSub.textContent=meta.sub;
-  const vpText=document.getElementById('vpText');if(vpText)vpText.textContent=(key==='sakura'?'🌸 ':'📼 ')+meta.label;
+  const vpText=document.getElementById('vpText');if(vpText)vpText.textContent=(key==='ehoro'?'🌙 ':key==='sakura'?'🌸 ':'📼 ')+meta.label;
   // If already playing, tear down iframe and restart with new stream
   if(wasPlaying){
     S.playing=false;document.body.classList.remove('music-playing');S.asheListenTimer=0;
