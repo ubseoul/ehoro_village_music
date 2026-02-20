@@ -817,32 +817,20 @@ body.music-playing .sd-bar-fill::after{opacity:1;animation:xpCrawl 3s linear inf
 .library-loot-tag.rare{color:var(--special);border-color:rgba(200,136,255,.2)}
 
 
- /* ═══ V3.3 ABSOLUTE OVERRIDE FOR TRAPPED MENUS ═══ */
-#spirit-selector-modal,
-.spirit-selector,
-#confirm-modal,
-.confirm-modal,
-#release-modal,
-#evo-ceremony-modal {
-  position: fixed !important; 
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  z-index: 99999 !important; /* Absolute max elevation */
-}
-
-/* Force overlays to sit right beneath them */
-#spirit-selector-overlay,
-#confirm-overlay,
-.modal-overlay {
+/* ═══ V3.3 SHARED MODAL STACKING FIX ═══ */
+/* Elevates the shared #modal used for Staff Picker & Dismiss Confirmations */
+#modal, 
+#modal.open,
+#modalBox {
   position: fixed !important;
-  z-index: 99998 !important;
+  z-index: 99999 !important; /* Absolute highest layer */
 }
 
-/* Ensure the base building/spirit modals stay lower */
-#building-modal,
-#spirit-detail-modal {
-  z-index: 9000 !important;
+/* If there is a generic overlay for this modal, elevate it too */
+#overlay,
+.overlay,
+#modal-overlay {
+  z-index: 99998 !important; 
 }
 </style>
 
