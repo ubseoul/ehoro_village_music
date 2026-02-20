@@ -1064,7 +1064,44 @@ const MILESTONES=[
   {id:'first_wicked',check:()=>S.spirits.some(s=>getSpiritAlignment(s.id)==='wicked'),msg:'Dark Path!',sub:'A spirit embraced the wicked arts',icon:'🩸'},
   {id:'first_heavenly',check:()=>S.spirits.some(s=>getSpiritAlignment(s.id)==='heavenly'),msg:'Heavenly Path!',sub:'A spirit achieved enlightenment',icon:'✦'}
 ];
-const SPIRIT_DATA={timi:{name:'Timi',bio:'Pulled into the spirit realm by a terrible accident. Curious and restless, she believes there\'s more to Ehoro Village than meets the eye.',img:['sprites/timi_1.png','sprites/timi_2.png','sprites/timi_3.png']},bayo:{name:'Bayo',bio:'Arrived after a life behind glass at the zoo. Shy but deeply intelligent, he\'s learning what it means to be free.',img:['sprites/bayo_1.png','sprites/bayo_2.png','sprites/bayo_3.png']},mowang:{name:'Mowang',bio:'Banished by a foolish adventurer, Mowang harbors fierce ambition for gleaming steel.',img:['sprites/mowang_1.png','sprites/mowang_2.png','sprites/mowang_3.png']},florita:{name:'Florita',bio:'Forgotten by accident, she drifted quietly into the spirit realm. Her old owner loved pink, but Florita always felt different on the inside.',img:['sprites/florita_1.png','sprites/florita_2.png','sprites/florita_3.png']},simi:{name:'Simi',bio:'One wrong piece of cheese sent him tumbling into the spirit realm. Endlessly cheerful, he came to Ehoro Village sure he\'d find a world full of friends.',img:['sprites/simi_1.png','sprites/simi_2.png','sprites/simi_3.png']},basu_basu:{name:'Basu Basu',bio:'Felt empty for a long time before finding his way to the village. He hopes that making new friends will finally make him feel whole again.',img:['sprites/basu_basu_1.png','sprites/basu_basu_2.png','sprites/basu_basu_3.png']}};
+const SPIRIT_DATA={
+  timi:{
+    name:'Timi',
+    bio:'Pulled into the spirit realm by a terrible accident. Curious and restless, she believes there\'s more to Ehoro Village than meets the eye.',
+    innate:{name:'Nature’s Grace', desc:'+5% XP Gain'},
+    img:['sprites/timi_1.png','sprites/timi_2.png','sprites/timi_3.png']
+  },
+  bayo:{
+    name:'Bayo',
+    bio:'Arrived after a life behind glass at the zoo. Shy but deeply intelligent, he\'s learning what it means to be free.',
+    innate:{name:'Gentle Presence', desc:'-10% Hatch Time'},
+    img:['sprites/bayo_1.png','sprites/bayo_2.png','sprites/bayo_3.png']
+  },
+  mowang:{
+    name:'Mowang',
+    bio:'Banished by a foolish adventurer, Mowang harbors fierce ambition for gleaming steel.',
+    innate:{name:'Iron Will', desc:'+10% Materials'},
+    img:['sprites/mowang_1.png','sprites/mowang_2.png','sprites/mowang_3.png']
+  },
+  florita:{
+    name:'Florita',
+    bio:'Forgotten by accident, she drifted quietly into the spirit realm. Her old owner loved pink, but Florita always felt different on the inside.',
+    innate:{name:'Soft Melody', desc:'+15% Passive XP'},
+    img:['sprites/florita_1.png','sprites/florita_2.png','sprites/florita_3.png']
+  },
+  simi:{
+    name:'Simi',
+    bio:'One wrong piece of cheese sent him tumbling into the spirit realm. Endlessly cheerful, he came to Ehoro Village sure he\'d find a world full of friends.',
+    innate:{name:'Sweet Luck', desc:'+10% Ingredients'},
+    img:['sprites/simi_1.png','sprites/simi_2.png','sprites/simi_3.png']
+  },
+  basu_basu:{
+    name:'Basu Basu',
+    bio:'Felt empty for a long time before finding his way to the village. He hopes that making new friends will finally make him feel whole again.',
+    innate:{name:'Steady Sip', desc:'-10% Rest Time'},
+    img:['sprites/basu_basu_1.png','sprites/basu_basu_2.png','sprites/basu_basu_3.png']
+  }
+};
 const TYPE_MAP={fox_lavender:'timi',fox_fire:'timi',panda:'bayo',slime:'mowang',timi:'timi',bayo:'bayo',mowang:'mowang',florita:'florita',simi:'simi',basu_basu:'basu_basu'};
 function spiritKey(t){return TYPE_MAP[t]||t}
 function spiritImg(t,s){const k=spiritKey(t),d=SPIRIT_DATA[k];return d?d.img[Math.min(s,2)]:'sprites/timi_1.png'}
@@ -1540,12 +1577,17 @@ function renderProfStep(){
 }
 function pickStarter(type){
   S.chosenStarter=type;
+  // Keeps your selection highlighting
   document.querySelectorAll('.prof-spirit-pick').forEach(el=>el.classList.remove('selected'));
-  const el=document.getElementById('profPick_'+type);if(el)el.classList.add('selected');
+  const el=document.getElementById('profPick_'+type); if(el) el.classList.add('selected');
+  
+  // Updates the button
   document.getElementById('profBtn').textContent='Choose '+SPIRIT_DATA[type].name;
   document.getElementById('profBtn').disabled=false;
+  
   const d=SPIRIT_DATA[type];
-  document.getElementById('profText').innerHTML='Now then — every new villager gets to choose their <b>first spirit companion</b>. Take your time. Each one is special.<br><br><b>'+d.name+'</b> — <i>'+d.bio+'</i>';
+  // Updates the text to include the new Innate Affinity
+  document.getElementById('profText').innerHTML='Now then — every new villager gets to choose their <b>first spirit companion</b>. Take your time. Each one is special.<br><br><b>'+d.name+'</b> — <i>'+d.bio+'</i><br><br><span style="color:var(--positive)">✦ Innate Affinity: '+d.innate.name+' ('+d.innate.desc+')</span>';
 }
 async function nextProfStep(){
   const step=PROF_STEPS[S.profStep];
