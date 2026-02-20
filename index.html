@@ -817,31 +817,33 @@ body.music-playing .sd-bar-fill::after{opacity:1;animation:xpCrawl 3s linear inf
 .library-loot-tag.rare{color:var(--special);border-color:rgba(200,136,255,.2)}
 
 
-  /* ═══ V3.3 MODAL STACKING HIERARCHY PATCH ═══ */
-/* 1. Base Modals (Buildings, Spirit Detail) stay at their normal z-index */
-
-/* 2. Secondary Action Modals (Selectors, Confirmations, Evolutions) get boosted */
+ /* ═══ V3.3 ABSOLUTE OVERRIDE FOR TRAPPED MENUS ═══ */
 #spirit-selector-modal,
 .spirit-selector,
 #confirm-modal,
 .confirm-modal,
 #release-modal,
 #evo-ceremony-modal {
-  z-index: 9990 !important;
+  position: fixed !important; 
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 99999 !important; /* Absolute max elevation */
 }
 
-/* 3. Overlays for secondary modals (if applicable) */
+/* Force overlays to sit right beneath them */
 #spirit-selector-overlay,
-#confirm-overlay {
-  z-index: 9989 !important;
+#confirm-overlay,
+.modal-overlay {
+  position: fixed !important;
+  z-index: 99998 !important;
 }
 
-/* 4. Toasts and Alerts must always be the absolute highest layer */
-#toast-container,
-.toast {
-  z-index: 9999 !important;
+/* Ensure the base building/spirit modals stay lower */
+#building-modal,
+#spirit-detail-modal {
+  z-index: 9000 !important;
 }
-  
 </style>
 
 </head>
@@ -1290,6 +1292,9 @@ const TRAIT_DEFS={
   'Frost-Hardened':{cat:'expedition',evoReq:2,desc:'The cold stopped bothering them a long time ago. They\'ve been to places that would turn others back, and they carry something from each one.',effect:'location_bonus',location:'frozen_ruins',value:0.40,display:'+40% drops in Frozen Ruins'},
   'Patient':       {cat:'expedition',evoReq:1,desc:'Never in a hurry. They rest quickly, recover fully, and are ready again before anyone expects them to be.',effect:'rest_reduction',value:0.35,display:'-35% away rest time'},
   'Wanderer':      {cat:'expedition',evoReq:0,desc:'Has always been drawn toward the unfamiliar. Wherever they\'re sent, they make it count.',effect:'xp_bonus',value:0.10,display:'+10% XP from journeys'},
+  'Dreamy':        {cat:'growth',evoReq:0,desc:'Often caught staring at the sky. They imagine things before they happen.',effect:'passive_xp_bonus',value:0.10,display:'+10% passive XP'},
+  'Curious':       {cat:'expedition',evoReq:0,desc:'They have to look under every rock and behind every tree.',effect:'loot_bonus',value:0.05,display:'+5% rare find chance'},
+  'Challant':      {cat:'affinity',evoReq:0,desc:'The opposite of nonchalant. They care deeply about absolutely everything.',effect:'village_presence',value:1,display:'Village +1 prestige/day'},
   'Lucky':         {cat:'expedition',evoReq:0,desc:'Some things can\'t be explained. They come back with something good more often than they should.',effect:'loot_bonus',value:0.08,display:'+8% rare find chance'},
   'Resilient':     {cat:'expedition',evoReq:1,desc:'Doesn\'t complain. Doesn\'t slow down. Returns from hard places no worse for the wear.',effect:'rest_reduction',value:0.20,display:'-20% away rest time'},
   'Instinctive':   {cat:'expedition',evoReq:2,desc:'Acts on feeling more than thought. Finds things others wouldn\'t think to look for.',effect:'loot_bonus',value:0.15,display:'+15% rare find chance'},
