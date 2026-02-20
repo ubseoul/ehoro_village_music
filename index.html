@@ -815,6 +815,33 @@ body.music-playing .sd-bar-fill::after{opacity:1;animation:xpCrawl 3s linear inf
 .library-loot-preview{margin-top:5px;display:flex;flex-wrap:wrap;gap:3px}
 .library-loot-tag{font-size:.42rem;padding:1px 5px;border-radius:6px;background:rgba(200,136,255,.06);border:1px solid rgba(200,136,255,.12);color:var(--t3)}
 .library-loot-tag.rare{color:var(--special);border-color:rgba(200,136,255,.2)}
+
+
+  /* ═══ V3.3 MODAL STACKING HIERARCHY PATCH ═══ */
+/* 1. Base Modals (Buildings, Spirit Detail) stay at their normal z-index */
+
+/* 2. Secondary Action Modals (Selectors, Confirmations, Evolutions) get boosted */
+#spirit-selector-modal,
+.spirit-selector,
+#confirm-modal,
+.confirm-modal,
+#release-modal,
+#evo-ceremony-modal {
+  z-index: 9990 !important;
+}
+
+/* 3. Overlays for secondary modals (if applicable) */
+#spirit-selector-overlay,
+#confirm-overlay {
+  z-index: 9989 !important;
+}
+
+/* 4. Toasts and Alerts must always be the absolute highest layer */
+#toast-container,
+.toast {
+  z-index: 9999 !important;
+}
+  
 </style>
 
 </head>
@@ -1252,6 +1279,9 @@ function isBusy(key){return !!_busy[key]}
 const TRAIT_DEFS={
   // EXPEDITION TRAITS — boost time in the field
   'Wild':          {cat:'expedition',evoReq:0,desc:'A restless energy that finds more in every trip.',effect:'exped_bonus_mats',value:0.15,display:'+15% expedition drops'},
+  'Dreamy':        {cat:'cultivation',evoReq:0,desc:'Often caught staring at the sky. They imagine things before they happen.',effect:'passive_xp_bonus',value:0.10,display:'+10% passive XP'},
+  'Curious':       {cat:'expedition',evoReq:0,desc:'They have to look under every rock and behind every tree.',effect:'loot_bonus',value:0.05,display:'+5% rare find chance'},
+  'Challant':      {cat:'affinity',evoReq:0,desc:'The opposite of nonchalant. They care deeply about absolutely everything.',effect:'village_presence',value:1,display:'Village +1 prestige/day'},
   'Adventurous':   {cat:'expedition',evoReq:0,desc:'They just love to go.',effect:'exped_bonus_mats',value:0.10,display:'+10% expedition drops'},
   'Resilient':     {cat:'expedition',evoReq:0,desc:'Shakes off the long road.',effect:'rest_reduction',value:0.20,display:'-20% expedition rest time'},
   'Scout':         {cat:'expedition',evoReq:1,desc:'Reads terrain others overlook.',effect:'exped_bonus_mats',value:0.20,display:'+20% expedition drops'},
