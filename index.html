@@ -2969,7 +2969,12 @@ async function confirmUseDrink(invId,spiritId){
   try{
     const{data,error}=await sb.rpc('use_drink',{p_inv_id:invId,p_spirit_id:spiritId});
     if(error)throw error;
-    if(data?.error){showToast('error');return}
+    if(data?.error){
+  alert("The Database rejected the evolution! Reason: " + data.error);
+  console.warn("DB Rejection Reason:", data.error);
+  showToast('error');
+  return;
+}
     await Promise.all([reloadSpiritsAndTraits(),reloadBuildings().then(()=>syncMaterialsFromInventory())]);
     debouncedUpdateAllUI();
     showToastMsg('☕','Drink consumed!','Your spirit feels refreshed.');
