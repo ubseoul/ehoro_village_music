@@ -3425,59 +3425,48 @@ await loadUserData();updateAllUI()}}catch(e){console.warn('cultivation tick erro
 
 // ═══ EVOLUTION ═══
 // ═══ EVOLUTION ═══
-// ═══ HEAVY DEBUG EVOLUTION ═══
-async function doEvolve(spiritId){
-  console.log("1. Evolve button clicked! Spirit ID:", spiritId);
+// ═══ EVOLUTION ═══
+async function doEvolve(spiritId) {
+  if (S.isGuest || isBusy('evolve_' + spiritId)) return;
+  setBusy('evolve_' + spiritId, 5000);
   
-  if(S.isGuest) { console.log("2. FAILED: Guest mode blocked it"); return; }
-  if(isBusy('evolve_'+spiritId)) { console.log("2. FAILED: Blocked by isBusy (button clicked twice too fast)"); return; }
-
-  setBusy('evolve_'+spiritId, 5000);
   const sp = S.spirits.find(s => s.id === spiritId);
-  console.log("3. Spirit found in local state:", sp ? sp.name : "NOT FOUND");
+  if (!sp) return;
 
   try {
-    console.log("4. Sending RPC request to Supabase database...");
-    const response = await sb.rpc('evolve_spirit', { p_spirit_id: spiritId });
-    console.log("5. Database responded! Raw response:", response);
-
-    const { data, error } = response;
-
-    // Check for hard database crash (like a missing column)
-    if(error) {
-      console.error("6. SUPABASE HARD ERROR:", error);
-      throw error;
-    }
-
-    // Check for a logical rule rejection (like not enough ingredients)
-    if(data && data.error) {
-      console.warn("6. DB REJECTED IT! Reason:", data.error);
-      alert("The Database rejected the evolution! Reason: " + data.error);
+    const { data, error } = await sb.rpc('evolve_spirit', { p_spirit_id: spiritId });
+    
+    // Catch hard crashes silently
+    if (error) {
+      console.error("Supabase RPC Error:", error);
       showToast('error');
       return;
     }
 
-    console.log("7. DB SUCCESS! Reloading UI and updating data...");
+    // Catch logical rejections (like missing ingredients) gracefully
+    if (data?.error) {
+      console.warn("Evolution rejected:", data.error);
+      showToast('error'); 
+      return;
+    }
+
+    // Success! Sync state and celebrate
     await loadUserData();
     updateAllUI();
     closeSpiritDetail();
     
     const newSp = S.spirits.find(s => s.id === spiritId) || sp;
-    console.log("8. Showing Evolution Ceremony for:", newSp.name);
-    
-    if(newSp) {
+    if (newSp) {
       showEvoCeremony(newSp);
       addJournalEntry(spiritId, 'evolution', 'Evolved to ' + EVO_LABELS[newSp.evo_stage]);
     } else {
-      console.log("9. Error: Could not find spirit for ceremony.");
       showToast('error');
     }
     
     checkMilestones();
-    console.log("10. Evolve completely finished!");
 
-  } catch(e) {
-    console.error('💥 FATAL JS CATCH BLOCK:', e);
+  } catch (e) {
+    console.error('Evolve error details:', e);
     showToast('error');
   }
 }
