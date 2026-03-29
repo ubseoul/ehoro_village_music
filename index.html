@@ -2285,33 +2285,20 @@ function applyExpedLootToLocalState(exp,loot){
 }
 
 async function persistExpeditionClaim(expedId,loot,retries=3){
-  // Fire-and-forget DB write with retry
   for(let attempt=0;attempt<retries;attempt++){
     try{
-      const _sess=await sb.auth.getSession();const _tok=_sess?.data?.session?.access_token;
-      if(!_tok){console.warn('persist exped: no auth token');return}
-      const res=await fetch(SUPABASE_URL+'/rest/v1/rpc/do_claim_expedition',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+_tok},
-        body:JSON.stringify({p_expedition_id_text:expedId})
-      });
-      if(res.ok){
-        // Silently sync state from DB in background (non-blocking)
-        setTimeout(()=>{
-          Promise.all([reloadSpiritsAndTraits(),reloadEmblems(),reloadExpeditions(),reloadBuildings().then(()=>syncMaterialsFromInventory()),reloadJournal()]).then(()=>debouncedUpdateAllUI()).catch(e=>console.warn('post-claim sync:',e));
-        },500);
-        return;
-      }
-      const errData=await res.json().catch(()=>({}));
-      console.warn('persist exped attempt '+(attempt+1)+' failed:',res.status,errData);
+      const{data,error}=await sb.rpc('do_claim_expedition',{p_expedition_id_text:expedId});
+      if(error)throw error;
+      if(data?.error)throw new Error(data.error);
+      setTimeout(()=>{
+        Promise.all([reloadSpiritsAndTraits(),reloadEmblems(),reloadExpeditions(),reloadBuildings().then(()=>syncMaterialsFromInventory()),reloadJournal()]).then(()=>debouncedUpdateAllUI()).catch(e=>console.warn('post-claim sync:',e));
+      },500);
+      return;
     }catch(e){console.warn('persist exped attempt '+(attempt+1)+' error:',e)}
-    // Exponential backoff: 1s, 2s, 4s
     if(attempt<retries-1)await new Promise(r=>setTimeout(r,1000*Math.pow(2,attempt)));
   }
-  console.warn('persist exped: all retries failed for',expedId,'— loot was already applied locally');
+  console.warn('persist exped: all retries failed for',expedId);
 }
-
-
 
 // ═══ V3.3: CLAIM EXPEDITION — LOCAL-FIRST ═══
 // Loot calculated client-side instantly. DB write fires async with retry.
