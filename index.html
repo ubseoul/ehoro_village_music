@@ -1854,7 +1854,7 @@ S.emblems={cafe_bean:0,wild_essence:0,focus_shard:0,ashe_essence:0,spirit_essenc
 [S.ticker,S.hatchTicker,S.cultTicker,S.jiggleTicker,S.expedTicker,_guestDemoTicker].forEach(t=>{if(t)clearInterval(t)});S.ticker=S.hatchTicker=S.cultTicker=S.jiggleTicker=S.expedTicker=null;_guestDemoTicker=null;
 const em=document.getElementById('videoEmbed'),ifr=em.querySelector('iframe');if(ifr)ifr.remove();em.classList.remove('loaded');
 // Reset stream switcher UI to Sakura Jazz default
-S.currentStream='ehoro';
+S.currentStream='bossa';
 document.querySelectorAll('.stream-pill').forEach(p=>p.classList.remove('active'));
 const pillDef=document.getElementById('pillEhoro');if(pillDef)pillDef.classList.add('active');
 const psTitle=document.getElementById('psTitle');if(psTitle)psTitle.textContent='Ehoro Village Radio';
