@@ -1860,10 +1860,11 @@ const em=document.getElementById('videoEmbed'),ifr=em.querySelector('iframe');if
 // Reset stream switcher UI to Sakura Jazz default
 S.currentStream='bossa';
 document.querySelectorAll('.stream-pill').forEach(p=>p.classList.remove('active'));
-const pillDef=document.getElementById('pillEhoro');if(pillDef)pillDef.classList.add('active');
-const psTitle=document.getElementById('psTitle');if(psTitle)psTitle.textContent='Ehoro Village Radio';
-const psSub=document.getElementById('psSub');if(psSub)psSub.textContent='lo-fi beats to study to';
-const vpText=document.getElementById('vpText');if(vpText)vpText.textContent='🌙 Ehoro Village Radio';
+const pillDef=document.getElementById('pillBossa');if(pillDef)pillDef.classList.add('active');
+const psTitle=document.getElementById('psTitle');if(psTitle)psTitle.textContent='Bossa Nova Jazz';
+const psSub=document.getElementById('psSub');if(psSub)psSub.textContent='café vibes · warm jazz';
+const vpText=document.getElementById('vpText');if(vpText)vpText.textContent='☕ Bossa Nova Jazz';
+
 document.getElementById('guestBanner').classList.remove('show');
 document.getElementById('login').classList.remove('gone');updateTopBar()}
 async function checkSession(){
