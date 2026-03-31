@@ -997,10 +997,10 @@ function withTimeout(promise,ms=8000){return Promise.race([promise,new Promise((
 // Basic connectivity check (non-blocking)
 async function checkSupabaseConnectivity(){try{await fetch(SUPABASE_URL+'/rest/v1/',{method:'HEAD',headers:{'apikey':SUPABASE_ANON_KEY}})}catch(e){console.warn('Network connectivity issue detected. Some features may not work properly.')}}
 checkSupabaseConnectivity();
-const STREAM_EHORO='VrnORnrOphA';   // 🌙 Ehoro Village Radio — new primary stream
-const STREAM_SAKURA='rESYC5ikn58'; // 🌸 Sakura Jazz
-const STREAM_LOFI='ojyT8dK0ZiA';   // 📼 Ehoro Village Lo-Fi Tape V1
-const STREAM_YT=STREAM_EHORO;      // legacy alias
+const STREAM_BOSSA='uj-fZfscY9Y';
+const STREAM_EHORO='VrnORnrOphA';
+const STREAM_CHILL='u9o1OYX5UOQ';
+const STREAM_YT=STREAM_BOSSA;
 const RARITY_COLORS={mundane:'#888',adept:'#8ab',refined:'#7a7',illustrious:'#ba8',sovereign:'#a8c',celestial:'#8cf',transcendent:'#fc8',mysterious:'#c8f',ancestral:'#f88',paradox:'#fff'};
 const INCUB_MINS={mundane:3,adept:7,refined:14,illustrious:20,sovereign:30,celestial:45,transcendent:60,mysterious:90,ancestral:90,paradox:90};
 const VILLAGE_RANKS=[{name:'Ember',min:0,desc:'Your village is a spark.',color:'#a08070'},{name:'Stone',min:50,desc:'Solid foundation.',color:'#909090'},{name:'Bronze',min:120,desc:'A real village.',color:'#cd8c52'},{name:'Silver',min:280,desc:'Respected.',color:'#b8c0cc'},{name:'Gold',min:550,desc:'Prosperous.',color:'#d4a843'},{name:'Emerald',min:950,desc:'A beacon.',color:'#4cba8a'},{name:'Celestial',min:1800,desc:'Transcendent.',color:'#7cb8f0'}];
@@ -3597,10 +3597,11 @@ function showEvoAnimation(){const ov=document.createElement('div');ov.style.cssT
 
 // ═══ STREAM META ═══
 const STREAM_META={
+  bossa:{id:STREAM_BOSSA,label:'Bossa Nova Jazz',sub:'café vibes · warm jazz',playlist:'bossa_jazz'},
   ehoro:{id:STREAM_EHORO,label:'Ehoro Village Radio',sub:'lo-fi beats to study to',playlist:'ehoro_radio'},
-  sakura:{id:STREAM_SAKURA,label:'Sakura Jazz',sub:'lo-fi jazz mix',playlist:'sakura_jazz'},
-  lofi:{id:STREAM_LOFI,label:'Lo-Fi Tape V1',sub:'ehoro village classics',playlist:'ehoro_lofi'}
+  chill:{id:STREAM_CHILL,label:'Chill Breaks',sub:'downtempo · calm rhythm',playlist:'chill_breaks'}
 };
+
 function getStreamMeta(){return STREAM_META[S.currentStream]||STREAM_META.ehoro}
 
 // ═══ SWITCH STREAM — swap between Sakura Jazz and Lo-Fi Tape V1 ═══
