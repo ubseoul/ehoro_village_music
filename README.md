@@ -27,8 +27,8 @@ Ehoro uses AI selectively, with a preference for narrow, human-in-the-loop autho
 
 **Lo-Fi Spirits** is a public interactive product experiment exploring persistent progression, collection systems, habit loops, session design, and engagement in a music-driven environment.
 
-- Company site: https://ubseoul.github.io/ehoro_village_music/
-- Product lab: https://ubseoul.github.io/ehoro_village_music/village.html
+- Company site: https://www.ehorovillage.com/
+- Product lab: https://www.ehorovillage.com/village.html
 - Contact: hello@ehorovillage.com
 
 ## Repository structure
