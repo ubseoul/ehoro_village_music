@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://ubseoul.github.io/ehoro_village_music/</loc><priority>1.0</priority></url>
-  <url><loc>https://ubseoul.github.io/ehoro_village_music/about.html</loc><priority>0.8</priority></url>
-  <url><loc>https://ubseoul.github.io/ehoro_village_music/work.html</loc><priority>0.8</priority></url>
-  <url><loc>https://ubseoul.github.io/ehoro_village_music/village.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.ehorovillage.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://www.ehorovillage.com/about.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.ehorovillage.com/work.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.ehorovillage.com/village.html</loc><priority>0.6</priority></url>
 </urlset>
