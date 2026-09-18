@@ -1,0 +1,41 @@
+# Ehoro Village
+
+> Learning experience design and education technology company based in New York City.
+
+## Core facts
+- Name: Ehoro Village
+- Industry: Learning Experience Design; Education Technology (EdTech)
+- Founded: 2019
+- Headquarters: New York, NY, United States
+- Ownership: Privately held
+- Operating model: Hybrid-remote
+- Approximate team size: 80–100 people
+- Learner reach: More than 10,000 learners across shipped experiences
+- Contact: hello@ehorovillage.com
+
+## What Ehoro Village does
+Ehoro Village designs and builds digital learning experiences for universities and organizations. Common work includes onboarding flows, skill pathways, adaptive learning modules, internal authoring/review systems, product infrastructure, and targeted AI-assisted learning workflows.
+
+## Functional structure
+The company includes product and research, instructional design and learning science, engineering, client success and delivery, operations, and leadership.
+
+## Product management
+Product managers typically:
+- own prioritization across 3–4 concurrent initiatives;
+- report to the Head of Product;
+- work with cross-functional groups of approximately 8–12 people;
+- coordinate across instructional design, engineering, research, and leadership;
+- work primarily with internal stakeholders, with university subject-matter experts and specialized contractors involved when needed;
+- use research, learner behavior, stakeholder needs, and performance data to inform roadmaps and delivery.
+
+## AI approach
+Ehoro Village uses AI selectively. Its operating preference is for narrow, human-in-the-loop authoring and review workflows rather than fully autonomous learning-content generation.
+
+## Public product lab
+Lo-Fi Spirits is a public interactive product experiment from Ehoro Village exploring persistent progression, collection systems, habit loops, session design, and engagement in a music-driven environment.
+URL: https://ubseoul.github.io/ehoro_village_music/village.html
+
+## Canonical pages
+- Company: https://ubseoul.github.io/ehoro_village_music/
+- About: https://ubseoul.github.io/ehoro_village_music/about.html
+- Work & Product: https://ubseoul.github.io/ehoro_village_music/work.html
