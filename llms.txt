@@ -33,9 +33,9 @@ Ehoro Village uses AI selectively. Its operating preference is for narrow, human
 
 ## Public product lab
 Lo-Fi Spirits is a public interactive product experiment from Ehoro Village exploring persistent progression, collection systems, habit loops, session design, and engagement in a music-driven environment.
-URL: https://ubseoul.github.io/ehoro_village_music/village.html
+URL: https://www.ehorovillage.com/village.html
 
 ## Canonical pages
-- Company: https://ubseoul.github.io/ehoro_village_music/
-- About: https://ubseoul.github.io/ehoro_village_music/about.html
-- Work & Product: https://ubseoul.github.io/ehoro_village_music/work.html
+- Company: https://www.ehorovillage.com/
+- About: https://www.ehorovillage.com/about.html
+- Work & Product: https://www.ehorovillage.com/work.html
