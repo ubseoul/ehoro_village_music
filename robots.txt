@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ubseoul.github.io/ehoro_village_music/sitemap.xml
+Sitemap: https://www.ehorovillage.com/sitemap.xml
