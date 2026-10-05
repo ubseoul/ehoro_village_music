@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.ehorovillage.com/</loc><lastmod>2026-10-05</lastmod></url>
-  <url><loc>https://www.ehorovillage.com/work.html</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://www.ehorovillage.com/services.html</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://www.ehorovillage.com/methods.html</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://www.ehorovillage.com/about.html</loc><lastmod>2026-10-05</lastmod></url>
-  <url><loc>https://www.ehorovillage.com/village.html</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://www.ehorovillage.com/blog/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://www.ehorovillage.com/blog/ai-workflows-people-actually-use.html</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://www.ehorovillage.com/blog/human-in-the-loop-ai-review-points.html</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://www.ehorovillage.com/blog/messy-spreadsheet-to-operating-dashboard.html</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://www.ehorovillage.com/blog/ai-adoption-is-a-training-problem.html</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://www.ehorovillage.com/blog/what-small-teams-should-automate-first.html</loc><lastmod>2026-10-05</lastmod></url>
 </urlset>

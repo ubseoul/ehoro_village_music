@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From Messy Spreadsheet to Operating Dashboard · Ehoro Village</title>
+<meta name="description" content="A practical path from the spreadsheet everyone is afraid to touch to a dashboard your team checks every week.">
+<link rel="canonical" href="https://www.ehorovillage.com/blog/messy-spreadsheet-to-operating-dashboard.html">
+<meta property="og:type" content="article"><meta property="og:site_name" content="Ehoro Village"><meta property="og:title" content="From Messy Spreadsheet to Operating Dashboard · Ehoro Village">
+<meta property="og:description" content="A practical path from the spreadsheet everyone is afraid to touch to a dashboard your team checks every week."><meta property="og:url" content="https://www.ehorovillage.com/blog/messy-spreadsheet-to-operating-dashboard.html"><meta property="og:image" content="https://www.ehorovillage.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#111111">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../assets/favicon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="alternate" type="application/rss+xml" title="Ehoro Village Insights" href="https://www.ehorovillage.com/blog/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "From Messy Spreadsheet to Operating Dashboard", "description": "A practical path from the spreadsheet everyone is afraid to touch to a dashboard your team checks every week.", "datePublished": "2026-10-05", "dateModified": "2026-10-05", "author": {"@type": "Organization", "name": "Ehoro Village", "url": "https://www.ehorovillage.com/"}, "publisher": {"@type": "Organization", "@id": "https://www.ehorovillage.com/#org", "name": "Ehoro Village", "url": "https://www.ehorovillage.com/", "email": "hello@ehorovillage.com", "logo": "https://www.ehorovillage.com/assets/logo-e.png", "image": "https://www.ehorovillage.com/assets/og.png", "description": "Ehoro Village builds practical AI workflows, dashboards, assistants and training systems for teams that need technology people will actually use.", "areaServed": "United States", "sameAs": ["https://www.linkedin.com/company/ehoro-village/", "https://www.instagram.com/ehorovillage"], "knowsAbout": ["AI workflow automation", "Dashboards and reporting", "Custom AI assistants", "AI training and adoption", "Human-in-the-loop AI", "Learning design"]}, "mainEntityOfPage": "https://www.ehorovillage.com/blog/messy-spreadsheet-to-operating-dashboard.html", "image": "https://www.ehorovillage.com/assets/og.png"}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="../"><img class="logo-light" src="../assets/logo-e.png" alt="" width="26" height="26"><img class="logo-dark" src="../assets/logo-e-white.png" alt="" width="26" height="26"><span>Ehoro Village</span></a>
+  <ul><li><a href="../services.html">Services</a></li><li><a href="../methods.html">Methods</a></li><li><a href="../blog/" aria-current="page">Insights</a></li><li><a href="../about.html">About</a></li></ul>
+  <div class="end">
+    <button class="icon-btn" data-toggle-theme aria-label="Switch light or dark">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+    </button>
+    <a class="btn" href="../index.html#start">Start a project</a>
+  </div>
+</div></header>
+<main id="main">
+
+<article class="article">
+  <div class="crumbs"><a href="../">Ehoro Village</a> / <a href="./">Insights</a></div>
+  <h1>From Messy Spreadsheet to Operating Dashboard</h1>
+  <p class="dek">A practical path from the spreadsheet everyone is afraid to touch to a dashboard your team checks every week.</p>
+  <div class="byline">Ehoro Village · <time datetime="2026-10-05">October 05, 2026</time> · 6 min read</div>
+  <div class="prose">
+<p>Most teams already have the data they need. It lives in a spreadsheet with merged cells, three date formats, totals typed in by hand and a tab called "FINAL v2 (use this one)". Turning that into a dashboard people trust is mostly careful cleanup and a few firm rules.</p>
+
+<h2>1. Start with the decisions, not the charts</h2>
+<p>List the three to five decisions the dashboard should support. "Which programs are behind on enrollment?" "Which invoices are overdue?" Every chart should answer one of those questions. If a chart doesn't change a decision, leave it out.</p>
+
+<h2>2. Separate raw, clean and display</h2>
+<p>Use three layers, even in a single workbook: a <b>raw</b> tab where data is pasted or imported and never edited, a <b>clean</b> tab built from it with formulas, and a <b>dashboard</b> tab that only reads from the clean data. When something looks wrong, you can trace it back in minutes.</p>
+
+<h2>3. Make the data tidy</h2>
+<p>The simplest structure is the most durable: one row per record, one column per attribute, one value per cell. That's the core of the "tidy data" idea described by statistician <a href="https://www.jstatsoft.org/article/view/v059i10">Hadley Wickham</a>. In practice:</p>
+<ul>
+<li>No merged cells, blank spacer rows or totals inside the data.</li>
+<li>One date format, real dates rather than text.</li>
+<li>Consistent names: "NYC", "New York" and "nyc" become one value.</li>
+<li>Dropdown validation for any column people type into.</li>
+</ul>
+
+<h2>4. Replace typed numbers with formulas</h2>
+<p>Every total, rate and status on the dashboard should be calculated, never typed. Typed numbers are where silent errors live. If the team needs manual adjustments, give them their own clearly labeled column.</p>
+
+<h2>5. Build charts that answer the questions</h2>
+<p>Pair each decision from step one with one view: a trend line for "are we on track", a ranked bar for "where is the problem", a short table for "what needs action this week". Label charts with the question they answer, not the data they show.</p>
+
+<h2>6. Give it an owner and a rhythm</h2>
+<p>Decide who refreshes the data, when, and who reviews it. A dashboard without a weekly or monthly routine slowly drifts out of date until no one trusts it. Add a "How to use" tab that explains the sources, the refresh steps and who to ask.</p>
+
+<div class="callout"><span class="sq">i</span><div><b>Common mistakes:</b> building charts before cleaning · editing the raw data · hard-coded totals · too many metrics · no named owner · no record of where the numbers come from.</div></div>
+
+<p>A good operating dashboard is not impressive. It's current, correct and opened every week. That's what makes it worth building.</p>
+
+  <div class="callout"><span class="sq">→</span><div>Ehoro Village helps teams with dashboards and reporting. <a href="../services.html#data">See how it works</a> or <a href="mailto:hello@ehorovillage.com?subject=Project%20inquiry">start a project</a>.</div></div>
+  </div>
+</article>
+<section class="related" style="padding-top:0"><p class="label">More insights</p><div class="posts"><a class="post-row" href="ai-workflows-people-actually-use.html"><time datetime="2026-10-05">6 min read</time><div><h3>How to Build AI Workflows People Actually Use</h3></div><span class="rt">→</span></a><a class="post-row" href="human-in-the-loop-ai-review-points.html"><time datetime="2026-10-05">5 min read</time><div><h3>Human-in-the-Loop AI: Why Review Points Matter</h3></div><span class="rt">→</span></a><a class="post-row" href="ai-adoption-is-a-training-problem.html"><time datetime="2026-10-05">6 min read</time><div><h3>AI Adoption Is a Training Problem, Not Just a Tool Problem</h3></div><span class="rt">→</span></a></div></section>
+
+</main>
+<footer><div class="wrap">
+  <span>© 2026 Ehoro Village · AI operations &amp; learning systems</span>
+  <span class="right"><a href="../services.html">Services</a><a href="../blog/">Insights</a><a href="mailto:hello@ehorovillage.com">hello@ehorovillage.com</a><a href="https://www.linkedin.com/company/ehoro-village/">LinkedIn</a></span>
+</div></footer>
+<script src="../site.js" defer></script>
+</body>
+</html>

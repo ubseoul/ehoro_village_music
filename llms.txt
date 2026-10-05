@@ -1,21 +1,21 @@
 # Ehoro Village
-> AI programs and learning practice in the New York metro area, led by Ade Ijidakinro (Program Manager, AI & Learning) since 2024.
+> Ehoro Village builds practical AI workflows, dashboards, assistants and training systems for teams that need technology people will actually use. Based in the New York area; works remotely across the United States.
 
 ## Services (https://www.ehorovillage.com/services.html)
-- AI workflow automation (Python, n8n, Zapier, with AI steps), from $100
-- Dashboards and data cleanup in Google Sheets or Excel, from $50
-- Custom AI assistants (ChatGPT or Claude) with instructions, knowledge files and a test transcript, from $150
-- Team AI workshops on request
-AI tools assist; a person scopes, tests and checks every deliverable. Clients never share passwords.
+- AI workflow automation (Python, n8n, Zapier, with AI steps where they help)
+- Dashboards and reporting (Google Sheets, Excel)
+- Custom AI assistants (ChatGPT, Claude) with documents, rules and review steps
+- AI training and adoption: hands-on sessions, plain-language AI policies, 30-day follow-up
 
-## Work (https://www.ehorovillage.com/work.html)
-- Directed a five-model AI production program (Claude, ChatGPT, DeepSeek, Gemini, Codex) that shipped a 113-adventure narrative game in about three weeks.
-- Quality audits that caught tests reporting success while 6 of 9 game modes did nothing.
-- A documented AI-assisted method across 24+ build sessions.
-- Lo-Fi Spirits, a live web app with 45 documented releases (https://www.ehorovillage.com/village.html).
+## How projects are handled
+Scoped in writing · tested against real examples · documented with a plain-language guide · human-reviewed. Clients never share passwords.
 
-## Program lead
-Ade Ijidakinro, Program Manager, AI & Learning. M.S. Information (HCI) and B.A., University of Michigan; PSM I. Previously IT Project Manager at Procter & Gamble (CEO Award) and Product Designer & UX Researcher at U-M BRAID. LinkedIn: https://www.linkedin.com/in/adeijidakinro
+## Insights (https://www.ehorovillage.com/blog/)
+- How to Build AI Workflows People Actually Use: https://www.ehorovillage.com/blog/ai-workflows-people-actually-use.html
+- Human-in-the-Loop AI: Why Review Points Matter: https://www.ehorovillage.com/blog/human-in-the-loop-ai-review-points.html
+- From Messy Spreadsheet to Operating Dashboard: https://www.ehorovillage.com/blog/messy-spreadsheet-to-operating-dashboard.html
+- AI Adoption Is a Training Problem, Not Just a Tool Problem: https://www.ehorovillage.com/blog/ai-adoption-is-a-training-problem.html
+- What Small Teams Should Automate First: https://www.ehorovillage.com/blog/what-small-teams-should-automate-first.html
 
 ## Contact
-hello@ehorovillage.com
+hello@ehorovillage.com · https://www.linkedin.com/company/ehoro-village/

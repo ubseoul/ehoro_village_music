@@ -60,10 +60,10 @@
   if (!demo) return;
   var lineEl = demo.querySelector(".line-in"), blocksEl = demo.querySelector(".blocks");
   var commands = [
-    { key: "A", name: "Automate a workflow", typed: "/automate", block: "Form replies → summarized by AI → logged in a sheet. Tested, documented, handed over." },
-    { key: "D", name: "Build a dashboard", typed: "/dashboard", block: "Messy CSV cleaned, dashboard live, monthly report runs itself." },
-    { key: "B", name: "Set up an AI assistant", typed: "/assistant", block: "A custom assistant with your docs, house rules and a test transcript." },
-    { key: "L", name: "Teach AI to a team", typed: "/teach", block: "A lesson people finish: practice on real tasks, plus a one-page AI policy." }
+    { key: "A", name: "Automate a workflow", typed: "/automate", block: "Intake forms summarized, routed and logged. Tested, documented, handed over." },
+    { key: "D", name: "Build a dashboard", typed: "/dashboard", block: "Messy spreadsheet cleaned; the dashboard and monthly report update themselves." },
+    { key: "S", name: "Set up an AI assistant", typed: "/assistant", block: "An assistant with your documents, house rules and a tested transcript." },
+    { key: "T", name: "Train a team", typed: "/train", block: "Hands-on training on real tasks, plus a one-page AI-use policy." }
   ];
   if (reduce) {
     commands.forEach(function (c) { addBlock(c.block); });
