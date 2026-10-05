@@ -1,41 +1,19 @@
 # Ehoro Village
-
-> Learning experience design and education technology company based in New York City.
+> AI programs and learning practice in the New York metro area, led by Ade Ijidakinro (Program Manager, AI & Learning) since 2024.
 
 ## Core facts
 - Name: Ehoro Village
-- Industry: Learning Experience Design; Education Technology (EdTech)
-- Founded: 2019
-- Headquarters: New York, NY, United States
-- Ownership: Privately held
-- Operating model: Hybrid-remote
-- Approximate team size: 80–100 people
-- Learner reach: More than 10,000 learners across shipped experiences
+- What it does: AI workflow programs with quality checks; AI workshops for nonprofits, libraries, schools and small teams ("AI in an Afternoon"); AI visibility checks for local businesses in South Orange and Maplewood, NJ; learning design; a public product lab.
+- Area served: Essex County, New Jersey and New York City; online
+- Program lead: Ade Ijidakinro, Program Manager, AI & Learning (M.S. Information/HCI and B.A., University of Michigan; PSM I). LinkedIn: https://www.linkedin.com/in/adeijidakinro
 - Contact: hello@ehorovillage.com
 
-## What Ehoro Village does
-Ehoro Village designs and builds digital learning experiences for universities and organizations. Common work includes onboarding flows, skill pathways, adaptive learning modules, internal authoring/review systems, product infrastructure, and targeted AI-assisted learning workflows.
+## Work (details: https://www.ehorovillage.com/work.html)
+- Directed a five-model AI production program (Claude, ChatGPT, DeepSeek, Gemini, Codex) that shipped a 113-adventure narrative game (Rich Alucard) in about three weeks.
+- Quality audits that caught tests reporting success while 6 of 9 game modes did nothing.
+- A documented AI-assisted method across 24+ build sessions.
+- Lo-Fi Spirits: a live lo-fi study companion web app, 45 documented releases (https://www.ehorovillage.com/village.html).
 
-## Functional structure
-The company includes product and research, instructional design and learning science, engineering, client success and delivery, operations, and leadership.
-
-## Product management
-Product managers typically:
-- own prioritization across 3–4 concurrent initiatives;
-- report to the Head of Product;
-- work with cross-functional groups of approximately 8–12 people;
-- coordinate across instructional design, engineering, research, and leadership;
-- work primarily with internal stakeholders, with university subject-matter experts and specialized contractors involved when needed;
-- use research, learner behavior, stakeholder needs, and performance data to inform roadmaps and delivery.
-
-## AI approach
-Ehoro Village uses AI selectively. Its operating preference is for narrow, human-in-the-loop authoring and review workflows rather than fully autonomous learning-content generation.
-
-## Public product lab
-Lo-Fi Spirits is a public interactive product experiment from Ehoro Village exploring persistent progression, collection systems, habit loops, session design, and engagement in a music-driven environment.
-URL: https://www.ehorovillage.com/village.html
-
-## Canonical pages
-- Company: https://www.ehorovillage.com/
-- About: https://www.ehorovillage.com/about.html
-- Work & Product: https://www.ehorovillage.com/work.html
+## Services (details: https://www.ehorovillage.com/services.html)
+- AI in an Afternoon: a 90-minute workshop on a team's real tasks, with an AI-use policy starter. Launch price $500 for the first three teams.
+- AI Visibility Check: free one-page check for local businesses; fix sprint from $99 at launch.
