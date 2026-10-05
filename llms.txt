@@ -1,19 +1,21 @@
 # Ehoro Village
 > AI programs and learning practice in the New York metro area, led by Ade Ijidakinro (Program Manager, AI & Learning) since 2024.
 
-## Core facts
-- Name: Ehoro Village
-- What it does: AI workflow programs with quality checks; AI workshops for nonprofits, libraries, schools and small teams ("AI in an Afternoon"); AI visibility checks for local businesses in South Orange and Maplewood, NJ; learning design; a public product lab.
-- Area served: Essex County, New Jersey and New York City; online
-- Program lead: Ade Ijidakinro, Program Manager, AI & Learning (M.S. Information/HCI and B.A., University of Michigan; PSM I). LinkedIn: https://www.linkedin.com/in/adeijidakinro
-- Contact: hello@ehorovillage.com
+## Services (https://www.ehorovillage.com/services.html)
+- AI workflow automation (Python, n8n, Zapier, with AI steps), from $100
+- Dashboards and data cleanup in Google Sheets or Excel, from $50
+- Custom AI assistants (ChatGPT or Claude) with instructions, knowledge files and a test transcript, from $150
+- Team AI workshops on request
+AI tools assist; a person scopes, tests and checks every deliverable. Clients never share passwords.
 
-## Work (details: https://www.ehorovillage.com/work.html)
-- Directed a five-model AI production program (Claude, ChatGPT, DeepSeek, Gemini, Codex) that shipped a 113-adventure narrative game (Rich Alucard) in about three weeks.
+## Work (https://www.ehorovillage.com/work.html)
+- Directed a five-model AI production program (Claude, ChatGPT, DeepSeek, Gemini, Codex) that shipped a 113-adventure narrative game in about three weeks.
 - Quality audits that caught tests reporting success while 6 of 9 game modes did nothing.
 - A documented AI-assisted method across 24+ build sessions.
-- Lo-Fi Spirits: a live lo-fi study companion web app, 45 documented releases (https://www.ehorovillage.com/village.html).
+- Lo-Fi Spirits, a live web app with 45 documented releases (https://www.ehorovillage.com/village.html).
 
-## Services (details: https://www.ehorovillage.com/services.html)
-- AI in an Afternoon: a 90-minute workshop on a team's real tasks, with an AI-use policy starter. Launch price $500 for the first three teams.
-- AI Visibility Check: free one-page check for local businesses; fix sprint from $99 at launch.
+## Program lead
+Ade Ijidakinro, Program Manager, AI & Learning. M.S. Information (HCI) and B.A., University of Michigan; PSM I. Previously IT Project Manager at Procter & Gamble (CEO Award) and Product Designer & UX Researcher at U-M BRAID. LinkedIn: https://www.linkedin.com/in/adeijidakinro
+
+## Contact
+hello@ehorovillage.com

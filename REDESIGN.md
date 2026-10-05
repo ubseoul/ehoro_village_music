@@ -1,5 +1,8 @@
 # ehorovillage.com redesign (October 2026): not live yet
 
+**v3 (Oct 5, latest):** monochrome, Notion-inspired. White paper and black ink with a full dark mode toggle, a live "/" slash-command demo in the hero, a cursor spotlight on a dotted grid, scroll reveals, count-up proof numbers, a tool marquee and Notion-style toggles. The front page now covers everything: the work (for recruiters), three services (AI workflow automation from $100, dashboards and data cleanup from $50, custom AI assistants from $150), resources launching this fall (AI literacy lessons, spreadsheet templates), the product lab, and Ade. Files: `site.css`, `site.js` (new), all pages regenerated. Motion respects reduced-motion settings; content stays visible without JavaScript.
+
+
 Branch `redesign-2026-10`, local only. Nothing has been pushed. The live site is unchanged until Ube says go.
 
 ## What changed
