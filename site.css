@@ -219,3 +219,15 @@ footer a { color: var(--muted); }
 .prose td { border-bottom: 1px solid var(--line); padding: 8px 8px 8px 0; vertical-align: top; }
 .related { max-width: 720px; margin: 10px auto 0; padding: 0 24px 40px; }
 @media (max-width: 600px) { .related { padding: 0 16px 32px; } }
+
+/* v5 polish: mobile menu, focus, contrast */
+.menu-btn { display: none; }
+.mnav { border-top: 1px solid var(--line); background: var(--bg); }
+.mnav .wrap { display: flex; flex-direction: column; padding-top: 6px; padding-bottom: 12px; }
+.mnav a { padding: 11px 2px; border-bottom: 1px solid var(--line); color: var(--ink); background: none; font-size: 16px; }
+.mnav a:last-child { border-bottom: 0; font-weight: 600; }
+@media (max-width: 760px) { .menu-btn { display: grid; } .nav .end .btn { display: none; } }
+@media (min-width: 761px) { .mnav { display: none !important; } }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+:root { --muted: #6b6a66; }
+.nav .mnav .wrap { height: auto; align-items: stretch; gap: 0; }

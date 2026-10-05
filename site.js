@@ -15,6 +15,18 @@
     try { localStorage.setItem("ev-theme", next); } catch (err) {}
   });
 
+  // Mobile menu.
+  var mbtn = document.querySelector("[data-menu]"), mnav = document.getElementById("mnav");
+  if (mbtn && mnav) {
+    mbtn.addEventListener("click", function () {
+      var open = mnav.hasAttribute("hidden");
+      if (open) mnav.removeAttribute("hidden"); else mnav.setAttribute("hidden", "");
+      mbtn.setAttribute("aria-expanded", open ? "true" : "false");
+      mbtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    });
+    mnav.addEventListener("click", function (e) { if (e.target.tagName === "A") { mnav.setAttribute("hidden", ""); mbtn.setAttribute("aria-expanded", "false"); } });
+  }
+
   // Nav hairline once the page scrolls.
   var nav = document.querySelector(".nav");
   var onScroll = function () { if (nav) nav.classList.toggle("scrolled", window.scrollY > 8); };
